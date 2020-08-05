@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  XPYBookStackViewController.h
 //  XPYReader
 //
 //  Created by zhangdu_imac on 2020/8/3.
@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface XPYBookStackViewController : UIViewController
 
 @end
 
+NS_ASSUME_NONNULL_END

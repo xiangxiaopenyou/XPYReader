@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  XPYBookStoreViewController.h
 //  XPYReader
 //
 //  Created by zhangdu_imac on 2020/8/3.
@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, strong) UIWindow *window;
+@interface XPYBookStoreViewController : UIViewController
 
 @end
 
+NS_ASSUME_NONNULL_END

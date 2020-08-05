@@ -1,5 +1,5 @@
 //
-//  SceneDelegate.h
+//  XPYTabBarController.h
 //  XPYReader
 //
 //  Created by zhangdu_imac on 2020/8/3.
@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
+NS_ASSUME_NONNULL_BEGIN
 
-@property (strong, nonatomic) UIWindow * window;
+@interface XPYTabBarController : UITabBarController
 
 @end
 
+NS_ASSUME_NONNULL_END

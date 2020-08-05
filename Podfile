@@ -23,4 +23,7 @@ target 'XPYReader' do
   # KVO
   pod 'KVOController'
   
+  # 网络图片展示
+  pod 'SDWebImage', '~> 5.6.0'
+  
 end

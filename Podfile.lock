@@ -17,6 +17,9 @@ PODS:
   - KVOController (1.2.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
+  - SDWebImage (5.6.1):
+    - SDWebImage/Core (= 5.6.1)
+  - SDWebImage/Core (5.6.1)
   - SQLiteRepairKit (1.2.2):
     - WCDBOptimizedSQLCipher (~> 1.2.0)
   - WCDB (1.0.7.5):
@@ -30,6 +33,7 @@ DEPENDENCIES:
   - KVOController
   - Masonry
   - MBProgressHUD
+  - SDWebImage (~> 5.6.0)
   - WCDB
   - YYModel
 
@@ -39,6 +43,7 @@ SPEC REPOS:
     - KVOController
     - Masonry
     - MBProgressHUD
+    - SDWebImage
     - SQLiteRepairKit
     - WCDB
     - WCDBOptimizedSQLCipher
@@ -49,11 +54,12 @@ SPEC CHECKSUMS:
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
   SQLiteRepairKit: 35aaae5a8838adb85f5b1eb4d796055be6060a4b
   WCDB: 8e90babdeb7784c569353a4bd22a66c0a175a882
   WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 070854776a29b2269f32236f660e447d596bdbe7
+PODFILE CHECKSUM: 5178e720bb14b6f99464341ef29ff51a984e1178
 
 COCOAPODS: 1.9.1
