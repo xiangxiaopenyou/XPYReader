@@ -8,7 +8,6 @@
 
 #import "XPYNetworkService+Book.h"
 #import "XPYBookModel.h"
-#import "XPYChapterModel.h"
 
 @implementation XPYNetworkService (Book)
 
@@ -24,16 +23,34 @@
         }
     }];
 }
-- (void)bookChaptersWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure {
-    [self request:XPYHTTPRequestTypeGet path:@"book?action=ots-chapter-list" parameters:@{@"type" : @"down", @"book_id" : bookId} success:^(id result) {
-        NSArray *chapters = [XPYChapterModel modelArrayWithJSON:result];
+- (void)storeBooksRequestSuccess:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure {
+    NSDictionary *params = @{
+        @"is_serial" : @-1,
+        @"ptype" : @2,
+        @"timeType" : @"all",
+        @"topType" : @"sold",
+        @"page" : @1
+    };
+    [self request:XPYHTTPRequestTypeGet path:@"book?action=top" parameters:params success:^(id result) {
+        NSArray *books = [XPYBookModel modelArrayWithJSON:result];
         if (success) {
-            success(chapters);
+            success(books);
         }
     } failure:^(NSError *error) {
         if (failure) {
             failure(error);
         }
+    }];
+}
+
+- (void)bookDetailsRequestWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure {
+    [self request:XPYHTTPRequestTypeGet path:@"book?action=detail" parameters:@{@"i_version" : @"4", @"book_id" : bookId} success:^(id result) {
+        XPYBookModel *book = [XPYBookModel yy_modelWithJSON:[result objectForKey:@"bookdetail"]];
+        if (success) {
+            success(book);
+        }
+    } failure:^(NSError *error) {
+        
     }];
 }
 

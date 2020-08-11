@@ -10,8 +10,6 @@
 
 #import "XPYBookModel.h"
 
-#import <SDWebImage.h>
-
 @interface XPYBookStackCollectionViewCell ()
 
 @property (nonatomic, strong) UIImageView *bookCoverImageView;

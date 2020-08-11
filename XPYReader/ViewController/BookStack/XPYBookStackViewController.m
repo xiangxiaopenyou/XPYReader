@@ -13,6 +13,7 @@
 
 #import "XPYBookModel.h"
 #import "XPYNetworkService+Book.h"
+#import "XPYNetworkService+Chapter.h"
 
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
@@ -65,15 +66,17 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 #pragma mark - Collection view delegate & flow layout
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     XPYBookModel *book = self.dataSource[indexPath.item];
+    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
     [[XPYNetworkService sharedService] bookChaptersWithBookId:book.bookId success:^(id result) {
+        [MBProgressHUD xpy_hideHUD];
         dispatch_async(dispatch_get_main_queue(), ^{
             XPYReadPageViewController *readPageController = [[XPYReadPageViewController alloc] init];
             readPageController.chapters = [(NSArray *)result copy];
             readPageController.book = [book copy];
-            NSLog(@"%p .. %p", readPageController.book, book);
             [self.navigationController pushViewController:readPageController animated:YES];
         });
     } failure:^(NSError *error) {
+        [MBProgressHUD xpy_hideHUD];
     }];
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {

@@ -15,11 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 书架默认书籍
 - (void)stackBooksRequestSuccess:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
 
-/// 获取书籍章节信息（不包括章节内容）
-/// @param bookId 书籍ID
-/// @param success 成功回调
-/// @param failure 失败回调
-- (void)bookChaptersWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
+/// 书城书籍列表
+- (void)storeBooksRequestSuccess:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
+
+/// 书籍详情
+- (void)bookDetailsRequestWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
 
 @end
 

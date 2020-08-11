@@ -8,6 +8,19 @@
 
 #import "XPYEnums.h"
 #import "XPYBlocks.h"
+#import "XPYConstant.h"
+
+/// 以375宽度屏幕为基准自适应
+#define XPYScreenScaleConstant(aConstant) CGRectGetWidth([UIScreen mainScreen].bounds) / 375 * aConstant
+
+/// 屏幕宽度
+#define XPYScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
+
+/// 屏幕高度
+#define XPYScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
+
+/// statusbar高度
+#define APP_STATUSBAR_HEIGHT (XPYDeviceIsIphoneX ? 44.0f : 20.0f)
 
 /// App Document文件夹路径
 #define XPYDocumentDirectory NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject
@@ -18,12 +31,9 @@
 /// 强引用对象
 #define strongify(object) autoreleasepool{} __typeof__(object) object = weak##_##object;
 
-/// 以375宽度屏幕为基准自适应
-#define XPYScreenScaleConstant(aConstant) CGRectGetWidth([UIScreen mainScreen].bounds) / 375 * aConstant
-
-/// 屏幕宽度
-#define XPYScreenWidth CGRectGetWidth([UIScreen mainScreen].bounds)
-
-/// 屏幕高度
-#define XPYScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
+#pragma mark - 阅读器文字显示
+#define XPYReadViewLeftSpacing 20
+#define XPYReadViewRightSpacing 20
+#define XPYReadViewTopSpacing (25 + APP_STATUSBAR_HEIGHT)
+#define XPYReadViewBottomSpacing (40 + (XPYDeviceIsIphoneX ? 24.0f : 0))
 

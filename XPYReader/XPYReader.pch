@@ -14,5 +14,7 @@
 #import "MBProgressHUD+XPYExtension.h"
 
 #import <Masonry.h>
+#import <UINavigationController+FDFullscreenPopGesture.h>
+#import <SDWebImage.h>
 
 #endif /* XPYReader_pch */

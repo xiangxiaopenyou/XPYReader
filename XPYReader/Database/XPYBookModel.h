@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XPYBookModel : XPYBaseModel
 
 @property (nonatomic, copy) NSString *bookId;
-
 @property (nonatomic, copy) NSString *bookName;
 /// 书本封面图网络链接
 @property (nonatomic, copy) NSString *bookCoverURL;

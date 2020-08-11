@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger index;
 /// 章节名称
 @property (nonatomic, copy) NSString *chapterName;
+/// 章节内容
 @property (nonatomic, copy) NSString *content;
 /// 章节字数
 @property (nonatomic, assign) NSInteger charNum;

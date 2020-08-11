@@ -26,4 +26,7 @@ target 'XPYReader' do
   # 网络图片展示
   pod 'SDWebImage', '~> 5.6.0'
   
+  # 全屏侧滑手势
+  pod 'FDFullscreenPopGesture'
+  
 end
