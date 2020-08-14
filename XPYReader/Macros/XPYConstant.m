@@ -8,5 +8,9 @@
 
 #import "XPYConstant.h"
 
+NSString * const XPYUserCacheKey = @"XPYUserCache";
+
 NSString * const XPYReadConfigKey = @"XPYReadConfig";
+
+NSString * const XPYBookStackDidChangeNotification = @"XPYBookStackDidChange";
 

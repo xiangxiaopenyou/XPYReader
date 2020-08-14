@@ -7,9 +7,13 @@
 //
 
 #import "XPYBookDetailsViewController.h"
+#import "XPYReadPageViewController.h"
 
 #import "XPYNetworkService+Book.h"
 #import "XPYBookModel.h"
+#import "XPYReadRecordManager.h"
+#import "XPYReadHelper.h"
+#import "XPYUserManager.h"
 
 @interface XPYBookDetailsViewController ()
 
@@ -30,7 +34,6 @@
 #pragma mark - Life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
     
     [self bookDetailsRequest];
 }
@@ -80,7 +83,14 @@
 #pragma mark - Network
 - (void)bookDetailsRequest {
     [[XPYNetworkService sharedService] bookDetailsRequestWithBookId:self.bookId success:^(id result) {
-        self.bookModel = (XPYBookModel *)result;
+        if ([XPYReadRecordManager recordWithBookId:self.bookId]) {
+            // 存在阅读记录
+            self.bookModel = [XPYReadRecordManager recordWithBookId:self.bookId];
+        } else {
+            // 不存在阅读记录时 isInStack为NO
+            self.bookModel = (XPYBookModel *)result;
+            self.bookModel.isInStack = NO;
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self configureUI];
         });
@@ -90,11 +100,46 @@
 }
 
 #pragma mark - Actions
+/// 开始阅读
 - (void)readAction {
-    
+    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
+    [XPYReadHelper readyForReadingWithBook:self.bookModel success:^(XPYBookModel * _Nonnull book) {
+        [MBProgressHUD xpy_hideHUD];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            XPYReadPageViewController *readPageController = [[XPYReadPageViewController alloc] init];
+            readPageController.book = book;
+            [self.navigationController pushViewController:readPageController animated:YES];
+        });
+    } failure:^(NSString * _Nonnull tip) {
+        [MBProgressHUD xpy_showTips:tip];
+    }];
 }
+
+/// 加入/移出书架
 - (void)stackOperateAction {
-    
+    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
+    if ([XPYUserManager sharedInstance].isLogin) {
+        // 登录情况下加入/移出书架需要上传服务端
+    } else {
+        // 未登录情况下加入/移出书架只在本地数据库中操作
+        if (self.bookModel.isInStack) {
+            // 移出书架
+            [XPYReadHelper removeFormBookStackWithBook:self.bookModel complete:^{
+                self.bookModel.isInStack = NO;
+                [self.stackOperateButton setTitle:@"加入书架" forState:UIControlStateNormal];
+                [MBProgressHUD xpy_showTips:@"已移出书架"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:XPYBookStackDidChangeNotification object:nil];
+            }];
+        } else {
+            // 加入书架
+            [XPYReadHelper addToBookStackWithBook:self.bookModel complete:^{
+                self.bookModel.isInStack = YES;
+                [self.stackOperateButton setTitle:@"移出书架" forState:UIControlStateNormal];
+                [MBProgressHUD xpy_showTips:@"已加入书架"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:XPYBookStackDidChangeNotification object:nil];
+            }];
+        }
+    }
 }
 
 #pragma mark - Getters

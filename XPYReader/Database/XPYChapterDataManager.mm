@@ -14,7 +14,8 @@
 @implementation XPYChapterDataManager
 
 + (void)insertOrReplaceChapterWithModel:(XPYChapterModel *)chapterModel {
-    [[XPYDatabaseManager sharedInstance].database insertOrReplaceObject:chapterModel into:XPYChapterTable];
+    BOOL yesOrNo = [[XPYDatabaseManager sharedInstance].database insertOrReplaceObject:chapterModel into:XPYChapterTable];
+    NSLog(@"%@", @(yesOrNo));
 }
 
 + (void)insertChaptersWithModels:(NSArray *)chapters {
@@ -38,7 +39,22 @@
 }
 
 + (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId {
+    if (!chapterId) {
+        return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) orderBy:XPYChapterModel.chapterIndex.order(WCTOrderedAscending)];
+    }
     return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) && XPYChapterModel.chapterId.is(chapterId)];
+}
+
++ (NSArray *)chaptersWithBookId:(NSString *)bookId {
+    return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) orderBy:XPYChapterModel.chapterIndex.order(WCTOrderedAscending)];
+}
+
++ (BOOL)isExsitChaptersWithBookId:(NSString *)bookId {
+    XPYChapterModel *model = [[XPYDatabaseManager sharedInstance].database getOneObjectOnResults:{XPYChapterModel.chapterId} fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId)];
+    if (model) {
+        return YES;
+    }
+    return NO;
 }
 
 + (BOOL)isExsitWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId {

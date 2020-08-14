@@ -24,13 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSTimeInterval openTime;
 /// 是否加入书架
 @property (nonatomic, assign) BOOL isInStack;
-
 ///总章节数
 @property (nonatomic, assign) NSInteger chapterCount;
 /// 当前章节信息
 @property (nonatomic, strong) XPYChapterModel *chapter;
-/// 当前章节索引
-@property (nonatomic, assign) NSInteger chapterIndex;
 /// 当前阅读章节页码
 @property (nonatomic, assign) NSInteger page;
 

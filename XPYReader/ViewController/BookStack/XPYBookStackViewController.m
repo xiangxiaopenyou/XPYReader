@@ -14,6 +14,8 @@
 #import "XPYBookModel.h"
 #import "XPYNetworkService+Book.h"
 #import "XPYNetworkService+Chapter.h"
+#import "XPYReadRecordManager.h"
+#import "XPYReadHelper.h"
 
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
@@ -31,26 +33,68 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    // 获取本地书架所有书籍
+    self.dataSource = [[XPYReadRecordManager allBooksInStack] copy];
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
     
+    // 请求网络书架中的书籍
     [self booksRequest];
+    
+    // 注册书架书籍发生变化通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stackBooksChanged:) name:XPYBookStackDidChangeNotification object:nil];
 }
 
 #pragma mark - Network
 - (void)booksRequest {
     [[XPYNetworkService sharedService] stackBooksRequestSuccess:^(NSArray * _Nonnull books) {
-        self.dataSource = [books copy];
+        NSArray *resultArray = [books copy];
+        if (resultArray.count > 0) {
+            [self synchronizeBooks:resultArray];
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView reloadData];
         });
     } failure:^(NSError * _Nonnull error) {
         [MBProgressHUD xpy_showTips:@"网络错误"];
     }];
+}
+
+#pragma mark - Private methods
+/// 同步本地书架和网络书架(网络书架包括推荐书籍)
+/// @param resultBooks 网络书架书籍数组
+- (void)synchronizeBooks:(NSArray *)resultBooks {
+    NSMutableArray *tempArray = [self.dataSource mutableCopy];
+    for (XPYBookModel *networkingBook in resultBooks) {
+        if (![self booksArray:self.dataSource isContainsBook:networkingBook]) {
+            // 本地书架中不存在该书籍，则添加该书籍到本地书架
+            networkingBook.isInStack = YES;
+            [tempArray addObject:networkingBook];
+            [XPYReadRecordManager insertOrReplaceRecordWithModel:networkingBook];
+        }
+    }
+    self.dataSource = [tempArray copy];
+}
+
+/// 判断书籍数组中是否存在某本书
+/// @param books 书籍数组
+/// @param book 书籍
+- (BOOL)booksArray:(NSArray <XPYBookModel *> *)books isContainsBook:(XPYBookModel *)book {
+    for (XPYBookModel *tempBook in books) {
+        if ([tempBook.bookId isEqualToString:book.bookId]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+#pragma mark - Notifications
+- (void)stackBooksChanged:(NSNotification *)notification {
+    self.dataSource = [[XPYReadRecordManager allBooksInStack] copy];
+    [self.collectionView reloadData];
 }
 
 #pragma mark - Collection view data source
@@ -67,16 +111,15 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     XPYBookModel *book = self.dataSource[indexPath.item];
     [MBProgressHUD xpy_showActivityHUDWithTips:nil];
-    [[XPYNetworkService sharedService] bookChaptersWithBookId:book.bookId success:^(id result) {
+    [XPYReadHelper readyForReadingWithBook:book success:^(XPYBookModel * _Nonnull book) {
         [MBProgressHUD xpy_hideHUD];
         dispatch_async(dispatch_get_main_queue(), ^{
             XPYReadPageViewController *readPageController = [[XPYReadPageViewController alloc] init];
-            readPageController.chapters = [(NSArray *)result copy];
             readPageController.book = [book copy];
             [self.navigationController pushViewController:readPageController animated:YES];
         });
-    } failure:^(NSError *error) {
-        [MBProgressHUD xpy_hideHUD];
+    } failure:^(NSString * _Nonnull tip) {
+        [MBProgressHUD xpy_showTips:tip];
     }];
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
@@ -103,6 +146,11 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
         [_collectionView registerClass:[XPYBookStackCollectionViewCell class] forCellWithReuseIdentifier:kXPYBookStackCollectionViewCellIdentifierKey];
     }
     return _collectionView;
+}
+
+#pragma mark - Override methods
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:XPYBookStackDidChangeNotification object:nil];
 }
 
 @end

@@ -12,12 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYChapterModel : XPYBaseModel
 
-/// 主键（bookId和chapterId拼接）
-@property (nonatomic, copy) NSString *primaryId;
 @property (nonatomic, copy) NSString *chapterId;
 @property (nonatomic, copy) NSString *bookId;
 /// 章节编号
-@property (nonatomic, assign) NSInteger index;
+@property (nonatomic, assign) NSInteger chapterIndex;
 /// 章节名称
 @property (nonatomic, copy) NSString *chapterName;
 /// 章节内容

@@ -10,18 +10,18 @@
 #import "XPYNetworkManager.h"
 
 /// 示例BaseURL
-#if DEBUG
+//#if DEBUG
 static NSString * const kXPYBaseURL = @"http://testapp.zhangdu.com/v1";
 static NSString * const kXPYDownloadURL = @"http://zhangdu-test.oss-cn-shanghai.aliyuncs.com/app/package/voice.zip";
-#else
-static NSString * const kXPYBaseURL = @"";
-#endif
+//#else
+//static NSString * const kXPYBaseURL = @"";
+//#endif
 
 /// 示例参数
-//static NSString * const kXPYChannelId = @"u2000";
-//static NSInteger const kXPYClientType = 2;
-//static NSString * const kXPYDeviceToken = @"54A26B87-4B33-468B-99D3-1A8651B6CD81";
-//static NSString * const kXPYVersion = @"3.0.0";
+static NSString * const kXPYChannelId = @"u1000";
+static NSInteger const kXPYClientType = 2;
+static NSString * const kXPYDeviceToken = @"1E8698A6-D632-4734-AAC2-97A631A0942D";
+static NSString * const kXPYVersion = @"3.0.4";
 
 @interface XPYNetworkService ()
 
@@ -60,9 +60,10 @@ static NSString * const kXPYBaseURL = @"";
 /// @param params 接口传入参数
 - (NSDictionary *)completeParametersWithParams:(NSDictionary *)params {
     NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:params];
-//    [temp setObject:kXPYChannelId forKey:@"channel_id"];
-//    [temp setObject:@(kXPYClientType) forKey:@"client_type"];
-//    [temp setObject:kXPYDeviceToken forKey:@"device_token"];
+    [temp setObject:kXPYChannelId forKey:@"channel_id"];
+    [temp setObject:@(kXPYClientType) forKey:@"client_type"];
+    [temp setObject:kXPYDeviceToken forKey:@"device_token"];
+    [temp setObject:kXPYVersion forKey:@"version"];
     // 先判断是否已经登录(根据需求自由发挥，这里传了userId和token)
 
     return (NSDictionary *)[temp copy];

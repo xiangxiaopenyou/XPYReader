@@ -9,18 +9,29 @@
 #import "XPYReadPageViewController.h"
 #import "XPYReadViewController.h"
 
+#import "XPYReadMenu.h"
+
 #import "XPYChapterModel.h"
+#import "XPYBookModel.h"
 
 #import "XPYReadParser.h"
+#import "XPYReadHelper.h"
+#import "XPYChapterHelper.h"
+#import "XPYReadRecordManager.h"
 
 #import "XPYNetworkService+Chapter.h"
 
 /// 阅读器文字区域Rect
 #define kXPYReadViewBounds CGRectMake(0, 0, XPYScreenWidth - XPYReadViewLeftSpacing - XPYReadViewRightSpacing, XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)
 
-@interface XPYReadPageViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface XPYReadPageViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, XPYReadMenuDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) UIPageViewController *pageViewController;
+
+/// 菜单工具栏管理
+@property (nonatomic, strong) XPYReadMenu *readMenu;
+
+@property (nonatomic, copy) NSArray <XPYChapterModel *> *chapters;  // 章节信息
 
 @end
 
@@ -30,27 +41,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.fd_prefersNavigationBarHidden = YES;
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self addChildViewController:self.pageViewController];
+    [self configureUI];
     
-    if (!self.book.chapter) {
-        if (self.chapters.count == 0) {
-            [MBProgressHUD xpy_showTips:@"章节为空"];
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-        self.book.chapter = self.chapters[0];
-    }
-    if (XPYIsEmptyObject(self.book.chapter.content)) {
-        // 当前章节内容为空
-        [self resolveEmptyChapterContentWithChapter:self.book.chapter complete:^(NSAttributedString *chapterContent, NSArray *pageRanges) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                XPYReadViewController *readViewController = [self createReadViewControllerWithChapter:self.book.chapter chapterContent:chapterContent pageRanges:pageRanges page:self.book.page pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:self.book.page pageRanges:pageRanges]];
-                [self.pageViewController setViewControllers:@[readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-            });
-        }];
-    }
+    // 获取章节信息
+    [XPYChapterHelper chaptersWithBookId:self.book.bookId success:^(NSArray * _Nonnull chapters) {
+        self.chapters = chapters;
+    } failure:^(NSString * _Nonnull tip) {
+        [MBProgressHUD xpy_showTips:tip];
+    }];
+    
+    // 当前章节分页并设置阅读页
+    [XPYReadParser parseChapterWithContent:self.book.chapter.content chapterName:self.book.chapter.chapterName bounds:kXPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            XPYReadViewController *readViewController = [self createReadViewControllerWithChapter:self.book.chapter chapterContent:chapterContent pageRanges:pageRanges page:self.book.page pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:self.book.page pageRanges:pageRanges]];
+            [self.pageViewController setViewControllers:@[readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+        });
+    }];
+    
+    // 初始化菜单工具栏
+    self.readMenu = [[XPYReadMenu alloc] initWithView:self.view];
+    self.readMenu.delegate = self;
+    
+    // 点击事件（弹出工具栏）
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+    
+    // 屏幕旋转通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)configureUI {
+    // 隐藏导航栏
+    self.fd_prefersNavigationBarHidden = YES;
+    // 取消右滑返回手势
+    self.fd_interactivePopDisabled = YES;
+    [self addChildViewController:self.pageViewController];
 }
 
 #pragma mark - Network
@@ -69,20 +95,6 @@
 }
 
 #pragma mark - Private methods
-
-/// 章节内容为空情况处理
-/// @param chapterModel 章节基本信息
-/// @param complete 处理完成回调
-- (void)resolveEmptyChapterContentWithChapter:(XPYChapterModel *)chapterModel complete:(void (^)(NSAttributedString *chapterContent, NSArray *pageRanges))complete {
-    [self chapterContentRequestWithChapter:chapterModel.chapterId success:^(id result) {
-        chapterModel.content = (NSString *)result;
-        [XPYReadParser parseChapterWithContent:chapterModel.content chapterName:chapterModel.chapterName bounds:kXPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-            if (complete) {
-                complete(chapterContent, pageRanges);
-            }
-        }];
-    }];
-}
 
 /// 创建阅读控制器
 /// @param chapter 章节Model
@@ -126,17 +138,24 @@
         XPYChapterModel *otherChapter = isAfter ? self.chapters[currentChapterIndex + 1] : self.chapters[currentChapterIndex - 1];
         if (XPYIsEmptyObject(otherChapter.content)) {
             // 下一章或上一章的章节内容为空
-            __block XPYReadViewController *readController;
-            [self resolveEmptyChapterContentWithChapter:otherChapter complete:^(NSAttributedString *chapterContent, NSArray *pageRanges) {
-                if (isAfter) {
-                    // 后一页设置为非镜像
-                    XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter chapterContent:chapterContent pageRanges:pageRanges page:0 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:0 pageRanges:pageRanges]];
-                    [self.pageViewController setViewControllers:@[afterReadController] direction:direction animated:YES completion:nil];
-                } else {
-                    
-                }
+            // 获取章节内容
+            [XPYChapterHelper chapterWithBookId:self.book.bookId chapterId:otherChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
+                [XPYReadParser parseChapterWithContent:chapter.content chapterName:chapter.chapterName bounds:kXPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
+                    if (isAfter) {
+                        // 下一章第一页
+                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter chapterContent:chapterContent pageRanges:pageRanges page:0 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:0 pageRanges:pageRanges]];
+                        [self.pageViewController setViewControllers:@[afterReadController] direction:direction animated:YES completion:nil];
+                    } else {
+                        // 上一章最后一页
+                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter chapterContent:chapterContent pageRanges:pageRanges page:pageRanges.count - 1 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:pageRanges.count - 1 pageRanges:pageRanges]];
+                        [self.pageViewController setViewControllers:@[beforeReadController] direction:direction animated:YES completion:nil];
+                    }
+                    // 跨章节时更新阅读记录
+                    [self updateReadRecord];
+                }];
+            } failure:^(NSString * _Nonnull tip) {
+                [MBProgressHUD xpy_showTips:tip];
             }];
-            return readController;
         } else {
             __block XPYReadViewController *readController;
             [XPYReadParser parseChapterWithContent:otherChapter.content chapterName:otherChapter.chapterName bounds:kXPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
@@ -149,12 +168,41 @@
         XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter chapterContent:currentChapterContent pageRanges:currentPageRanges page:isAfter ? currentPage + 1 : currentPage - 1 pageContent:[XPYReadParser pageContentWithChapterContent:currentChapterContent page:isAfter ? currentPage + 1 : currentPage - 1 pageRanges:currentPageRanges]];
         return readController;
     }
+    return nil;
+}
+
+/// 更新阅读记录
+- (void)updateReadRecord {
+    // 获取当前阅读页面
+    XPYReadViewController *currentReadController = self.pageViewController.viewControllers.firstObject;
+    self.book.chapter = currentReadController.chapterModel;
+    self.book.page = currentReadController.page;
+    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+}
+
+#pragma mark - Actions
+- (void)tap:(UITapGestureRecognizer *)tap {
+    CGPoint touchPoint = [tap locationInView:self.view];
+    CGFloat width = CGRectGetWidth(self.view.bounds) / 3.0;
+    if (touchPoint.x > width && touchPoint.x < width * 2) {
+        NSLog(@"弹出工具栏");
+        [self.readMenu show];
+    }
+}
+
+#pragma mark - Notifications
+/// 屏幕方向旋转
+- (void)orientationChanged:(NSNotification *)notification {
+}
+
+#pragma mark - XPYReadMenuDelegate
+- (void)readMenuDidClickBack {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Page view controller data source
 - (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerAfterViewController:(nonnull UIViewController *)viewController {
     return [self viewControllerAfterOrBeforeViewController:viewController after:YES];
-    
 }
 
 - (nullable UIViewController *)pageViewController:(nonnull UIPageViewController *)pageViewController viewControllerBeforeViewController:(nonnull UIViewController *)viewController {
@@ -164,6 +212,15 @@
 #pragma mark - Page view controller delegate
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
     // 动画完成更新阅读记录
+    [self updateReadRecord];
+}
+
+#pragma mark - Gesture recognizer delegete
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([otherGestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]) {
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - Getters
@@ -178,6 +235,25 @@
     return _pageViewController;
 }
 
-
+#pragma mark - Override methods
+// 阅读器设置可以横屏
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
 
 @end

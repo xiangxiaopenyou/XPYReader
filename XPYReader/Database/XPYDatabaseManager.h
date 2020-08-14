@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const XPYReadRecordTable = @"read_record";
+static NSString * const XPYReadRecordTable = @"read";
 static NSString * const XPYChapterTable = @"chapter";
 
 @interface XPYDatabaseManager : NSObject

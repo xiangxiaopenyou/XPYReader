@@ -6,13 +6,13 @@
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XPYBaseViewController.h"
 
 #import "XPYChapterModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYReadViewController : UIViewController
+@interface XPYReadViewController : XPYBaseViewController
 
 /// 当前章节
 @property (nonatomic, strong, readonly) XPYChapterModel *chapterModel;

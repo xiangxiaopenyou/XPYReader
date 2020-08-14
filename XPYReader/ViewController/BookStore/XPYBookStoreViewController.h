@@ -6,11 +6,11 @@
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XPYBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYBookStoreViewController : UIViewController
+@interface XPYBookStoreViewController : XPYBaseViewController
 
 @end
 

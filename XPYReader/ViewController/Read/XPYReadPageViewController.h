@@ -6,18 +6,15 @@
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XPYBaseViewController.h"
 
-#import "XPYBookModel.h"
-#import "XPYChapterModel.h"
+@class XPYBookModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYReadPageViewController : UIViewController
+@interface XPYReadPageViewController : XPYBaseViewController
 
 @property (nonatomic, strong) XPYBookModel *book;
-
-@property (nonatomic, copy) NSArray <XPYChapterModel *> *chapters;  // 章节信息
 
 @end
 

@@ -28,3 +28,6 @@
 /// 对象判空
 #define XPYIsEmptyObject(aObject) [XPYUtilities isEmptyObject:aObject]
 
+/// 字符串MD5加密
+#define XPYMD5StringWithString(aString) [XPYUtilities md5StringWithString:aString]
+

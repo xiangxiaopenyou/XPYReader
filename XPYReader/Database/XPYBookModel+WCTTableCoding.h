@@ -22,7 +22,6 @@ WCDB_PROPERTY(openTime)
 WCDB_PROPERTY(isInStack)
 WCDB_PROPERTY(chapterCount)
 WCDB_PROPERTY(chapter)
-WCDB_PROPERTY(chapterIndex)
 WCDB_PROPERTY(page)
 
 @end

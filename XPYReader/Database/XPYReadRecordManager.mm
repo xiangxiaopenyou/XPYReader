@@ -17,8 +17,26 @@
     bookModel.openTime = [NSDate date].timeIntervalSince1970;
     [[XPYDatabaseManager sharedInstance].database insertOrReplaceObject:bookModel into:XPYReadRecordTable];
 }
+
++ (void)deleteRecordWithModel:(XPYBookModel *)bookModel {
+    [[XPYDatabaseManager sharedInstance].database deleteObjectsFromTable:XPYReadRecordTable where:XPYBookModel.bookId.is(bookModel.bookId)];
+}
+
 + (XPYBookModel *)recordWithBookId:(NSString *)bookId {
     return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.bookId.is(bookId)];
+}
+
++ (void)updateOpenTimeWithModel:(XPYBookModel *)bookModel {
+    bookModel.openTime = [NSDate date].timeIntervalSince1970;
+    [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperties:XPYBookModel.openTime withObject:bookModel where:XPYBookModel.bookId.is(bookModel.bookId)];
+}
+
++ (void)updateInStackStatusWithModel:(XPYBookModel *)bookModel {
+    [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperties:XPYBookModel.isInStack withObject:bookModel where:XPYBookModel.bookId.is(bookModel.bookId)];
+}
+
++ (NSArray *)allBooksInStack {
+    return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.isInStack.is(YES)];
 }
 
 @end

@@ -26,10 +26,9 @@
 
 @implementation XPYReadViewController
 
+#pragma mark - Life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.readView];
     [self.readView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -43,7 +42,7 @@
 #pragma mark - Instance methods
 - (void)setupChapter:(XPYChapterModel *)chapter chapterContent:(NSAttributedString *)chapterContent pageRanges:(NSArray *)pageRanges page:(NSInteger)page pageContent:(NSAttributedString *)pageContent {
     self.chapterModel = chapter;
-    self.chapterIndex = chapter.index > 0 ? chapter.index - 1 : 0;
+    self.chapterIndex = chapter.chapterIndex > 0 ? chapter.chapterIndex - 1 : 0;
     self.chapterContent = chapterContent;
     self.pageRanges = [pageRanges copy];
     _page = page;

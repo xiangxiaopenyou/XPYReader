@@ -32,6 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param object 对象
 + (BOOL)isEmptyObject:(id)object;
 
+/// 字符串MD5加密
+/// @param input 字符串
++ (NSString *)md5StringWithString:(NSString *)input;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -15,12 +15,27 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XPYReadRecordManager : NSObject
 
 /// 插入或者替换数据
-/// @param bookModel 数据模型
+/// @param bookModel 书籍模型
 + (void)insertOrReplaceRecordWithModel:(XPYBookModel *)bookModel;
+
+/// 删除数据
+/// @param bookModel 书籍模型
++ (void)deleteRecordWithModel:(XPYBookModel *)bookModel;
 
 /// 根据bookId获取阅读记录
 /// @param bookId 书籍ID
 + (XPYBookModel *)recordWithBookId:(NSString *)bookId;
+
+/// 更新阅读时间
+/// @param bookModel 书籍模型
++ (void)updateOpenTimeWithModel:(XPYBookModel *)bookModel;
+
+/// 更新是否在书架状态
+/// @param bookModel 书籍模型
++ (void)updateInStackStatusWithModel:(XPYBookModel *)bookModel;
+
+/// 获取所有在书架上的书籍
++ (NSArray *)allBooksInStack;
 
 
 @end

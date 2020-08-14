@@ -22,10 +22,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param chapters 章节数组
 + (void)insertChaptersWithModels:(NSArray *)chapters;
 
-/// 获取章节信息
+/// 获取书籍所有章节数组
 /// @param bookId 书籍ID
-/// @param chapterId 章节ID
-+ (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId;
++ (NSArray *)chaptersWithBookId:(NSString *)bookId;
+
+/// 获取指定章节信息
+/// @param bookId 书籍ID
+/// @param chapterId 章节ID（为空时获取第一章）
++ (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterId:(NSString * _Nullable)chapterId;
+
+/// 判断某本书是否已经保存章节
+/// @param bookId 书籍ID
++ (BOOL)isExsitChaptersWithBookId:(NSString *)bookId;
 
 /// 判断是否存在某章节信息
 /// @param bookId 书籍ID

@@ -10,6 +10,9 @@
 #import "XPYBlocks.h"
 #import "XPYConstant.h"
 
+/// KeyWindow
+#define XPYKeyWindow  [UIApplication sharedApplication].delegate.window
+
 /// 以375宽度屏幕为基准自适应
 #define XPYScreenScaleConstant(aConstant) CGRectGetWidth([UIScreen mainScreen].bounds) / 375 * aConstant
 
@@ -20,7 +23,7 @@
 #define XPYScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
 
 /// statusbar高度
-#define APP_STATUSBAR_HEIGHT (XPYDeviceIsIphoneX ? 44.0f : 20.0f)
+#define APP_STATUSBAR_HEIGHT CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
 
 /// App Document文件夹路径
 #define XPYDocumentDirectory NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject

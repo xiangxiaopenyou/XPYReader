@@ -8,6 +8,14 @@
 
 #import "XPYBaseModel.h"
 
+/// 阅读翻页模式
+typedef NS_ENUM(NSInteger, XPYReadPageType) {
+    XPYReadPageTypeCurl,        // 仿真
+    XPYReadPageTypeScroll,      // 左右滑动
+    XPYReadPageTypeNone,        // 无动画
+    XPYReadPageTypeVertical,    // 上下翻页
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYReadConfigManager : XPYBaseModel
@@ -20,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger fontSize;
 /// 文字颜色
 @property (nonatomic, strong) UIColor *textColor;
+/// 翻页模式
+@property (nonatomic, assign) XPYReadPageType pageType;
 
 + (instancetype)sharedInstance;
 

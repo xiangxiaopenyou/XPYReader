@@ -1,8 +1,8 @@
 //
-//  XPYBookStackViewController.h
+//  XPYLoginViewController.h
 //  XPYReader
 //
-//  Created by zhangdu_imac on 2020/8/3.
+//  Created by zhangdu_imac on 2020/8/14.
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYBookStackViewController : XPYBaseViewController
+@interface XPYLoginViewController : XPYBaseViewController
 
 @end
 

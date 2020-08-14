@@ -13,17 +13,14 @@
 @implementation XPYChapterModel
 
 WCDB_IMPLEMENTATION(XPYChapterModel)
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, primaryId,"primaryId")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterId,"chapterId")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, bookId,"bookId")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, index, "index")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterName,"chapterName")
+WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterId, "chapterId")
+WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, bookId, "bookId")
+WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterIndex, "chapterIndex")
+WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterName, "chapterName")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, content,"content")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, charNum, "charNum")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, needFee, "needFee")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, price, "price")
-
-WCDB_PRIMARY(XPYChapterModel, primaryId)
 
 
 WCDB_INDEX(XPYChapterModel, "_bookId_chapterId_index", bookId)
@@ -37,20 +34,11 @@ WCDB_INDEX(XPYChapterModel, "_bookId_content_index", content)
         @"bookId": @"bid",
         @"chapterId": @"cid",
         @"chapterName": @"cn",
-        @"index" : @"id",
+        @"chapterIndex" : @"id",
         @"charNum" : @"wc",
         @"needFee" : @"fe",
         @"price" : @"pr"
     };
-}
-
-
-/// 拼接bookId和chapterId获取主键
-- (NSString *)primaryId {
-    if (!_primaryId) {
-        _primaryId = [NSString stringWithFormat:@"%@%@", self.bookId, self.chapterId];
-    }
-    return _primaryId;
 }
 
 @end
