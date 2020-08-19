@@ -88,4 +88,29 @@
     
     return  output;
 }
+
++ (CGFloat)readViewLeftSpacing {
+    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft && XPYDeviceIsIphoneX) {
+        return 54;
+    }
+    return 20;
+}
+
++ (CGFloat)readViewRightSpacing {
+    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight && XPYDeviceIsIphoneX) {
+        return 54;
+    }
+    return 20;
+}
+
++ (CGFloat)readViewTopSpacing {
+    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
+        return XPYDeviceIsIphoneX ? APP_STATUSBAR_HEIGHT + 45 : APP_STATUSBAR_HEIGHT + 25;
+    }
+    return APP_STATUSBAR_HEIGHT + 25;
+}
+
++ (CGFloat)readViewBottomSpacing {
+    return 40 + (XPYDeviceIsIphoneX ? 24.0f : 0);
+}
 @end

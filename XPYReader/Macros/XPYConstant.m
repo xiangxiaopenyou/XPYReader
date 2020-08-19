@@ -12,5 +12,7 @@ NSString * const XPYUserCacheKey = @"XPYUserCache";
 
 NSString * const XPYReadConfigKey = @"XPYReadConfig";
 
+NSString * const XPYLoginStatusDidChangeNotification = @"XPYLoginStatusDidChange";
+
 NSString * const XPYBookStackDidChangeNotification = @"XPYBookStackDidChange";
 

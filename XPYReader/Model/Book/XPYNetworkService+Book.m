@@ -50,7 +50,21 @@
             success(book);
         }
     } failure:^(NSError *error) {
-        
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
+- (void)synchronizeStackBooksWithBooksString:(NSString *)booksString success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure {
+    [self request:XPYHTTPRequestTypePost path:@"user-bookshelf?action=data_sync" parameters:@{@"book_ids" : booksString, @"i_version" : @2} success:^(id result) {
+        if (success) {
+            success(result);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
     }];
 }
 

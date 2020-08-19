@@ -8,15 +8,12 @@
 
 #import "XPYReadViewController.h"
 
-#import "XPYReadView.h"
-
 
 @interface XPYReadViewController ()
 
 @property (nonatomic, strong) XPYReadView *readView;
 
 @property (nonatomic, strong) XPYChapterModel *chapterModel;
-@property (nonatomic, assign) NSInteger chapterIndex;
 @property (nonatomic, copy) NSAttributedString *chapterContent;
 @property (nonatomic, copy) NSArray *pageRanges;
 @property (nonatomic, assign) NSInteger page;
@@ -42,18 +39,12 @@
 #pragma mark - Instance methods
 - (void)setupChapter:(XPYChapterModel *)chapter chapterContent:(NSAttributedString *)chapterContent pageRanges:(NSArray *)pageRanges page:(NSInteger)page pageContent:(NSAttributedString *)pageContent {
     self.chapterModel = chapter;
-    self.chapterIndex = chapter.chapterIndex > 0 ? chapter.chapterIndex - 1 : 0;
     self.chapterContent = chapterContent;
     self.pageRanges = [pageRanges copy];
     _page = page;
     self.pageContent = pageContent;
     [self.readView setupContent:pageContent];
     [self.view setNeedsLayout];
-}
-
-#pragma mark - Network
-- (void)chapterContentRequest {
-    
 }
 
 #pragma mark - Getters

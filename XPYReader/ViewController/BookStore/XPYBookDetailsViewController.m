@@ -7,7 +7,7 @@
 //
 
 #import "XPYBookDetailsViewController.h"
-#import "XPYReadPageViewController.h"
+#import "XPYReaderManagerController.h"
 
 #import "XPYNetworkService+Book.h"
 #import "XPYBookModel.h"
@@ -106,7 +106,7 @@
     [XPYReadHelper readyForReadingWithBook:self.bookModel success:^(XPYBookModel * _Nonnull book) {
         [MBProgressHUD xpy_hideHUD];
         dispatch_async(dispatch_get_main_queue(), ^{
-            XPYReadPageViewController *readPageController = [[XPYReadPageViewController alloc] init];
+            XPYReaderManagerController *readPageController = [[XPYReaderManagerController alloc] init];
             readPageController.book = book;
             [self.navigationController pushViewController:readPageController animated:YES];
         });

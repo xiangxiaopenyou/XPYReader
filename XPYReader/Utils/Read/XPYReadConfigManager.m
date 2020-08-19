@@ -22,6 +22,7 @@
             instance.paragraphSpacing = 10;
             instance.fontSize = 19;
             instance.textColor = [UIColor blackColor];
+            instance.pageType = XPYReadPageTypeCurl;
         }
     });
     return instance;

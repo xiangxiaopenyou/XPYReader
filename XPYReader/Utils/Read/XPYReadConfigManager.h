@@ -8,14 +8,6 @@
 
 #import "XPYBaseModel.h"
 
-/// 阅读翻页模式
-typedef NS_ENUM(NSInteger, XPYReadPageType) {
-    XPYReadPageTypeCurl,        // 仿真
-    XPYReadPageTypeScroll,      // 左右滑动
-    XPYReadPageTypeNone,        // 无动画
-    XPYReadPageTypeVertical,    // 上下翻页
-};
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYReadConfigManager : XPYBaseModel

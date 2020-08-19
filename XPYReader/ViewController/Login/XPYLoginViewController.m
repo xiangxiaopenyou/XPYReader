@@ -10,6 +10,7 @@
 
 #import "XPYNetworkService+User.h"
 #import "XPYUserManager.h"
+#import "XPYReadHelper.h"
 
 
 @interface XPYLoginViewController ()
@@ -55,8 +56,12 @@
         [MBProgressHUD xpy_hideHUD];
         // 保存用户信息
         [[XPYUserManager sharedInstance] saveUser:(XPYUserModel *)result];
-        // 检查是否需要同步书架数据
-        //[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#>
+        // 同步书架数据
+        [XPYReadHelper synchronizeStackBooksAndReadRecordsComplete:^{
+            [self.navigationController popViewControllerAnimated:YES];
+            // 发送登录状态变化通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:XPYLoginStatusDidChangeNotification object:nil];
+        }];
     } failure:^(NSError *error) {
         [MBProgressHUD xpy_showTips:@"登录失败"];
     }];

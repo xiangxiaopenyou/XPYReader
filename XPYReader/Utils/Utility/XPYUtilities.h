@@ -36,6 +36,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param input 字符串
 + (NSString *)md5StringWithString:(NSString *)input;
 
+/// 阅读内容左边距
++ (CGFloat)readViewLeftSpacing;
+
+/// 阅读内容右边距
++ (CGFloat)readViewRightSpacing;
+
+/// 阅读内容上边距
++ (CGFloat)readViewTopSpacing;
+
+/// 阅读内容下边距
++ (CGFloat)readViewBottomSpacing;
+
 @end
 
 NS_ASSUME_NONNULL_END

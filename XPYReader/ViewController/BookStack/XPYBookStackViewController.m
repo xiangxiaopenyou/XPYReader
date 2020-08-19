@@ -7,7 +7,7 @@
 //
 
 #import "XPYBookStackViewController.h"
-#import "XPYReadPageViewController.h"
+#import "XPYReaderManagerController.h"
 
 #import "XPYBookStackCollectionViewCell.h"
 
@@ -16,6 +16,7 @@
 #import "XPYNetworkService+Chapter.h"
 #import "XPYReadRecordManager.h"
 #import "XPYReadHelper.h"
+#import "XPYUserManager.h"
 
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
@@ -47,20 +48,28 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     // 注册书架书籍发生变化通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stackBooksChanged:) name:XPYBookStackDidChangeNotification object:nil];
 }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self stackBooksChanged:nil];
+}
 
 #pragma mark - Network
 - (void)booksRequest {
-    [[XPYNetworkService sharedService] stackBooksRequestSuccess:^(NSArray * _Nonnull books) {
-        NSArray *resultArray = [books copy];
-        if (resultArray.count > 0) {
-            [self synchronizeBooks:resultArray];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView reloadData];
-        });
-    } failure:^(NSError * _Nonnull error) {
-        [MBProgressHUD xpy_showTips:@"网络错误"];
-    }];
+    if ([XPYUserManager sharedInstance].isLogin) {
+        
+    } else {
+        [[XPYNetworkService sharedService] stackBooksRequestSuccess:^(NSArray * _Nonnull books) {
+            NSArray *resultArray = [books copy];
+            if (resultArray.count > 0) {
+                [self synchronizeBooks:resultArray];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadData];
+            });
+        } failure:^(NSError * _Nonnull error) {
+            [MBProgressHUD xpy_showTips:@"网络错误"];
+        }];
+    }
 }
 
 #pragma mark - Private methods
@@ -114,7 +123,7 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     [XPYReadHelper readyForReadingWithBook:book success:^(XPYBookModel * _Nonnull book) {
         [MBProgressHUD xpy_hideHUD];
         dispatch_async(dispatch_get_main_queue(), ^{
-            XPYReadPageViewController *readPageController = [[XPYReadPageViewController alloc] init];
+            XPYReaderManagerController *readPageController = [[XPYReaderManagerController alloc] init];
             readPageController.book = [book copy];
             [self.navigationController pushViewController:readPageController animated:YES];
         });

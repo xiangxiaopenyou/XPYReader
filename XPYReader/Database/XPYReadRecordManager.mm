@@ -22,6 +22,10 @@
     [[XPYDatabaseManager sharedInstance].database deleteObjectsFromTable:XPYReadRecordTable where:XPYBookModel.bookId.is(bookModel.bookId)];
 }
 
++ (void)deleteAllReadRecords {
+    [[XPYDatabaseManager sharedInstance].database deleteAllObjectsFromTable:XPYReadRecordTable];
+}
+
 + (XPYBookModel *)recordWithBookId:(NSString *)bookId {
     return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.bookId.is(bookId)];
 }
@@ -33,6 +37,10 @@
 
 + (void)updateInStackStatusWithModel:(XPYBookModel *)bookModel {
     [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperties:XPYBookModel.isInStack withObject:bookModel where:XPYBookModel.bookId.is(bookModel.bookId)];
+}
+
++ (void)updateChapterCountWithBookId:(NSString *)bookId count:(NSInteger)count {
+    [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperty:XPYBookModel.chapterCount withValue:@(count) where:XPYBookModel.bookId.is(bookId)];
 }
 
 + (NSArray *)allBooksInStack {

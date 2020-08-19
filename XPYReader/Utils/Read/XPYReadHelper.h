@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param complete 完成回调
 + (void)removeFormBookStackWithBook:(XPYBookModel *)bookModel complete:(void (^)(void))complete;
 
+/// 用户登录时同步本地书架和阅读记录
+/// @param complete 完成回调
++ (void)synchronizeStackBooksAndReadRecordsComplete:(void (^)(void))complete;
+
 @end
 
 NS_ASSUME_NONNULL_END

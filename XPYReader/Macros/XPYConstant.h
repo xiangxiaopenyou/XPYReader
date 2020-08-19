@@ -11,6 +11,10 @@
 FOUNDATION_EXTERN NSString * const XPYUserCacheKey;
 /// 阅读配置保存Key
 FOUNDATION_EXTERN NSString * const XPYReadConfigKey;
+
+#pragma mark - Notification name
+/// 登录状态变化通知
+FOUNDATION_EXTERN NSString * const XPYLoginStatusDidChangeNotification;
 /// 书架书籍变化通知
 FOUNDATION_EXTERN NSString * const XPYBookStackDidChangeNotification;
 

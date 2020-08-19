@@ -7,7 +7,7 @@
 //
 
 #import "XPYBaseViewController.h"
-
+#import "XPYReadView.h"
 #import "XPYChapterModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 当前章节
 @property (nonatomic, strong, readonly) XPYChapterModel *chapterModel;
-/// 当前章节序号(从0开始，XPYChapterModel中的index默认从1开始)
-@property (nonatomic, assign, readonly) NSInteger chapterIndex;
 /// 当前章节所有内容
 @property (nonatomic, copy, readonly) NSAttributedString *chapterContent;
 /// 当前章节分页

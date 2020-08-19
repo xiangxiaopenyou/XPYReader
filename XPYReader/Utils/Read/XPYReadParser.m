@@ -83,16 +83,23 @@
 /// @param content 内容
 + (NSString *)resetContent:(NSString *)content {
     if (!content || content.length == 0) {
-        content = @"";
+        return @"";
     }
-//    content = [content stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
-//    content = [content stringByReplacingOccurrencesOfString:@"\n\n" withString:@"\n"];
-//    content = [content stringByReplacingOccurrencesOfString:@"\n\n" withString:@"\n"];
-//    content = [content stringByReplacingOccurrencesOfString:@"\0" withString:@""];
-//    content = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
-    // 段落开头空格
-    //content = [NSString stringWithFormat:@"%@%@", @"　　", content];
-    //content = [content stringByReplacingOccurrencesOfString:@"\n" withString:@"\n　　"];
+    // 替换单换行
+    content = [content stringByReplacingOccurrencesOfString:@"r" withString:@""];
+    
+    // 替换换行和多个换行（换行加空格）
+    NSRegularExpression *regularExpression = [[NSRegularExpression alloc] initWithPattern:@"\\s*\\n+\\s*" options:NSRegularExpressionCaseInsensitive error:nil];
+    content = [regularExpression stringByReplacingMatchesInString:content options:NSMatchingReportProgress range:NSMakeRange(0, content.length) withTemplate:@"\n　　"];
+    
+    // 去掉最后换行和空格，避免空字符另起一页
+    if ([[content substringFromIndex:content.length - 3] isEqualToString:@"\n　　"]) {
+        content = [content substringToIndex:content.length - 3];
+    }
+    
+    // 章节开头添加空格
+    content = [@"　　" stringByAppendingString:content];
+    
     return content;
 }
 

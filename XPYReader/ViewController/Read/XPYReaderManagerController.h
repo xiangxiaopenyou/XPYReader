@@ -1,10 +1,10 @@
 //
-//  XPYReadPageViewController.h
+//  XPYReaderManagerController.h
 //  XPYReader
 //
 //  Created by zhangdu_imac on 2020/8/4.
 //  Copyright © 2020 xiang. All rights reserved.
-//
+//  阅读器总控制器
 
 #import "XPYBaseViewController.h"
 
@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYReadPageViewController : XPYBaseViewController
+@interface XPYReaderManagerController : XPYBaseViewController
 
 @property (nonatomic, strong) XPYBookModel *book;
 

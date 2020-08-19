@@ -8,6 +8,7 @@
 
 #import "XPYChapterHelper.h"
 #import "XPYChapterDataManager.h"
+#import "XPYReadRecordManager.h"
 #import "XPYChapterModel.h"
 #import "XPYNetworkService+Chapter.h"
 
@@ -95,6 +96,14 @@
     } else {
         !success ?: success(chapters);
     }
+}
+
++ (XPYChapterModel *)lastChapterOfCurrentChapter:(XPYChapterModel *)currentChapter {
+    return [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterIndex:currentChapter.chapterIndex - 1];
+}
+
++ (XPYChapterModel *)nextChapterOfCurrentChapter:(XPYChapterModel *)currentChapter {
+    return [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterIndex:currentChapter.chapterIndex + 1];
 }
 
 // 请求书籍章节基本信息

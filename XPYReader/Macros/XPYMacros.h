@@ -34,9 +34,12 @@
 /// 强引用对象
 #define strongify(object) autoreleasepool{} __typeof__(object) object = weak##_##object;
 
-#pragma mark - 阅读器文字显示
-#define XPYReadViewLeftSpacing 20
-#define XPYReadViewRightSpacing 20
-#define XPYReadViewTopSpacing (25 + APP_STATUSBAR_HEIGHT)
-#define XPYReadViewBottomSpacing (40 + (XPYDeviceIsIphoneX ? 24.0f : 0))
+/// 阅读器文字区域Rect
+#define XPYReadViewBounds CGRectMake(0, 0, XPYScreenWidth - XPYReadViewLeftSpacing - XPYReadViewRightSpacing, XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)
+
+#pragma mark - Font
+#define FontBold(x) [UIFont fontWithName:@"PingFangSC-Semibold" size:x]
+#define FontRegular(x) [UIFont fontWithName:@"PingFangSC-Regular" size:x]
+#define FontMedium(x) [UIFont fontWithName:@"PingFangSC-Medium" size:x]
+#define FontLight(x) [UIFont fontWithName:@"PingFangSC-Light" size:x]
 

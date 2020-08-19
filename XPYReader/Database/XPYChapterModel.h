@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *chapterId;
 @property (nonatomic, copy) NSString *bookId;
-/// 章节编号
+/// 章节编号(从1开始)
 @property (nonatomic, assign) NSInteger chapterIndex;
 /// 章节名称
 @property (nonatomic, copy) NSString *chapterName;
@@ -26,6 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL needFee;
 /// 价格
 @property (nonatomic, assign) NSInteger price;
+
+#pragma mark - 不保存进数据库
+/// 当前章节分页
+@property (nonatomic, copy) NSArray *pageRanges;
+/// 包含文字属性的章节内容
+@property (nonatomic, copy) NSAttributedString *attributedContent;
+
 
 @end
 

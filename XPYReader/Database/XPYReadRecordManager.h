@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param bookModel 书籍模型
 + (void)deleteRecordWithModel:(XPYBookModel *)bookModel;
 
+/// 删除所有阅读数据
++ (void)deleteAllReadRecords;
+
 /// 根据bookId获取阅读记录
 /// @param bookId 书籍ID
 + (XPYBookModel *)recordWithBookId:(NSString *)bookId;
@@ -33,6 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 更新是否在书架状态
 /// @param bookModel 书籍模型
 + (void)updateInStackStatusWithModel:(XPYBookModel *)bookModel;
+
+/// 更新章节数量
+/// @param bookId 书籍ID
+/// @param count 数量
++ (void)updateChapterCountWithBookId:(NSString *)bookId count:(NSInteger)count;
 
 /// 获取所有在书架上的书籍
 + (NSArray *)allBooksInStack;

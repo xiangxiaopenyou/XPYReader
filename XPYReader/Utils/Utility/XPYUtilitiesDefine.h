@@ -31,3 +31,9 @@
 /// 字符串MD5加密
 #define XPYMD5StringWithString(aString) [XPYUtilities md5StringWithString:aString]
 
+#pragma mark - 阅读器
+#define XPYReadViewLeftSpacing [XPYUtilities readViewLeftSpacing]
+#define XPYReadViewRightSpacing [XPYUtilities readViewRightSpacing]
+#define XPYReadViewTopSpacing [XPYUtilities readViewTopSpacing]
+#define XPYReadViewBottomSpacing [XPYUtilities readViewBottomSpacing]
+

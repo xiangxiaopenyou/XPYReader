@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id <XPYReadMenuDelegate> delegate;
 
+/// 是否正在显示
+@property (nonatomic, assign, getter=isShowing, readonly) BOOL showing;
+
 /// 唯一初始化方法
 /// @param sourceView 需要展示Menu的视图，为空则设为KeyWindow
 - (instancetype)initWithView:(UIView * _Nullable)sourceView;

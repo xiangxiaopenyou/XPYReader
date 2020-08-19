@@ -21,6 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 书籍详情
 - (void)bookDetailsRequestWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
 
+/// 同步书架书籍
+/// @param booksString bookId拼接字符串
+- (void)synchronizeStackBooksWithBooksString:(NSString *)booksString success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

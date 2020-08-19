@@ -45,6 +45,10 @@
     return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) && XPYChapterModel.chapterId.is(chapterId)];
 }
 
++ (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterIndex:(NSInteger)chapterIndex {
+    return [[XPYDatabaseManager sharedInstance].database getOneObjectOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) && XPYChapterModel.chapterIndex.is(chapterIndex)];
+}
+
 + (NSArray *)chaptersWithBookId:(NSString *)bookId {
     return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYChapterModel class] fromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId) orderBy:XPYChapterModel.chapterIndex.order(WCTOrderedAscending)];
 }
@@ -67,6 +71,10 @@
 
 + (void)deleteAllChaptersWithBookId:(NSString *)bookId {
     [[XPYDatabaseManager sharedInstance].database deleteObjectsFromTable:XPYChapterTable where:XPYChapterModel.bookId.is(bookId)];
+}
+
++ (void)deleteAllChapters {
+    [[XPYDatabaseManager sharedInstance].database deleteAllObjectsFromTable:XPYChapterTable];
 }
 
 @end

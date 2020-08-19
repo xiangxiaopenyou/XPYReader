@@ -31,6 +31,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param chapterId 章节ID（为空时获取第一章）
 + (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterId:(NSString * _Nullable)chapterId;
 
+/// 根据章节索引获取章节信息
+/// @param bookId 书籍ID
+/// @param chapterIndex 章节索引
++ (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterIndex:(NSInteger)chapterIndex;
+
 /// 判断某本书是否已经保存章节
 /// @param bookId 书籍ID
 + (BOOL)isExsitChaptersWithBookId:(NSString *)bookId;
@@ -43,6 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 删除某本书籍的所有章节信息
 /// @param bookId 书籍ID
 + (void)deleteAllChaptersWithBookId:(NSString *)bookId;
+
+/// 删除本地所有章节信息
++ (void)deleteAllChaters;
 
 @end
 

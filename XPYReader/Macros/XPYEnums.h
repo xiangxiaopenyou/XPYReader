@@ -26,4 +26,12 @@ typedef NS_ENUM(NSUInteger, XPYHTTPRequestType) {
     XPYHTTPRequestTypeDownloadFile  // Download
 };
 
+/// 阅读翻页模式
+typedef NS_ENUM(NSInteger, XPYReadPageType) {
+    XPYReadPageTypeCurl,            // 仿真
+    XPYReadPageTypeTranslation,     // 左右平移
+    XPYReadPageTypeNone,            // 无动画
+    XPYReadPageTypeVerticalScroll,  // 上下翻页
+};
+
 #endif /* XPYEnums_h */
