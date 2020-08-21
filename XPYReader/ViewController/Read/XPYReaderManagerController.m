@@ -13,16 +13,13 @@
 
 #import "XPYReadMenu.h"
 
-#import "XPYChapterModel.h"
 #import "XPYBookModel.h"
-#import "XPYChapterPageModel.h"
 
-#import "XPYReadParser.h"
 #import "XPYReadHelper.h"
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
-@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYPageReadViewControllerDelegate>
+@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
 
 /// 仿真、左右平移、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
@@ -76,7 +73,7 @@
     [self.view addGestureRecognizer:tap];
     
     // 屏幕旋转通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 #pragma mark - UI
@@ -85,15 +82,44 @@
     self.fd_prefersNavigationBarHidden = YES;
     // 取消右滑返回手势
     self.fd_interactivePopDisabled = YES;
-    [self addChildViewController:self.pageViewController];
-    //[self addChildViewController:self.scrollReadController];
+    
+    [self createReaderWithPageType:[XPYReadConfigManager sharedInstance].pageType];
+}
+
+#pragma mark - Private methods
+/// 根据翻页模式创建阅读器
+/// @param pageType 翻页模式
+- (void)createReaderWithPageType:(XPYReadPageType)pageType {
+    if (_pageViewController) {
+        [_pageViewController.view removeFromSuperview];
+        [_pageViewController removeFromParentViewController];
+        _pageViewController = nil;
+    }
+    if (_scrollReadController) {
+        [_scrollReadController.view removeFromSuperview];
+        [_scrollReadController removeFromParentViewController];
+        _scrollReadController = nil;
+    }
+    switch (pageType) {
+        case XPYReadPageTypeCurl:
+        case XPYReadPageTypeNone:
+        case XPYReadPageTypeTranslation: {
+            [self addChildViewController:self.pageViewController];
+        }
+            break;
+        case XPYReadPageTypeVerticalScroll: {
+            [self addChildViewController:self.scrollReadController];
+        }
+            break;
+    }
 }
 
 #pragma mark - Actions
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
-    CGFloat width = CGRectGetWidth(self.view.bounds) / 3.0;
-    if (touchPoint.x > width && touchPoint.x < width * 2) {
+    // 限制弹出菜单工具栏的点击区域为屏幕中间，宽度为屏幕一半
+    CGFloat width = CGRectGetWidth(self.view.bounds) / 4.0;
+    if (touchPoint.x > width && touchPoint.x < width * 3) {
         NSLog(@"弹出或隐藏工具栏");
         if (self.readMenu.isShowing) {
             [self.readMenu hidden];
@@ -107,16 +133,17 @@
 /// 屏幕方向旋转
 - (void)orientationChanged:(NSNotification *)notification {
     // 当前章节分页并设置阅读页
-    NSLog(@"width:%@ height:%@", @(XPYScreenWidth), @(XPYScreenHeight));
-    if (self.pageViewController) {
-        [self.pageViewController.view removeFromSuperview];
-        [self.pageViewController removeFromParentViewController];
-        self.pageViewController = nil;
-    }
-    [self addChildViewController:self.pageViewController];
+    [self createReaderWithPageType:[XPYReadConfigManager sharedInstance].pageType];
 }
 #pragma mark - XPYPageReadViewControllerDelegate
 - (void)pageReadViewControllerWillTransition {
+    if (self.readMenu.isShowing) {
+        [self.readMenu hidden];
+    }
+}
+
+#pragma mark - XPYScrollReadViewControllerDelegate
+- (void)scrollReadViewControllerWillBeginDragging {
     if (self.readMenu.isShowing) {
         [self.readMenu hidden];
     }
@@ -126,7 +153,9 @@
 - (void)readMenuDidClickBack {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
+- (void)readMenuDidChangePageType:(XPYReadPageType)pageType {
+    [self createReaderWithPageType:pageType];
+}
 
 #pragma mark - Gesture recognizer delegete
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -139,7 +168,7 @@
 #pragma mark - Getters
 - (XPYPageReadViewController *)pageViewController {
     if (!_pageViewController) {
-        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book pageType:XPYReadPageTypeCurl];
+        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book pageType:[XPYReadConfigManager sharedInstance].pageType];
         _pageViewController.pageReadDelegate = self;
         [self.view addSubview:_pageViewController.view];
         [self.view sendSubviewToBack:_pageViewController.view];
@@ -149,6 +178,7 @@
 - (XPYScrollReadViewController *)scrollReadController {
     if (!_scrollReadController) {
         _scrollReadController = [[XPYScrollReadViewController alloc] initWithBook:self.book];
+        _scrollReadController.scrollReadDelegate = self;
         [self.view addSubview:_scrollReadController.view];
         [self.view sendSubviewToBack:_scrollReadController.view];
     }

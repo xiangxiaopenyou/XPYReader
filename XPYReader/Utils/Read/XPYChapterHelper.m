@@ -15,6 +15,7 @@
 @implementation XPYChapterHelper
 
 + (void)chapterWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId success:(void (^)(XPYChapterModel * _Nonnull))success failure:(void (^)(NSString * _Nonnull))failure {
+    // chapterId为空时获取书籍第一章
     if (!chapterId) {
         // 该书籍是否保存了章节信息
         BOOL isExsitChapters = [XPYChapterDataManager isExsitChaptersWithBookId:bookId];
@@ -106,6 +107,78 @@
     return [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterIndex:currentChapter.chapterIndex + 1];
 }
 
++ (void)preloadNextChapterWithCurrentChapter:(XPYChapterModel *)currentChapter complete:(void (^)(XPYChapterModel * _Nullable))complete {
+    if (!currentChapter) {
+        return;
+    }
+    __block XPYChapterModel *nextChapter = [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter];
+    if (XPYIsEmptyObject(nextChapter.content)) {
+        [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[nextChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
+            nextChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:nextChapter.chapterId];
+            !complete ?: complete(nextChapter);
+        }];
+        [XPYChapterHelper downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[nextChapter.chapterId] progress:nil complete:nil];
+    } else {
+        // 已经存在章节内容直接返回
+        !complete ?: complete(nextChapter);
+    }
+}
+
++ (void)preloadLastChapterWithCurrentChapter:(XPYChapterModel *)currentChapter complete:(void (^)(XPYChapterModel * _Nullable))complete {
+    __block XPYChapterModel *lastChapter = [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
+    if (XPYIsEmptyObject(lastChapter.content)) {
+        [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[lastChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
+            lastChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:lastChapter.chapterId];
+            !complete ?: complete(lastChapter);
+        }];
+    } else {
+        // 已经存在章节内容直接返回
+        !complete ?: complete(lastChapter);
+    }
+}
+
++ (void)downloadChaptersContentWithBookId:(NSString *)bookId chapterIds:(NSArray *)chapterIds progress:(void (^)(NSInteger))progress complete:(nullable void (^)(BOOL, NSString * _Nonnull, NSArray * _Nullable))complete {
+    if (XPYIsEmptyObject(bookId)) {
+        !complete ?: complete(NO, @"未知书籍", nil);
+    }
+    if (chapterIds.count == 0) {
+        !complete ?: complete(NO, @"未知章节", nil);
+    }
+    // 统计下载章节数量
+    __block NSInteger downloadCount = 0;
+    // 统计下载失败章节ID
+    __block NSMutableArray *failureArray = [[NSMutableArray alloc] init];
+    for (NSString *chapterId in chapterIds) {
+        if (XPYIsEmptyObject(chapterId)) {
+            downloadCount += 1;
+            if (downloadCount == chapterIds.count) {
+                !complete ?: complete(YES, @"下载完成", failureArray);
+            } else {
+                !progress ?: progress(downloadCount);
+            }
+            continue;
+        }
+        [self chapterWithBookId:bookId chapterId:chapterId success:^(XPYChapterModel * _Nonnull chapter) {
+            downloadCount += 1;
+            if (downloadCount == chapterIds.count) {
+                !complete ?: complete(YES, @"下载完成", failureArray);
+            } else {
+                !progress ?: progress(downloadCount);
+            }
+        } failure:^(NSString * _Nonnull tip) {
+            downloadCount += 1;
+            // 保存失败章节ID
+            [failureArray addObject:chapterId];
+            if (downloadCount == chapterIds.count) {
+                !complete ?: complete(YES, @"下载完成", failureArray);
+            } else {
+                !progress ?: progress(downloadCount);
+            }
+        }];
+    }
+}
+
+#pragma mark - Private class methods
 // 请求书籍章节基本信息
 + (void)requestBaseChapterInformationsWithBookId:(NSString *)bookId success:(XPYSuccessHandler)success failure:(void (^)(NSString * tip))failure {
     [[XPYNetworkService sharedService] bookChaptersWithBookId:bookId success:^(id result) {
@@ -138,5 +211,6 @@
         !failure ?: failure(@"请求章节内容失败");
     }];
 }
+
 
 @end

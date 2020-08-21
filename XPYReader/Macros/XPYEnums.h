@@ -28,10 +28,10 @@ typedef NS_ENUM(NSUInteger, XPYHTTPRequestType) {
 
 /// 阅读翻页模式
 typedef NS_ENUM(NSInteger, XPYReadPageType) {
-    XPYReadPageTypeCurl,            // 仿真
-    XPYReadPageTypeTranslation,     // 左右平移
-    XPYReadPageTypeNone,            // 无动画
+    XPYReadPageTypeCurl = 0,            // 仿真
     XPYReadPageTypeVerticalScroll,  // 上下翻页
+    XPYReadPageTypeTranslation,     // 左右平移
+    XPYReadPageTypeNone             // 无动画
 };
 
 #endif /* XPYEnums_h */

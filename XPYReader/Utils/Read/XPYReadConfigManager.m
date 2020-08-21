@@ -21,11 +21,21 @@
             instance.lineSpacing = 3;
             instance.paragraphSpacing = 10;
             instance.fontSize = 19;
-            instance.textColor = [UIColor blackColor];
             instance.pageType = XPYReadPageTypeCurl;
         }
     });
     return instance;
+}
+
+/// 更新本地阅读配置
+- (void)updateConfigs {
+    [[NSUserDefaults standardUserDefaults] setObject:[self yy_modelToJSONObject] forKey:XPYReadConfigKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)setPageType:(XPYReadPageType)pageType {
+    _pageType = pageType;
+    [self updateConfigs];
 }
 
 @end

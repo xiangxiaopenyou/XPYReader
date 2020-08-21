@@ -11,7 +11,12 @@
 
 @protocol XPYReadMenuDelegate <NSObject>
 
+/// 退出阅读器
 - (void)readMenuDidClickBack;
+
+/// 切换翻阅模式
+/// @param pageType 翻页模式
+- (void)readMenuDidChangePageType:(XPYReadPageType)pageType;
 
 @end
 

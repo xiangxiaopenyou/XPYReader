@@ -18,8 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat paragraphSpacing;
 /// 字号
 @property (nonatomic, assign) NSInteger fontSize;
-/// 文字颜色
-@property (nonatomic, strong) UIColor *textColor;
 /// 翻页模式
 @property (nonatomic, assign) XPYReadPageType pageType;
 

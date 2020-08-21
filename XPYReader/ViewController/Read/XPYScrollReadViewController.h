@@ -11,9 +11,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol XPYScrollReadViewControllerDelegate <NSObject>
+
+/// 开始拖动列表
+- (void)scrollReadViewControllerWillBeginDragging;
+
+@end
+
 @interface XPYScrollReadViewController : XPYBaseViewController
 
 - (instancetype)initWithBook:(XPYBookModel *)book;
+
+@property (nonatomic, weak) id <XPYScrollReadViewControllerDelegate> scrollReadDelegate;
 
 @end
 

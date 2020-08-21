@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteAllChaptersWithBookId:(NSString *)bookId;
 
 /// 删除本地所有章节信息
-+ (void)deleteAllChaters;
++ (void)deleteAllChapters;
 
 @end
 

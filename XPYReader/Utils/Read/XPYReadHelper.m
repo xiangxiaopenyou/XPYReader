@@ -104,7 +104,7 @@
     } cancelHandler:^{
         // 选择不同步数据，则删除本地数据
         [XPYReadRecordManager deleteAllReadRecords];
-        [XPYChapterDataManager deleteAllChaters];
+        [XPYChapterDataManager deleteAllChapters];
         !complete ?: complete();
     }];
 }

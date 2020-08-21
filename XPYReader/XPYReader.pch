@@ -13,6 +13,7 @@
 #import "XPYUtilitiesDefine.h"
 #import "MBProgressHUD+XPYExtension.h"
 #import "XPYAlertManager.h"
+#import "XPYReadConfigManager.h"
 
 #import <Masonry.h>
 #import <UINavigationController+FDFullscreenPopGesture.h>

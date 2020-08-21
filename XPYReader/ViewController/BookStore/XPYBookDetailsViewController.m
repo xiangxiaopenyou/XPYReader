@@ -66,14 +66,22 @@
     
     [self.readButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view);
-        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
         make.height.mas_offset(40);
         make.width.equalTo(self.view.mas_width).multipliedBy(0.5);
     }];
     
     [self.stackOperateButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
         make.leading.equalTo(self.readButton.mas_trailing);
         make.height.mas_offset(40);
     }];

@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol XPYPageReadViewControllerDelegate <NSObject>
 
-/// 更新阅读进度记录
-//- (void)pageReadViewController:(XPYPageReadViewController *)viewController didUpdateRecord:(XPYBookModel *)bookModel;
-
 @optional
 - (void)pageReadViewControllerWillTransition;
 

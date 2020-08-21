@@ -12,14 +12,21 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol XPYReadViewControllerDelegate <NSObject>
+
+/// 下一页
+- (void)readViewControllerShowNextPage;
+/// 上一页
+- (void)readViewControllerShowLastPage;
+
+@end
+
 @interface XPYReadViewController : XPYBaseViewController
+
+@property (nonatomic, weak) id <XPYReadViewControllerDelegate> delegate;
 
 /// 当前章节
 @property (nonatomic, strong, readonly) XPYChapterModel *chapterModel;
-/// 当前章节所有内容
-@property (nonatomic, copy, readonly) NSAttributedString *chapterContent;
-/// 当前章节分页
-@property (nonatomic, copy, readonly) NSArray *pageRanges;
 /// 当前页码
 @property (nonatomic, assign, readonly) NSInteger page;
 /// 当前页面内容
@@ -27,13 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 设置当前页面内容
 /// @param chapter 章节Model
-/// @param chapterContent 当前章节所有内容
-/// @param pageRanges 当前章节分页
 /// @param page 当前页码
 /// @param pageContent 当前页码内容
 - (void)setupChapter:(XPYChapterModel *)chapter
-      chapterContent:(NSAttributedString *)chapterContent
-          pageRanges:(NSArray *)pageRanges
                 page:(NSInteger)page
          pageContent:(NSAttributedString *)pageContent;
 

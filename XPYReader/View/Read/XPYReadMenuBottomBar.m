@@ -47,13 +47,21 @@
     [self addSubview:self.slider];
     
     [self.lastChapterButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.mas_leading).mas_offset(5);
+        if (@available(iOS 11.0, *)) {
+            make.left.equalTo(self.mas_safeAreaLayoutGuideLeft).mas_offset(5);
+        } else {
+            make.leading.equalTo(self.mas_leading).mas_offset(5);
+        }
         make.top.equalTo(self.mas_top);
         make.size.mas_offset(CGSizeMake(50, 50));
     }];
     
     [self.nextChapterButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.trailing.equalTo(self.mas_trailing).offset(- 5);
+        if (@available(iOS 11.0, *)) {
+            make.right.equalTo(self.mas_safeAreaLayoutGuideRight).mas_offset(- 5);
+        } else {
+            make.trailing.equalTo(self.mas_trailing).mas_offset(- 5);
+        }
         make.top.equalTo(self.mas_top);
         make.size.mas_equalTo(CGSizeMake(50, 50));
     }];
@@ -70,7 +78,7 @@
     [self addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(self);
-        make.top.equalTo(self.mas_top).offset(49.5);
+        make.top.equalTo(self.mas_top).offset(50);
         make.height.mas_equalTo(0.5);
     }];
     
@@ -110,7 +118,6 @@
         // 四分之一宽
         make.width.equalTo(self.mas_width).multipliedBy(0.25);
     }];
-    
 }
 
 #pragma mark - Actions
@@ -127,10 +134,14 @@
     
 }
 - (void)backgroundAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickBackground)]) {
+        [self.delegate bottomBarDidClickBackground];
+    }
 }
 - (void)pageTypeAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickPageType)]) {
+        [self.delegate bottomBarDidClickPageType];
+    }
 }
 - (void)settingAction {
     

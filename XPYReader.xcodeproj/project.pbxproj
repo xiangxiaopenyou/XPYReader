@@ -49,6 +49,8 @@
 		6CCDDC8E24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */; };
 		6CCDDC9124EBD28100612B7B /* XPYPageReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */; };
 		6CCDDC9424ED03A200612B7B /* XPYReadMenuBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */; };
+		6CCDDC9724EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */; };
+		6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */; };
 		6CE9251824D7EF4A000AA12F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9251724D7EF4A000AA12F /* AppDelegate.m */; };
 		6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CE9252224D7EF4D000AA12F /* Assets.xcassets */; };
 		6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CE9252424D7EF4D000AA12F /* LaunchScreen.storyboard */; };
@@ -149,6 +151,10 @@
 		6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYPageReadViewController.m; sourceTree = "<group>"; };
 		6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuBottomBar.h; sourceTree = "<group>"; };
 		6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuBottomBar.m; sourceTree = "<group>"; };
+		6CCDDC9524EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuChangeBackgroundBar.h; sourceTree = "<group>"; };
+		6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuChangeBackgroundBar.m; sourceTree = "<group>"; };
+		6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuPageTypeBar.h; sourceTree = "<group>"; };
+		6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuPageTypeBar.m; sourceTree = "<group>"; };
 		6CE9251324D7EF4A000AA12F /* XPYReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XPYReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CE9251624D7EF4A000AA12F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6CE9251724D7EF4A000AA12F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -206,6 +212,10 @@
 				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
 				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
 				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
+				6CCDDC9524EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.h */,
+				6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */,
+				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
+				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -673,6 +683,8 @@
 				6C91FAFC24E77E2100D7D2B2 /* XPYAlertManager.m in Sources */,
 				6C03F10124E2787B0070328E /* XPYBookDetailsViewController.m in Sources */,
 				6C03F0F824E23D7E0070328E /* XPYBookStoreCell.m in Sources */,
+				6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */,
+				6CCDDC9724EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m in Sources */,
 				6C03F0CE24D94C5D0070328E /* XPYDatabaseManager.mm in Sources */,
 				6CCDDC8424EB766E00612B7B /* XPYScrollReadViewController.m in Sources */,
 				6C91FB0124E77F3000D7D2B2 /* XPYViewControllerHelper.m in Sources */,
@@ -830,7 +842,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -850,7 +862,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

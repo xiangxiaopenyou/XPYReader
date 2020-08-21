@@ -10,7 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol XPYReadMenuBottomBarDelegate <NSObject>
+
+/// 点击背景
+- (void)bottomBarDidClickBackground;
+/// 点击翻页
+- (void)bottomBarDidClickPageType;
+
+@end
+
 @interface XPYReadMenuBottomBar : UIView
+
+@property (nonatomic, weak) id <XPYReadMenuBottomBarDelegate> delegate;
 
 @end
 

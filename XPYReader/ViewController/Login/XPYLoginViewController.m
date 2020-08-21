@@ -32,7 +32,11 @@
     
     [self.usernameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_offset(CGSizeMake(300, 50));
-        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).mas_offset(50);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).mas_offset(50);
+        } else {
+            make.top.equalTo(self.view.mas_top).mas_offset(50);
+        }
         make.centerX.equalTo(self.view);
     }];
     

@@ -7,7 +7,6 @@
 //
 
 #import "XPYReadParser.h"
-#import "XPYReadConfigManager.h"
 
 #import <CoreText/CoreText.h>
 
@@ -15,7 +14,7 @@
 
 + (NSDictionary *)chapterNameAttributes {
     NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
-    attributes[NSForegroundColorAttributeName] = [XPYReadConfigManager sharedInstance].textColor;
+    attributes[NSForegroundColorAttributeName] = [UIColor blackColor];
     attributes[NSFontAttributeName] = [UIFont systemFontOfSize:[XPYReadConfigManager sharedInstance].fontSize + 5];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 0;
@@ -27,7 +26,7 @@
 
 + (NSDictionary *)chapterContentAttributes {
     NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
-    attributes[NSForegroundColorAttributeName] = [XPYReadConfigManager sharedInstance].textColor;
+    attributes[NSForegroundColorAttributeName] = [UIColor blackColor];
     attributes[NSFontAttributeName] = [UIFont systemFontOfSize:[XPYReadConfigManager sharedInstance].fontSize];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = [XPYReadConfigManager sharedInstance].lineSpacing;
