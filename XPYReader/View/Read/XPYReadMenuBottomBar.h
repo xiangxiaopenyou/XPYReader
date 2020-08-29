@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)bottomBarDidClickBackground;
 /// 点击翻页
 - (void)bottomBarDidClickPageType;
+/// 点击设置
+- (void)bottomBarDidClickSetting;
 
 @end
 

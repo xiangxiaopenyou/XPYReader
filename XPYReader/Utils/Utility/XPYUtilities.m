@@ -7,6 +7,7 @@
 //
 
 #import "XPYUtilities.h"
+#import "XPYViewControllerHelper.h"
 #import <CommonCrypto/CommonDigest.h>
 
 @implementation XPYUtilities
@@ -20,6 +21,27 @@
         }
     }
     return NO;
+}
+
++ (BOOL)isDarkUserInterfaceStyle {
+    if (@available(iOS 12.0, *)) {
+        if ([XPYViewControllerHelper currentViewController].traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (void)changeInterfaceOrientation:(UIInterfaceOrientation)orientation {
+    if ([[UIDevice currentDevice] respondsToSelector:@selector(setOrientation:)]) {
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = (int)orientation;
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexString alpha:(CGFloat)alpha {
@@ -90,24 +112,23 @@
 }
 
 + (CGFloat)readViewLeftSpacing {
-    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft && XPYDeviceIsIphoneX) {
-        return 54;
+    // 当iPhoneX 处于横屏模式时返回54 其他情况返回20
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait || !XPYDeviceIsIphoneX) {
+        return 20;
     }
-    return 20;
+    return 54;
 }
 
 + (CGFloat)readViewRightSpacing {
-    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight && XPYDeviceIsIphoneX) {
-        return 54;
+    // 当iPhoneX 处于横屏模式时返回54 其他情况返回20
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait || !XPYDeviceIsIphoneX) {
+        return 20;
     }
-    return 20;
+    return 54;
 }
 
 + (CGFloat)readViewTopSpacing {
-    if ([UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeLeft || [UIDevice currentDevice].orientation == UIDeviceOrientationLandscapeRight) {
-        return XPYDeviceIsIphoneX ? APP_STATUSBAR_HEIGHT + 45 : APP_STATUSBAR_HEIGHT + 25;
-    }
-    return APP_STATUSBAR_HEIGHT + 25;
+    return XPYStatusBarHeight + 25;
 }
 
 + (CGFloat)readViewBottomSpacing {

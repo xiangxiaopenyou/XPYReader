@@ -8,14 +8,20 @@
 
 #import "XPYReadViewController.h"
 
+#import "XPYReadView.h"
+
+#import "XPYChapterPageModel.h"
+#import "XPYChapterModel.h"
+
 
 @interface XPYReadViewController ()
 
 @property (nonatomic, strong) XPYReadView *readView;
 
 @property (nonatomic, strong) XPYChapterModel *chapterModel;
-@property (nonatomic, assign) NSInteger page;
-@property (nonatomic, copy) NSAttributedString *pageContent;
+@property (nonatomic, strong) XPYChapterPageModel *pageModel;
+
+@property (nonatomic, assign) BOOL backView;
 
 @end
 
@@ -44,14 +50,26 @@
         }
     }
 }
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    if (_backView) {
+        // 如果是背面，则将当前页面左右反转
+        CGAffineTransform transform = CGAffineTransformIdentity;
+        transform = CGAffineTransformScale(transform, -1, 1);
+        self.view.transform = transform;
+        self.view.alpha = 0.9;
+    }
+}
 
 #pragma mark - Instance methods
-- (void)setupChapter:(XPYChapterModel *)chapter page:(NSInteger)page pageContent:(NSAttributedString *)pageContent {
+- (void)setupChapter:(XPYChapterModel *)chapter pageModel:(XPYChapterPageModel *)pageModel isBackView:(BOOL)isBackView {
     self.chapterModel = chapter;
-    _page = page;
-    self.pageContent = pageContent;
-    [self.readView setupContent:pageContent];
+    self.pageModel = [pageModel copy];
+    [self.readView setupContent:self.pageModel.pageContent];
     [self.view setNeedsLayout];
+    
+    _backView = isBackView;
 }
 
 #pragma mark - Actions

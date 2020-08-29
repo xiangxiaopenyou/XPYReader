@@ -1,8 +1,8 @@
 //
-//  XPYReadMenuChangeBackgroundBar.h
+//  XPYBaseReadViewController.h
 //  XPYReader
 //
-//  Created by zhangdu_imac on 2020/8/20.
+//  Created by zhangdu_imac on 2020/8/24.
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYReadMenuChangeBackgroundBar : UIView
+@interface XPYBaseReadViewController : UIViewController
 
 @end
 

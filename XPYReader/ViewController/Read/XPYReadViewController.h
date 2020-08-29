@@ -6,9 +6,10 @@
 //  Copyright © 2020 xiang. All rights reserved.
 //
 
-#import "XPYBaseViewController.h"
-#import "XPYReadView.h"
-#import "XPYChapterModel.h"
+#import "XPYBaseReadViewController.h"
+
+@class XPYReadView;
+@class XPYChapterPageModel, XPYChapterModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,24 +22,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface XPYReadViewController : XPYBaseViewController
+@interface XPYReadViewController : XPYBaseReadViewController
 
 @property (nonatomic, weak) id <XPYReadViewControllerDelegate> delegate;
 
+/// 当前
+@property (nonatomic, strong, readonly) XPYChapterPageModel *pageModel;
 /// 当前章节
 @property (nonatomic, strong, readonly) XPYChapterModel *chapterModel;
-/// 当前页码
-@property (nonatomic, assign, readonly) NSInteger page;
-/// 当前页面内容
-@property (nonatomic, copy, readonly) NSAttributedString *pageContent;
+/// 是否页面背面（仿真模式使用）
+@property (nonatomic, assign, getter=isBackView, readonly) BOOL backView;
 
 /// 设置当前页面内容
 /// @param chapter 章节Model
-/// @param page 当前页码
-/// @param pageContent 当前页码内容
+/// @param pageModel 当前页面信息
+/// @param isBackView 是否背面视图(用于仿真模式生成页面背面)
 - (void)setupChapter:(XPYChapterModel *)chapter
-                page:(NSInteger)page
-         pageContent:(NSAttributedString *)pageContent;
+           pageModel:(XPYChapterPageModel *)pageModel
+          isBackView:(BOOL)isBackView;
 
 @end
 

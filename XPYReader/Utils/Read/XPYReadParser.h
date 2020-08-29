@@ -8,31 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
+@class XPYChapterPageModel;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYReadParser : NSObject
 
-/// 章节名文字属性
+/// 章节名富文本属性
 + (NSDictionary *)chapterNameAttributes;
 
-/// 章节内容文字属性
+/// 章节内容富文本属性
 + (NSDictionary *)chapterContentAttributes;
 
-/// 解析章节内容
+/// 获取富文本章节内容
+/// @param content 章节原始内容
+/// @param chapterName 章节名
++ (NSAttributedString *)chapterAttributedContentWithChapterContent:(NSString *)content chapterName:(NSString *)chapterName;
+
+/// 解析章节内容返回章节分页信息
 /// @param content 内容
 /// @param chapterName 章节名
-/// @param bounds 显示区域
-/// @param complete 完成解析回调
-+ (void)parseChapterWithContent:(NSString *)content
-                    chapterName:(NSString *)chapterName
-                         bounds:(CGRect)bounds
-                       complete:(void (^)(NSAttributedString *chapterContent, NSArray *pageRanges))complete;
-
-/// 获取单页内容
-/// @param chapterContent 章节内容
-/// @param page 页码
-/// @param pageRanges 页码内容范围数组
-+ (NSAttributedString *)pageContentWithChapterContent:(NSAttributedString *)chapterContent page:(NSInteger)page pageRanges:(NSArray *)pageRanges;
++ (NSArray <XPYChapterPageModel *> *)parseChapterWithChapterContent:(NSString *)content chapterName:(NSString *)chapterName;
 
 @end
 

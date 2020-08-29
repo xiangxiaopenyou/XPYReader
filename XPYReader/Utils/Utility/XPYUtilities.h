@@ -16,6 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 是否iPhoneX系列机型
 + (BOOL)isIphoneX;
 
+/// 当前设备是否深色模式
++ (BOOL)isDarkUserInterfaceStyle;
+
+/// 强制旋转屏幕
+/// @param orientation 方向
++ (void)changeInterfaceOrientation:(UIInterfaceOrientation)orientation;
+
 /// 根据Hex字符串获取颜色
 /// @param hexString 16进制字符串
 /// @param alpha 透明度

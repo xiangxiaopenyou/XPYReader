@@ -44,7 +44,7 @@
 }
 
 + (NSArray *)allBooksInStack {
-    return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.isInStack.is(YES)];
+    return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.isInStack.is(YES) orderBy:XPYBookModel.openTime.order(WCTOrderedDescending)];
 }
 
 @end

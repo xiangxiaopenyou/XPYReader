@@ -27,11 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param failure 失败回调
 + (void)chaptersWithBookId:(NSString *)bookId success:(void (^)(NSArray *chapters))success failure:(void (^)(NSString *tip))failure;
 
-/// 获取当前章节的上一章节
+/// 获取当前章节的上一章节（不一定包含章节内容，本地有章节内容则包含内容）
 /// @param currentChapter 当前章节
 + (XPYChapterModel *)lastChapterOfCurrentChapter:(XPYChapterModel *)currentChapter;
 
-/// 获取当前章节的下一章节
+/// 获取当前章节的下一章节（不一定包含章节内容，本地有章节内容则包含内容）
 /// @param currentChapter 当前章节
 + (XPYChapterModel *)nextChapterOfCurrentChapter:(XPYChapterModel *)currentChapter;
 

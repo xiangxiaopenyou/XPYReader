@@ -23,7 +23,7 @@
 #define XPYScreenHeight CGRectGetHeight([UIScreen mainScreen].bounds)
 
 /// statusbar高度
-#define APP_STATUSBAR_HEIGHT CGRectGetHeight([UIApplication sharedApplication].statusBarFrame)
+#define XPYStatusBarHeight (XPYDeviceIsIphoneX ? 44.0f : 20.0f)
 
 /// App Document文件夹路径
 #define XPYDocumentDirectory NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject
@@ -36,6 +36,10 @@
 
 /// 阅读器文字区域Rect
 #define XPYReadViewBounds CGRectMake(0, 0, XPYScreenWidth - XPYReadViewLeftSpacing - XPYReadViewRightSpacing, XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)
+/// 阅读器文字区域宽度
+#define XPYReadViewWidth (XPYScreenWidth - XPYReadViewLeftSpacing - XPYReadViewRightSpacing)
+/// 阅读去文字区域高度
+#define XPYReadViewHeight (XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)
 
 #pragma mark - Font
 #define FontBold(x) [UIFont fontWithName:@"PingFangSC-Semibold" size:x]

@@ -144,7 +144,9 @@
     }
 }
 - (void)settingAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickSetting)]) {
+        [self.delegate bottomBarDidClickSetting];
+    }
 }
 
 #pragma mark - Getters

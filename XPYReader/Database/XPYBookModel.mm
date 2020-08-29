@@ -7,6 +7,8 @@
 //
 
 #import "XPYBookModel.h"
+#import "XPYChapterModel.h"
+
 #import <WCDB/WCDB.h>
 
 @implementation XPYBookModel

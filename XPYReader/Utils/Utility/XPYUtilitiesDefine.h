@@ -10,6 +10,12 @@
 /// 设备是否iPhoneX系列
 #define XPYDeviceIsIphoneX [XPYUtilities isIphoneX]
 
+/// 是否深色模式
+#define XPYIsDarkUserInterfaceStyle [XPYUtilities isDarkUserInterfaceStyle]
+
+/// 强制旋转屏幕
+#define XPYChangeInterfaceOrientation(aOrientation) [XPYUtilities changeInterfaceOrientation:aOrientation]
+
 /// 根据Hex值和透明度获取颜色
 #define XPYColorFromHexWithAlpha(aHex, aAlpha) [UIColor colorWithRed:((float)((aHex & 0xFF0000) >> 16)) / 255.0 green:((float)((aHex & 0xFF00) >> 8)) / 255.0 blue:((float)(aHex & 0xFF)) / 255.0 alpha:aAlpha]
 

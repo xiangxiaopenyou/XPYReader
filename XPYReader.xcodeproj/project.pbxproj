@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0E8F9C96C0109F73ECE90967 /* libPods-XPYReader.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9286C8D3744A6AE8C3108E1 /* libPods-XPYReader.a */; };
+		6C033EC724F3C06E002B86A3 /* XPYBaseReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033EC624F3C06E002B86A3 /* XPYBaseReadViewController.m */; };
+		6C033ECD24F4E77A002B86A3 /* XPYTimerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ECA24F4E77A002B86A3 /* XPYTimerProxy.m */; };
+		6C033ECE24F4E77A002B86A3 /* NSTimer+XPYWeakTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ECB24F4E77A002B86A3 /* NSTimer+XPYWeakTimer.m */; };
+		6C033ED124F4F651002B86A3 /* XPYReadMenuSettingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */; };
+		6C033ED424F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */; };
+		6C033ED724F74740002B86A3 /* XPYAutoReadCoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */; };
+		6C033EDA24F8B25E002B86A3 /* XPYAutoReadCoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */; };
 		6C03F0CB24D93BD90070328E /* XPYReaderManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F0CA24D93BD90070328E /* XPYReaderManagerController.m */; };
 		6C03F0CE24D94C5D0070328E /* XPYDatabaseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F0CD24D94C5D0070328E /* XPYDatabaseManager.mm */; };
 		6C03F0D124D950310070328E /* XPYChapterModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F0D024D950310070328E /* XPYChapterModel.mm */; };
@@ -49,7 +56,7 @@
 		6CCDDC8E24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */; };
 		6CCDDC9124EBD28100612B7B /* XPYPageReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */; };
 		6CCDDC9424ED03A200612B7B /* XPYReadMenuBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */; };
-		6CCDDC9724EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */; };
+		6CCDDC9724EE0AB200612B7B /* XPYReadMenuBackgroundBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */; };
 		6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */; };
 		6CE9251824D7EF4A000AA12F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9251724D7EF4A000AA12F /* AppDelegate.m */; };
 		6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CE9252224D7EF4D000AA12F /* Assets.xcassets */; };
@@ -62,6 +69,21 @@
 
 /* Begin PBXFileReference section */
 		32E8E58213F1C70C64AC51C9 /* Pods-XPYReader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XPYReader.release.xcconfig"; path = "Target Support Files/Pods-XPYReader/Pods-XPYReader.release.xcconfig"; sourceTree = "<group>"; };
+		6C033EC424F351BC002B86A3 /* XPYReadConfigDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadConfigDefines.h; sourceTree = "<group>"; };
+		6C033EC524F3C06E002B86A3 /* XPYBaseReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBaseReadViewController.h; sourceTree = "<group>"; };
+		6C033EC624F3C06E002B86A3 /* XPYBaseReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBaseReadViewController.m; sourceTree = "<group>"; };
+		6C033EC924F4E77A002B86A3 /* NSTimer+XPYWeakTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+XPYWeakTimer.h"; sourceTree = "<group>"; };
+		6C033ECA24F4E77A002B86A3 /* XPYTimerProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPYTimerProxy.m; sourceTree = "<group>"; };
+		6C033ECB24F4E77A002B86A3 /* NSTimer+XPYWeakTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+XPYWeakTimer.m"; sourceTree = "<group>"; };
+		6C033ECC24F4E77A002B86A3 /* XPYTimerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYTimerProxy.h; sourceTree = "<group>"; };
+		6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuSettingBar.h; sourceTree = "<group>"; };
+		6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuSettingBar.m; sourceTree = "<group>"; };
+		6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuAutoReadSettingBar.h; sourceTree = "<group>"; };
+		6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuAutoReadSettingBar.m; sourceTree = "<group>"; };
+		6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYAutoReadCoverView.h; sourceTree = "<group>"; };
+		6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYAutoReadCoverView.m; sourceTree = "<group>"; };
+		6C033ED824F8B25E002B86A3 /* XPYAutoReadCoverViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYAutoReadCoverViewController.h; sourceTree = "<group>"; };
+		6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYAutoReadCoverViewController.m; sourceTree = "<group>"; };
 		6C03F0C524D92C890070328E /* XPYBookModel+WCTTableCoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XPYBookModel+WCTTableCoding.h"; sourceTree = "<group>"; };
 		6C03F0C924D93BD90070328E /* XPYReaderManagerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReaderManagerController.h; sourceTree = "<group>"; };
 		6C03F0CA24D93BD90070328E /* XPYReaderManagerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReaderManagerController.m; sourceTree = "<group>"; };
@@ -151,8 +173,8 @@
 		6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYPageReadViewController.m; sourceTree = "<group>"; };
 		6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuBottomBar.h; sourceTree = "<group>"; };
 		6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuBottomBar.m; sourceTree = "<group>"; };
-		6CCDDC9524EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuChangeBackgroundBar.h; sourceTree = "<group>"; };
-		6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuChangeBackgroundBar.m; sourceTree = "<group>"; };
+		6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuBackgroundBar.h; sourceTree = "<group>"; };
+		6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuBackgroundBar.m; sourceTree = "<group>"; };
 		6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuPageTypeBar.h; sourceTree = "<group>"; };
 		6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuPageTypeBar.m; sourceTree = "<group>"; };
 		6CE9251324D7EF4A000AA12F /* XPYReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XPYReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +206,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C033EC824F4E77A002B86A3 /* XPYWeakTimer */ = {
+			isa = PBXGroup;
+			children = (
+				6C033EC924F4E77A002B86A3 /* NSTimer+XPYWeakTimer.h */,
+				6C033ECB24F4E77A002B86A3 /* NSTimer+XPYWeakTimer.m */,
+				6C033ECC24F4E77A002B86A3 /* XPYTimerProxy.h */,
+				6C033ECA24F4E77A002B86A3 /* XPYTimerProxy.m */,
+			);
+			path = XPYWeakTimer;
+			sourceTree = "<group>";
+		};
 		6C03F0C824D93B910070328E /* Read */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +228,8 @@
 				6CCDDC8324EB766E00612B7B /* XPYScrollReadViewController.m */,
 				6C03F0DC24DB9B5C0070328E /* XPYReadViewController.h */,
 				6C03F0DD24DB9B5C0070328E /* XPYReadViewController.m */,
+				6C033ED824F8B25E002B86A3 /* XPYAutoReadCoverViewController.h */,
+				6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -204,18 +239,24 @@
 			children = (
 				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
 				6C03F0E124DB9F2A0070328E /* XPYReadView.m */,
+				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
+				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
+				6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */,
+				6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */,
 				6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */,
 				6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */,
 				6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */,
 				6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */,
-				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
-				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
 				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
 				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
-				6CCDDC9524EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.h */,
-				6CCDDC9624EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m */,
+				6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */,
+				6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */,
 				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
 				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
+				6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */,
+				6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */,
+				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
+				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -234,6 +275,7 @@
 		6C03F0E724DCED280070328E /* Read */ = {
 			isa = PBXGroup;
 			children = (
+				6C033EC424F351BC002B86A3 /* XPYReadConfigDefines.h */,
 				6C03F0EB24DCF0AD0070328E /* XPYReadConfigManager.h */,
 				6C03F0EC24DCF0AD0070328E /* XPYReadConfigManager.m */,
 				6C03F0E824DCED5D0070328E /* XPYReadParser.h */,
@@ -406,6 +448,7 @@
 		6C91FAF624E77E0C00D7D2B2 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				6C033EC824F4E77A002B86A3 /* XPYWeakTimer */,
 				6C91FAF724E77E2100D7D2B2 /* XPYAlert */,
 			);
 			path = Vendor;
@@ -512,6 +555,8 @@
 				6C03F0DA24DAB12F0070328E /* XPYNavigationController.m */,
 				6C91FAE024E5237A00D7D2B2 /* XPYBaseViewController.h */,
 				6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */,
+				6C033EC524F3C06E002B86A3 /* XPYBaseReadViewController.h */,
+				6C033EC624F3C06E002B86A3 /* XPYBaseReadViewController.m */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -662,6 +707,8 @@
 				6C03F0DB24DAB12F0070328E /* XPYNavigationController.m in Sources */,
 				6C7BA8BA24D7FB9E0054B971 /* XPYBaseModel.m in Sources */,
 				6C03F0F024DCF3C00070328E /* XPYConstant.m in Sources */,
+				6C033EDA24F8B25E002B86A3 /* XPYAutoReadCoverViewController.m in Sources */,
+				6C033ECE24F4E77A002B86A3 /* NSTimer+XPYWeakTimer.m in Sources */,
 				6CE9251824D7EF4A000AA12F /* AppDelegate.m in Sources */,
 				6C03F0FB24E241940070328E /* XPYReadRecordManager.mm in Sources */,
 				6C03F10724E3844C0070328E /* XPYChapterHelper.m in Sources */,
@@ -680,17 +727,21 @@
 				6C7BA8C824D7FF8C0054B971 /* XPYUtilities.m in Sources */,
 				6C91FADF24E4E90600D7D2B2 /* XPYReadMenuTopBar.m in Sources */,
 				6C91FAEE24E6376100D7D2B2 /* XPYUserManager.m in Sources */,
+				6C033ECD24F4E77A002B86A3 /* XPYTimerProxy.m in Sources */,
 				6C91FAFC24E77E2100D7D2B2 /* XPYAlertManager.m in Sources */,
 				6C03F10124E2787B0070328E /* XPYBookDetailsViewController.m in Sources */,
 				6C03F0F824E23D7E0070328E /* XPYBookStoreCell.m in Sources */,
 				6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */,
-				6CCDDC9724EE0AB200612B7B /* XPYReadMenuChangeBackgroundBar.m in Sources */,
+				6CCDDC9724EE0AB200612B7B /* XPYReadMenuBackgroundBar.m in Sources */,
 				6C03F0CE24D94C5D0070328E /* XPYDatabaseManager.mm in Sources */,
 				6CCDDC8424EB766E00612B7B /* XPYScrollReadViewController.m in Sources */,
+				6C033ED124F4F651002B86A3 /* XPYReadMenuSettingBar.m in Sources */,
 				6C91FB0124E77F3000D7D2B2 /* XPYViewControllerHelper.m in Sources */,
+				6C033ED724F74740002B86A3 /* XPYAutoReadCoverView.m in Sources */,
 				6C03F0FE24E249C30070328E /* XPYChapterDataManager.mm in Sources */,
 				6C7BA8D624D80FDB0054B971 /* XPYBookStackCollectionViewCell.m in Sources */,
 				6CCDDC8B24EBA94100612B7B /* XPYChapterPageModel.m in Sources */,
+				6C033ED424F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m in Sources */,
 				6C91FADC24E4E2DB00D7D2B2 /* XPYReadMenu.m in Sources */,
 				6C91FAE224E5237A00D7D2B2 /* XPYBaseViewController.m in Sources */,
 				6C03F0F424E0D8560070328E /* NSString+blowFish.m in Sources */,
@@ -705,6 +756,7 @@
 				6CCDDC9124EBD28100612B7B /* XPYPageReadViewController.m in Sources */,
 				6C7BA8C024D7FEAC0054B971 /* XPYNetworkManager.m in Sources */,
 				6CE9253724D7F55E000AA12F /* XPYBookStoreViewController.m in Sources */,
+				6C033EC724F3C06E002B86A3 /* XPYBaseReadViewController.m in Sources */,
 				6C91FAF524E65DFA00D7D2B2 /* XPYNetworkService+User.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

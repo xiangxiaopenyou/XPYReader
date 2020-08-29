@@ -8,7 +8,7 @@
 
 #import "XPYBaseModel.h"
 
-#import "XPYChapterModel.h"
+@class XPYChapterModel;
 
 NS_ASSUME_NONNULL_BEGIN
 

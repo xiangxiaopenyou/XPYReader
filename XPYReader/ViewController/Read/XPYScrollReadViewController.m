@@ -8,12 +8,17 @@
 
 #import "XPYScrollReadViewController.h"
 #import "XPYScrollReadTableViewCell.h"
+#import "XPYReadView.h"
 
 #import "XPYReadParser.h"
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
 #import "XPYBookModel.h"
+#import "XPYChapterModel.h"
+#import "XPYChapterPageModel.h"
+
+#import "XPYTimerProxy.h"
 
 static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadViewCellIdentifier";
 
@@ -25,20 +30,25 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 @property (nonatomic, strong) UILabel *chapterNameLabel;
 /// 阅读进度（页码）
 @property (nonatomic, strong) UILabel *progressLabel;
-
+/// 主阅读视图列表
 @property (nonatomic, strong) UITableView *tableView;
 
-/// 书籍
+/// 当前书籍
 @property (nonatomic, strong) XPYBookModel *bookModel;
-
 /// 当前阅读章节ID数组
 @property (nonatomic, strong) NSMutableArray <NSString *> *chapterIds;
+/// 正在预加载的章节ID数组
+@property (nonatomic, strong) NSMutableArray <NSString *> *preloadingChapterIds;
 /// 当前阅读章节数组(只保存本次阅读列表)
 @property (nonatomic, strong) NSMutableArray <XPYChapterModel *> *chapters;
 /// 列表滚动方式是否向下
 @property (nonatomic, assign) BOOL isScrollOrientationDown;
 /// 列表OffsetY坐标，用于判断列表滚动方向
 @property (nonatomic, assign) CGFloat tableOffsetY;
+/// 自动阅读计时器
+@property (nonatomic, strong) CADisplayLink *autoReadTimer;
+/// 是否显示自动阅读菜单（显示菜单时滑动列表不操作启计时器）
+@property (nonatomic, assign) BOOL isShowingAutoReadMenu;
 
 @end
 
@@ -52,6 +62,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
         // 初始化数组
         self.chapterIds = [@[book.chapter.chapterId] mutableCopy];
         self.chapters = [@[book.chapter] mutableCopy];
+        self.preloadingChapterIds = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -60,23 +71,29 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    XPYChapterModel *currentChapter = self.chapters.firstObject;
+    // 分页(避免横竖屏错位问题)
+    NSArray *pageModels = [XPYReadParser parseChapterWithChapterContent:currentChapter.content chapterName:currentChapter.chapterName];
+    currentChapter.pageModels = [pageModels copy];
+    if (self.bookModel.page >= pageModels.count) {
+        // 横竖屏切换可能导致当前页超过总页数
+        self.bookModel.page = pageModels.count - 1;
+    }
+    
     [self configureUI];
     
-    // chapters中只有当前章节
-    XPYChapterModel *currentChapter = self.chapters.firstObject;
-    [XPYReadParser parseChapterWithContent:currentChapter.content chapterName:currentChapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-        // 保存分页信息到数组中
-        currentChapter.pageRanges = [pageRanges copy];
-        currentChapter.attributedContent = chapterContent;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.bookModel.page inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        });
-    }];
+    // 列表滚动至阅读记录位置
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.bookModel.page inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        [self loadTimer];
+    }
 }
 
 #pragma mark - UI
 - (void)configureUI {
+    self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+    
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
@@ -84,6 +101,19 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
         make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing);
         make.bottom.equalTo(self.view.mas_bottom).mas_offset(- XPYReadViewBottomSpacing);
     }];
+}      
+
+#pragma mark - Instance methods
+- (void)updateAutoReadStatus:(BOOL)status {
+    if (![XPYReadConfigManager sharedInstance].isAutoRead) {
+        return;
+    }
+    if (!self.autoReadTimer) {
+        return;
+    }
+    self.autoReadTimer.paused = !status;
+    // 改变是否显示自动阅读菜单状态
+    _isShowingAutoReadMenu = !status;
 }
 
 #pragma mark - Private methods
@@ -91,23 +121,39 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     XPYChapterModel *currentChapter = self.bookModel.chapter;
     if (currentChapter.chapterIndex == 1) {
         // 当前为第一章
-        if (![self.chapterIds containsObject:[XPYChapterHelper nextChapterOfCurrentChapter:currentChapter].chapterId]) {
-            // 加载下一章
-            [self preloadNextChapterOfCurrentChapter:currentChapter];
+        XPYChapterModel *tempChapter = [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter];
+        if (!tempChapter || [self.chapterIds containsObject:tempChapter.chapterId] || [self.preloadingChapterIds containsObject:tempChapter.chapterId]) {
+            // 章节获取失败或者当前阅读数组已存在或者正在加载
+            return;
         }
+        // 保存正在加载章节ID
+        [self.preloadingChapterIds addObject:tempChapter.chapterId];
+        // 加载下一章
+        [self preloadNextChapterOfCurrentChapter:currentChapter];
     } else if (currentChapter.chapterIndex == self.bookModel.chapterCount) {
         // 当前为最后一章
-        if (![self.chapterIds containsObject:[XPYChapterHelper lastChapterOfCurrentChapter:currentChapter].chapterId]) {
-            // 加载上一章
-            [self preloadLastChapterOfCurrentChapter:currentChapter];
+        XPYChapterModel *tempChapter = [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
+        if (!tempChapter || [self.chapterIds containsObject:tempChapter.chapterId] || [self.preloadingChapterIds containsObject:tempChapter.chapterId]) {
+            // 章节获取失败或者当前阅读数组已存在或者正在加载
+            return;
         }
+        // 保存正在加载章节ID
+        [self.preloadingChapterIds addObject:tempChapter.chapterId];
+        // 加载上一章
+        [self preloadLastChapterOfCurrentChapter:currentChapter];
     } else {
         // 当前为中间章节
-        if (![self.chapterIds containsObject:[XPYChapterHelper nextChapterOfCurrentChapter:currentChapter].chapterId]) {
+        XPYChapterModel *tempNextChapter = [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter];
+        XPYChapterModel *tempLastChapter = [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
+        if (tempNextChapter && ![self.chapterIds containsObject:tempNextChapter.chapterId] && ![self.preloadingChapterIds containsObject:tempNextChapter.chapterId]) {
+            // 保存正在加载章节ID
+            [self.preloadingChapterIds addObject:tempNextChapter.chapterId];
             // 加载下一章
             [self preloadNextChapterOfCurrentChapter:currentChapter];
         }
-        if (![self.chapterIds containsObject:[XPYChapterHelper lastChapterOfCurrentChapter:currentChapter].chapterId]) {
+        if (tempLastChapter && ![self.chapterIds containsObject:tempLastChapter.chapterId] && ![self.chapterIds containsObject:tempLastChapter.chapterId]) {
+            // 保存正在加载章节ID
+            [self.preloadingChapterIds addObject:tempLastChapter.chapterId];
             // 加载上一章
             [self preloadLastChapterOfCurrentChapter:currentChapter];
         }
@@ -119,17 +165,15 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (void)preloadNextChapterOfCurrentChapter:(XPYChapterModel *)currentChapter {
     [XPYChapterHelper preloadNextChapterWithCurrentChapter:currentChapter complete:^(XPYChapterModel * _Nullable    nextChapter) {
         if (nextChapter && !XPYIsEmptyObject(nextChapter.content)) {
-            [XPYReadParser parseChapterWithContent:nextChapter.content chapterName:nextChapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                // 保存分页信息到数组中
-                nextChapter.pageRanges = [pageRanges copy];
-                nextChapter.attributedContent = chapterContent;
-                // 插入预加载的下一个章节到当前阅读中
-                [self.chapterIds addObject:nextChapter.chapterId];
-                [self.chapters addObject:nextChapter];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                });
-            }];
+            // 保存分页信息
+            nextChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:nextChapter.content chapterName:nextChapter.chapterName] copy];
+            // 插入预加载的下一个章节到当前阅读中
+            [self safeInsertChapter:nextChapter atFirstOrLast:NO];
+            // 当前预加载列表移除
+            [self.preloadingChapterIds removeObject:nextChapter.chapterId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
     }];
 }
@@ -139,21 +183,44 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (void)preloadLastChapterOfCurrentChapter:(XPYChapterModel *)currentChapter {
     [XPYChapterHelper preloadLastChapterWithCurrentChapter:currentChapter complete:^(XPYChapterModel * _Nullable lastChapter) {
         if (lastChapter && !XPYIsEmptyObject(lastChapter.content)) {
-            [XPYReadParser parseChapterWithContent:lastChapter.content chapterName:lastChapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                // 保存分页信息到数组中
-                lastChapter.pageRanges = [pageRanges copy];
-                lastChapter.attributedContent = chapterContent;
-                // 插入预加载的上一个章节到当前阅读章节中
-                [self.chapterIds insertObject:lastChapter.chapterId atIndex:0];
-                [self.chapters insertObject:lastChapter atIndex:0];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
-                    // 更新列表位置
-                    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y + (XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing) * pageRanges.count) animated:NO];
-                });
-            }];
+            // 保存分页信息
+            lastChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:lastChapter.content chapterName:lastChapter.chapterName] copy];
+            // 插入预加载的上一个章节到当前阅读章节中
+            [self safeInsertChapter:lastChapter atFirstOrLast:YES];
+            // 当前预加载列表移除
+            [self.preloadingChapterIds removeObject:lastChapter.chapterId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                // 计算章节总高度
+                CGFloat chapterContentTotalHeight = 0;
+                for (XPYChapterPageModel *pageModel in lastChapter.pageModels) {
+                    chapterContentTotalHeight += (pageModel.extraHeaderHeight + pageModel.contentHeight);
+                }
+                // 更新列表位置
+                [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentOffset.y + chapterContentTotalHeight) animated:NO];
+            });
         }
     }];
+}
+
+/// 当前章节数组安全插入章节数据
+/// @param chapter 章节
+/// @param first 是否插入到最前
+- (void)safeInsertChapter:(XPYChapterModel *)chapter atFirstOrLast:(BOOL)first {
+    if ([self.chapterIds containsObject:chapter.chapterId]) {
+        return;
+    }
+    if (first) {
+        @synchronized (self) {
+            [self.chapterIds insertObject:chapter.chapterId atIndex:0];
+            [self.chapters insertObject:chapter atIndex:0];
+        }
+    } else {
+        @synchronized (self) {
+            [self.chapterIds addObject:chapter.chapterId];
+            [self.chapters addObject:chapter];
+        }
+    }
 }
 
 /// 更新阅读记录
@@ -162,6 +229,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     if (!indexPaths || indexPaths.count == 0) {
         return;
     }
+    // 获取目标IndexPath（滚动方向不同结果不同）
     NSIndexPath *indexPath = _isScrollOrientationDown ? indexPaths.firstObject : indexPaths.lastObject;
     XPYChapterModel *chapter = self.chapters[indexPath.section];
     if (self.bookModel.chapter.chapterIndex == chapter.chapterIndex && self.bookModel.page == indexPath.row) {
@@ -173,6 +241,22 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
 }
 
+/// 加载计时器
+- (void)loadTimer {
+    self.autoReadTimer = [CADisplayLink displayLinkWithTarget:[XPYTimerProxy proxyWithTarget:self] selector:@selector(scrollAutoRead:)];
+    [self.autoReadTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    self.autoReadTimer.paused = NO;
+}
+
+#pragma mark - Actions
+- (void)scrollAutoRead:(CADisplayLink *)timer {
+    CGFloat speed = 15.0 / 8.0 + 0.35;
+    [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + speed)];
+    // 更新阅读记录
+    [self updateReadRecord];
+}
+
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // 每一章节设置成一个section
@@ -181,21 +265,24 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // 章节的每一页设置成一个row
     XPYChapterModel *chapter = self.chapters[section];
-    if (chapter.pageRanges) {
-        return chapter.pageRanges.count;
+    if (chapter.pageModels) {
+        return chapter.pageModels.count;
     }
     return 0;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     XPYScrollReadTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kXPYScrollReadViewCellIdentifierKey forIndexPath:indexPath];
     XPYChapterModel *chapter = self.chapters[indexPath.section];
-    [cell setupContent:[XPYReadParser pageContentWithChapterContent:chapter.attributedContent page:indexPath.row pageRanges:chapter.pageRanges]];
+    XPYChapterPageModel *pageModel = chapter.pageModels[indexPath.row];
+    [cell setupChapterPageModel:pageModel];
     return cell;
 }
 
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing;
+    XPYChapterModel *chapter = self.chapters[indexPath.section];
+    XPYChapterPageModel *pageModel = chapter.pageModels[indexPath.row];
+    return pageModel.contentHeight + pageModel.extraHeaderHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -223,11 +310,20 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     // 保存拖动开始时坐标
     _tableOffsetY = scrollView.contentOffset.y;
     _isScrollOrientationDown = NO;
+    
+    if ([XPYReadConfigManager sharedInstance].isAutoRead && !self.autoReadTimer.isPaused && !_isShowingAutoReadMenu) {
+        // 手动拖动时暂停自动阅读(自动阅读菜单必须是隐藏状态)
+        self.autoReadTimer.paused = YES;
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     // 拖动结束更新阅读记录
     [self updateReadRecord];
+    if ([XPYReadConfigManager sharedInstance].isAutoRead && self.autoReadTimer.isPaused && !_isShowingAutoReadMenu) {
+        // 拖动结束继续自动阅读(自动阅读菜单必须是隐藏状态)
+        self.autoReadTimer.paused = NO;
+    }
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
@@ -256,7 +352,12 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 #pragma mark - Getters
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(XPYReadViewLeftSpacing, XPYReadViewTopSpacing, XPYReadViewWidth, XPYReadViewHeight) style:UITableViewStylePlain];
+        // 设置TableView的backgroundView
+        UIView *tableBackgroundView = [[UIView alloc] initWithFrame:_tableView.bounds];
+        tableBackgroundView.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+        _tableView.backgroundView = tableBackgroundView;
+        _tableView.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
@@ -268,6 +369,13 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
         [_tableView registerClass:[XPYScrollReadTableViewCell class] forCellReuseIdentifier:kXPYScrollReadViewCellIdentifierKey];
     }
     return _tableView;
+}
+#pragma mark - Override method
+- (void)dealloc {
+    if (self.autoReadTimer) {
+        [self.autoReadTimer invalidate];
+        self.autoReadTimer = nil;
+    }
 }
 
 @end

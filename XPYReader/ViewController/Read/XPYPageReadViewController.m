@@ -10,6 +10,9 @@
 #import "XPYReadViewController.h"
 
 #import "XPYBookModel.h"
+#import "XPYChapterModel.h"
+#import "XPYChapterPageModel.h"
+
 #import "XPYChapterHelper.h"
 #import "XPYReadParser.h"
 #import "XPYReadRecordManager.h"
@@ -40,6 +43,8 @@
         // 初始化当前阅读章节
         self.dataSource = self;
         self.delegate = self;
+        
+        self.doubleSided = style == UIPageViewControllerTransitionStylePageCurl;
     }
     return self;
 }
@@ -48,36 +53,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // 当前章节分页并设置阅读页
-    [XPYReadParser parseChapterWithContent:self.bookModel.chapter.content chapterName:self.bookModel.chapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-        self.bookModel.chapter.attributedContent = chapterContent;
-        self.bookModel.chapter.pageRanges = [pageRanges copy];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            XPYReadViewController *readViewController = [self createReadViewControllerWithChapter:self.bookModel.chapter page:self.bookModel.page pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:self.bookModel.page pageRanges:pageRanges]];
-            [self setViewControllers:@[readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-        });
-    }];
+    self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+    
+    // 当前章节分页
+    NSArray *pageModels = [XPYReadParser parseChapterWithChapterContent:self.bookModel.chapter.content chapterName:self.bookModel.chapter.chapterName];
+    self.bookModel.chapter.pageModels = [pageModels copy];
+    if (self.bookModel.page >= pageModels.count) {
+        // 横竖屏切换可能导致当前页超过总页数
+        self.bookModel.page = pageModels.count - 1;
+    }
+    
+    // 设置阅读页
+    XPYReadViewController *readViewController = [self createReadViewControllerWithChapter:self.bookModel.chapter pageModel:self.bookModel.chapter.pageModels[self.bookModel.page] isBackView:NO];
+    [self setViewControllers:@[readViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
     // 预加载其他章节
     [self preloadChapters];
-}
-
-#pragma mark - UI
-- (void)configureUI {
-    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 #pragma mark - Private methods
 
 /// 创建阅读控制器
 /// @param chapter 章节Model
-/// @param page 控制器章节页码
-/// @param pageContent 页码内容
+/// @param pageModel 页码信息
+/// @param isBackView 是否背面视图
 - (XPYReadViewController *)createReadViewControllerWithChapter:(XPYChapterModel *)chapter
-                                                          page:(NSInteger)page
-                                                   pageContent:(NSAttributedString *)pageContent {
+                                                     pageModel:(XPYChapterPageModel *)pageModel
+                                                    isBackView:(BOOL)isBackView {
     XPYReadViewController *readController = [[XPYReadViewController alloc] init];
-    [readController setupChapter:chapter page:page pageContent:pageContent];
+    [readController setupChapter:chapter pageModel:pageModel isBackView:isBackView];
     readController.delegate = self;
     return readController;
 }
@@ -85,24 +89,23 @@
 /// 获取上一页/下一页页面控制器
 /// @param viewController 当前页控制器
 /// @param isNext 是否下一页
-- (UIViewController *)viewControllerAfterOrBeforeViewController:(UIViewController *)viewController next:(BOOL)isNext {
+/// @param isBackView 是否背面视图
+- (UIViewController *)viewControllerAfterOrBeforeViewController:(UIViewController *)viewController next:(BOOL)isNext isBackView:(BOOL)isBackView {
     // 当前页信息
     XPYReadViewController *currentController = (XPYReadViewController *)viewController;
     XPYChapterModel *currentChapter = currentController.chapterModel;
-    NSInteger currentPage = currentController.page;
-    NSAttributedString *currentChapterContent = currentController.chapterModel.attributedContent;
-    NSArray *currentPageRanges = [currentController.chapterModel.pageRanges copy];
+    XPYChapterPageModel *currentPageModel = currentController.pageModel;
     
     UIPageViewControllerNavigationDirection direction = isNext ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
-    if (!isNext && currentPage == 0 && currentChapter.chapterIndex == 1) {
+    if (!isNext && currentPageModel.pageIndex == 0 && currentChapter.chapterIndex == 1) {
         // 第一章第一页上一页返回空
         return nil;
     }
-    if (isNext && currentPage == currentPageRanges.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
+    if (isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
         // 最后一章最后一页下一页返回空
         return nil;
     }
-    if ((isNext && currentPage == currentPageRanges.count - 1) || (!isNext && currentPage == 0)) {
+    if ((isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1) || (!isNext && currentPageModel.pageIndex == 0)) {
         // 下一章或上一章
         XPYChapterModel *otherChapter = isNext ? [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter] : [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
         if (!otherChapter) {
@@ -112,36 +115,48 @@
             // 下一章或上一章的章节内容为空
             // 获取章节内容
             [XPYChapterHelper chapterWithBookId:self.bookModel.bookId chapterId:otherChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
-                [XPYReadParser parseChapterWithContent:chapter.content chapterName:chapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                    otherChapter.attributedContent = chapterContent;
-                    otherChapter.pageRanges = [pageRanges copy];
+                otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
+                if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
+                    // 仿真模式
                     if (isNext) {
                         // 下一章第一页
-                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter page:0 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:0 pageRanges:pageRanges]];
+                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
+                        // 背面（这里的背面是当前页的背面）
+                        XPYReadViewController *afterBackViewController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentPageModel isBackView:YES];
+                        [self setViewControllers:@[afterReadController, afterBackViewController] direction:direction animated:YES completion:nil];
+                    } else {
+                        // 上一章最后一页
+                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
+                        // 背面（这里的背面是上一页的背面，与上一页相同）
+                        XPYReadViewController *beforeBackViewController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:YES];
+                        [self setViewControllers:@[beforeReadController, beforeBackViewController] direction:direction animated:YES completion:nil];
+                    }
+                } else {
+                    // 平移模式
+                    if (isNext) {
+                        // 下一章第一页
+                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
                         [self setViewControllers:@[afterReadController] direction:direction animated:YES completion:nil];
                     } else {
                         // 上一章最后一页
-                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter page:pageRanges.count - 1 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:pageRanges.count - 1 pageRanges:pageRanges]];
+                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
                         [self setViewControllers:@[beforeReadController] direction:direction animated:YES completion:nil];
                     }
-                    // 跨章节时更新阅读记录
-                    [self updateReadRecord];
-                }];
+                }
+                // 跨章节时更新阅读记录
+                [self updateReadRecord];
             } failure:^(NSString * _Nonnull tip) {
                 [MBProgressHUD xpy_showTips:tip];
             }];
         } else {
-            __block XPYReadViewController *readController;
-            [XPYReadParser parseChapterWithContent:otherChapter.content chapterName:otherChapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                otherChapter.attributedContent = chapterContent;
-                otherChapter.pageRanges = [pageRanges copy];
-                readController = [self createReadViewControllerWithChapter:otherChapter page:isNext ? 0 : pageRanges.count - 1 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:isNext ? 0 : pageRanges.count - 1 pageRanges:pageRanges]];
-            }];
+            // 上一章/下一章有内容，则直接分页
+            otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
+            XPYReadViewController *readController = [self createReadViewControllerWithChapter:otherChapter pageModel:isNext ? otherChapter.pageModels.firstObject : otherChapter.pageModels.lastObject isBackView:isBackView];
             return readController;
         }
     } else {
         // 正常翻页
-        XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter page:isNext ? currentPage + 1 : currentPage - 1 pageContent:[XPYReadParser pageContentWithChapterContent:currentChapterContent page:isNext ? currentPage + 1 : currentPage - 1 pageRanges:currentPageRanges]];
+        XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter pageModel:isNext ? currentChapter.pageModels[currentPageModel.pageIndex + 1] : currentChapter.pageModels[currentPageModel.pageIndex - 1] isBackView:isBackView];
         return readController;
     }
     return nil;
@@ -153,21 +168,20 @@
     // 当前页信息
     XPYReadViewController *currentController = (XPYReadViewController *)self.viewControllers.firstObject;
     XPYChapterModel *currentChapter = currentController.chapterModel;
-    NSInteger currentPage = currentController.page;
-    NSAttributedString *currentChapterContent = currentController.chapterModel.attributedContent;
-    NSArray *currentPageRanges = [currentController.chapterModel.pageRanges copy];
+    XPYChapterPageModel *currentPageModel = currentController.pageModel;
+    
     UIPageViewControllerNavigationDirection direction = isNext ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
     // 是否需要动画
     BOOL isAnimated = !([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone);
-    if (!isNext && currentPage == 0 && currentChapter.chapterIndex == 1) {
-        // 第一章第一页上一页直接返回
+    if (!isNext && currentPageModel.pageIndex == 0 && currentChapter.chapterIndex == 1) {
+        // 第一章第一页上一页返回空
         return;
     }
-    if (isNext && currentPage == currentPageRanges.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
-        // 最后一章最后一页下一页直接返回
+    if (isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
+        // 最后一章最后一页下一页返回空
         return;
     }
-    if ((isNext && currentPage == currentPageRanges.count - 1) || (!isNext && currentPage == 0)) {
+    if ((isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1) || (!isNext && currentPageModel.pageIndex == 0)) {
         // 下一章或上一章
         XPYChapterModel *otherChapter = isNext ? [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter] : [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
         if (!otherChapter) {
@@ -177,36 +191,29 @@
             // 下一章或上一章的章节内容为空
             // 获取章节内容
             [XPYChapterHelper chapterWithBookId:self.bookModel.bookId chapterId:otherChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
-                [XPYReadParser parseChapterWithContent:chapter.content chapterName:chapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                    otherChapter.attributedContent = chapterContent;
-                    otherChapter.pageRanges = [pageRanges copy];
-                    if (isNext) {
-                        // 下一章第一页
-                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter page:0 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:0 pageRanges:pageRanges]];
-                        [self setViewControllers:@[afterReadController] direction:direction animated:isAnimated completion:nil];
-                    } else {
-                        // 上一章最后一页
-                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter page:pageRanges.count - 1 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:pageRanges.count - 1 pageRanges:pageRanges]];
-                        [self setViewControllers:@[beforeReadController] direction:direction animated:isAnimated completion:nil];
-                    }
-                    // 跨章节时更新阅读记录
-                    [self updateReadRecord];
-                }];
+                otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
+                if (isNext) {
+                    // 下一章第一页
+                    XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
+                    [self setViewControllers:@[afterReadController] direction:direction animated:YES completion:nil];
+                } else {
+                    // 上一章最后一页
+                    XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
+                    [self setViewControllers:@[beforeReadController] direction:direction animated:YES completion:nil];
+                }
+                // 跨章节时更新阅读记录
+                [self updateReadRecord];
             } failure:^(NSString * _Nonnull tip) {
                 [MBProgressHUD xpy_showTips:tip];
             }];
         } else {
-            // 内容不为空则直接分页显示
-            [XPYReadParser parseChapterWithContent:otherChapter.content chapterName:otherChapter.chapterName bounds:XPYReadViewBounds complete:^(NSAttributedString * _Nonnull chapterContent, NSArray * _Nonnull pageRanges) {
-                otherChapter.attributedContent = chapterContent;
-                otherChapter.pageRanges = [pageRanges copy];
-                XPYReadViewController *readController = [self createReadViewControllerWithChapter:otherChapter page:isNext ? 0 : pageRanges.count - 1 pageContent:[XPYReadParser pageContentWithChapterContent:chapterContent page:isNext ? 0 : pageRanges.count - 1 pageRanges:pageRanges]];
-                [self setViewControllers:@[readController] direction:direction animated:isAnimated completion:nil];
-            }];
+            otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
+            XPYReadViewController *readController = [self createReadViewControllerWithChapter:otherChapter pageModel:isNext ? otherChapter.pageModels.firstObject : otherChapter.pageModels.lastObject isBackView:NO];
+            [self setViewControllers:@[readController] direction:direction animated:isAnimated completion:nil];
         }
     } else {
         // 正常翻页
-        XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter page:isNext ? currentPage + 1 : currentPage - 1 pageContent:[XPYReadParser pageContentWithChapterContent:currentChapterContent page:isNext ? currentPage + 1 : currentPage - 1 pageRanges:currentPageRanges]];
+        XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter pageModel:isNext ? currentChapter.pageModels[currentPageModel.pageIndex + 1] : currentChapter.pageModels[currentPageModel.pageIndex - 1] isBackView:NO];
         [self setViewControllers:@[readController] direction:direction animated:isAnimated completion:nil];
     }
 }
@@ -218,7 +225,7 @@
     // 获取当前阅读页面
     XPYReadViewController *currentReadController = self.viewControllers.firstObject;
     self.bookModel.chapter = currentReadController.chapterModel;
-    self.bookModel.page = currentReadController.page;
+    self.bookModel.page = currentReadController.pageModel.pageIndex;
     [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
     
     // 预加载其他章节
@@ -245,10 +252,29 @@
 
 #pragma mark - Page view controller data source
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
-    return [self viewControllerAfterOrBeforeViewController:viewController next:YES];
+    if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
+        XPYReadViewController *readController = (XPYReadViewController *)viewController;
+        if (!readController.isBackView) {
+            // 不是背面视图时返回下一页为背面视图
+            return [self createReadViewControllerWithChapter:readController.chapterModel pageModel:readController.pageModel isBackView:YES];
+        }
+    }
+    // 返回主页面
+    return [self viewControllerAfterOrBeforeViewController:viewController next:YES isBackView:NO];
 }
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
-    return [self viewControllerAfterOrBeforeViewController:viewController next:NO];
+    if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
+        XPYReadViewController *readController = (XPYReadViewController *)viewController;
+        if (!readController.isBackView) {
+            // 不是背面视图时返回上一页为背面视图
+            XPYReadViewController *backReadController = (XPYReadViewController *)[self viewControllerAfterOrBeforeViewController:viewController next:NO isBackView:YES];
+            return backReadController;
+        }
+        // 是背面视图时创建上一页为主页面
+        return [self createReadViewControllerWithChapter:readController.chapterModel pageModel:readController.pageModel isBackView:NO];
+    }
+    // 返回主页面
+    return [self viewControllerAfterOrBeforeViewController:viewController next:NO isBackView:NO];
 }
 
 #pragma mark - Page view controller delegate

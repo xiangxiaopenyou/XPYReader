@@ -21,7 +21,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
     }
     return self;
 }
@@ -45,6 +45,13 @@
     CGPathRelease(pathRef);
     CFRelease(frameSetterRef);
     CFRelease(frameRef);
+}
+
+- (NSAttributedString *)contentString {
+    if (!_contentString) {
+        _contentString = [[NSAttributedString alloc] initWithString:@""];
+    }
+    return _contentString;
 }
 
 

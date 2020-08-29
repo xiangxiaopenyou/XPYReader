@@ -12,13 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol XPYReadMenuPageTypeBarDelegate <NSObject>
 
-- (void)pageTypeBarDidSelectType:(XPYReadPageType)type;
+- (void)pageTypeBarDidSelectType;
 
 @end
 
 @interface XPYReadMenuPageTypeBar : UIView
 
 @property (nonatomic, weak) id <XPYReadMenuPageTypeBarDelegate> delegate;
+
+/// 更新按钮位置（横竖屏切换）
+- (void)updateButtonsConstraints;
 
 @end
 

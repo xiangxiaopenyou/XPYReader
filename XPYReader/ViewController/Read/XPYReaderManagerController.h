@@ -6,13 +6,13 @@
 //  Copyright © 2020 xiang. All rights reserved.
 //  阅读器总控制器
 
-#import "XPYBaseViewController.h"
+#import "XPYBaseReadViewController.h"
 
 @class XPYBookModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XPYReaderManagerController : XPYBaseViewController
+@interface XPYReaderManagerController : XPYBaseReadViewController
 
 @property (nonatomic, strong) XPYBookModel *book;
 

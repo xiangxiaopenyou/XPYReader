@@ -7,6 +7,7 @@
 //
 
 #import "XPYBaseModel.h"
+@class XPYChapterPageModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,10 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger price;
 
 #pragma mark - 不保存进数据库
-/// 当前章节分页
-@property (nonatomic, copy) NSArray *pageRanges;
-/// 包含文字属性的章节内容
-@property (nonatomic, copy) NSAttributedString *attributedContent;
+/// 当前章节分页信息
+@property (nonatomic, copy) NSArray <XPYChapterPageModel *> *pageModels;
 
 
 @end

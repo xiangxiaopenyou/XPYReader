@@ -9,6 +9,7 @@
 #import "XPYReaderManagerController.h"
 #import "XPYPageReadViewController.h"
 #import "XPYScrollReadViewController.h"
+#import "XPYAutoReadCoverViewController.h"
 #import "XPYReadViewController.h"
 
 #import "XPYReadMenu.h"
@@ -24,8 +25,11 @@
 /// 仿真、左右平移、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
 
-/// 左右平移翻页控制器
+/// 上下滑动翻页和自动阅读滚屏模式控制器
 @property (nonatomic, strong) XPYScrollReadViewController *scrollReadController;
+
+/// 自动阅读覆盖模式控制器
+@property (nonatomic, strong) XPYAutoReadCoverViewController *coverReadController;
 
 /// 菜单工具栏管理
 @property (nonatomic, strong) XPYReadMenu *readMenu;
@@ -74,6 +78,9 @@
     
     // 屏幕旋转通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    // App即将进入不活跃状态
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterResignActive) name:UIApplicationWillResignActiveNotification object:nil];
+    
 }
 
 #pragma mark - UI
@@ -83,13 +90,12 @@
     // 取消右滑返回手势
     self.fd_interactivePopDisabled = YES;
     
-    [self createReaderWithPageType:[XPYReadConfigManager sharedInstance].pageType];
+    [self createReader];
 }
 
 #pragma mark - Private methods
-/// 根据翻页模式创建阅读器
-/// @param pageType 翻页模式
-- (void)createReaderWithPageType:(XPYReadPageType)pageType {
+/// 创建阅读器
+- (void)createReader {
     if (_pageViewController) {
         [_pageViewController.view removeFromSuperview];
         [_pageViewController removeFromParentViewController];
@@ -100,29 +106,79 @@
         [_scrollReadController removeFromParentViewController];
         _scrollReadController = nil;
     }
-    switch (pageType) {
-        case XPYReadPageTypeCurl:
-        case XPYReadPageTypeNone:
-        case XPYReadPageTypeTranslation: {
-            [self addChildViewController:self.pageViewController];
-        }
-            break;
-        case XPYReadPageTypeVerticalScroll: {
+    if (_coverReadController) {
+        [_coverReadController.view removeFromSuperview];
+        [_coverReadController removeFromParentViewController];
+        _coverReadController = nil;
+    }
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        if ([XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+            // 自动阅读滚屏模式
             [self addChildViewController:self.scrollReadController];
+        } else {
+            // 自动阅读覆盖模式
+            [self addChildViewController:self.coverReadController];
         }
-            break;
+        
+    } else {
+        // 非自动阅读模式
+        XPYReadPageType pageType = [XPYReadConfigManager sharedInstance].pageType;
+        switch (pageType) {
+            case XPYReadPageTypeCurl:
+            case XPYReadPageTypeNone:
+            case XPYReadPageTypeTranslation: {
+                [self addChildViewController:self.pageViewController];
+            }
+                break;
+            case XPYReadPageTypeVerticalScroll: {
+                [self addChildViewController:self.scrollReadController];
+            }
+                break;
+        }
     }
 }
 
 #pragma mark - Actions
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
-    // 限制弹出菜单工具栏的点击区域为屏幕中间，宽度为屏幕一半
+    // 自动阅读和上下滚动翻页模式弹出菜单点击区域为全屏
+    // 其他情况限制弹出菜单工具栏的点击区域为屏幕中间，宽度为屏幕一半
     CGFloat width = CGRectGetWidth(self.view.bounds) / 4.0;
-    if (touchPoint.x > width && touchPoint.x < width * 3) {
-        NSLog(@"弹出或隐藏工具栏");
+    // 左边无效区域边界
+    CGFloat leftWidth = 0;
+    // 右边无效区域边界
+    CGFloat rightWidth = CGRectGetWidth(self.view.bounds);
+    if (![XPYReadConfigManager sharedInstance].isAutoRead && [XPYReadConfigManager sharedInstance].pageType != XPYReadPageTypeVerticalScroll) {
+        leftWidth = width;
+        rightWidth = width * 3;
+    }
+    if (touchPoint.x < leftWidth || touchPoint.x > rightWidth) {
+        // 点击无效区域直接返回
+        return;
+    }
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        // 如果自动阅读模式
+        if (self.readMenu.isShowingAutoReadSetting) {
+            [self.readMenu hideAutoReadSetting];
+            // 继续自动阅读
+            if ([XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+                [self.scrollReadController updateAutoReadStatus:YES];
+            } else {
+                [self.coverReadController updateAutoReadStatus:YES];
+            }
+        } else {
+            [self.readMenu showAutoReadSetting];
+            // 暂停自动阅读
+            if ([XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+                [self.scrollReadController updateAutoReadStatus:NO];
+            } else {
+                [self.coverReadController updateAutoReadStatus:NO];
+            }
+        }
+    } else {
+        // 普通阅读模式
         if (self.readMenu.isShowing) {
-            [self.readMenu hidden];
+            [self.readMenu hiddenWithComplete:nil];
         } else {
             [self.readMenu show];
         }
@@ -133,28 +189,65 @@
 /// 屏幕方向旋转
 - (void)orientationChanged:(NSNotification *)notification {
     // 当前章节分页并设置阅读页
-    [self createReaderWithPageType:[XPYReadConfigManager sharedInstance].pageType];
+    [self createReader];
 }
+- (void)appWillEnterResignActive {
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        // 自动阅读暂停
+        [self.readMenu showAutoReadSetting];
+        if ([XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+            [self.scrollReadController updateAutoReadStatus:NO];
+        } else {
+            [self.coverReadController updateAutoReadStatus:NO];
+        }
+    }
+}
+
 #pragma mark - XPYPageReadViewControllerDelegate
 - (void)pageReadViewControllerWillTransition {
     if (self.readMenu.isShowing) {
-        [self.readMenu hidden];
+        [self.readMenu hiddenWithComplete:nil];
     }
 }
 
 #pragma mark - XPYScrollReadViewControllerDelegate
 - (void)scrollReadViewControllerWillBeginDragging {
     if (self.readMenu.isShowing) {
-        [self.readMenu hidden];
+        [self.readMenu hiddenWithComplete:nil];
     }
 }
 
 #pragma mark - XPYReadMenuDelegate
-- (void)readMenuDidClickBack {
+- (void)readMenuHideStatusDidChange:(BOOL)isHide {
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+- (void)readMenuDidExitReader {
     [self.navigationController popViewControllerAnimated:YES];
 }
-- (void)readMenuDidChangePageType:(XPYReadPageType)pageType {
-    [self createReaderWithPageType:pageType];
+- (void)readMenuDidChangePageType {
+    [self createReader];
+}
+- (void)readMenuDidChangeBackground {
+    self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+    [self createReader];
+}
+- (void)readMenuDidOpenAutoRead {
+    [self.readMenu hiddenWithComplete:^{
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            // 开启自动阅读时如果阅读器为横屏则强制旋转屏幕
+            XPYChangeInterfaceOrientation(UIInterfaceOrientationPortrait);
+        }
+        [XPYReadConfigManager sharedInstance].isAutoRead = YES;
+        [self createReader];
+    }];
+}
+- (void)readMenuDidCloseAutoRead {
+    [XPYReadConfigManager sharedInstance].isAutoRead = NO;
+    [self createReader];
+}
+- (void)readMenuDidChangeAutoReadMode:(XPYAutoReadMode)mode {
+    [[XPYReadConfigManager sharedInstance] updateAutoReadMode:mode];
+    [self createReader];
 }
 
 #pragma mark - Gesture recognizer delegete
@@ -163,6 +256,23 @@
         return YES;
     }
     return NO;
+}
+
+#pragma mark - UITraitEnvironment
+/// 系统深色/浅色模式切换
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    if (@available(iOS 13.0, *)) {
+        if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection] && [UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+            // 更新选中背景
+            [self.readMenu updateSelectedBackgroundWithColorIndex:[XPYReadConfigManager sharedInstance].currentColorIndex];
+            if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+                // 自动阅读阅读时切换系统深浅模式会出现问题所以先关闭自动阅读
+                [self.readMenu hideAutoReadSetting];
+                [XPYReadConfigManager sharedInstance].isAutoRead = NO;
+            }
+            [self createReader];
+        }
+    }
 }
 
 #pragma mark - Getters
@@ -185,12 +295,28 @@
     return _scrollReadController;
 }
 
+- (XPYAutoReadCoverViewController *)coverReadController {
+    if (!_coverReadController) {
+        _coverReadController = [[XPYAutoReadCoverViewController alloc] initWithBook:self.book];
+        [self.view addSubview:_coverReadController.view];
+        [self.view sendSubviewToBack:_coverReadController.view];
+    }
+    return _coverReadController;
+}
+
 #pragma mark - Override methods
 // 阅读器设置可以横屏
 - (BOOL)shouldAutorotate {
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        // 自动阅读不允许横屏
+        return NO;
+    }
     return YES;
 }
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
+        return UIInterfaceOrientationMaskPortrait;
+    }
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
@@ -200,10 +326,11 @@
     return UIStatusBarStyleLightContent;
 }
 - (BOOL)prefersStatusBarHidden {
-    return NO;
+    return !self.readMenu.isShowing;
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 @end

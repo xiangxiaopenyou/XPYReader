@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 页面内容高度（上下翻页模式使用）
 @property (nonatomic, assign) CGFloat contentHeight;
 
+/// 页面头部额外高度
+@property (nonatomic, assign) CGFloat extraHeaderHeight;
+
 @end
 
 NS_ASSUME_NONNULL_END

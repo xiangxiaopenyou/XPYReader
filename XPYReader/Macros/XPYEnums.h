@@ -34,4 +34,18 @@ typedef NS_ENUM(NSInteger, XPYReadPageType) {
     XPYReadPageTypeNone             // 无动画
 };
 
+/// 阅读行间距/段间距等级
+typedef NS_ENUM(NSInteger, XPYReadSpacingLevel) {
+    XPYReadSpacingLevelZero = 0,
+    XPYReadSpacingLevelOne,
+    XPYReadSpacingLevelTwo,
+    XPYReadSpacingLevelThree
+};
+
+/// 自动阅读模式
+typedef NS_ENUM(NSInteger, XPYAutoReadMode) {
+    XPYAutoReadModeScroll,  // 滚屏
+    XPYAutoReadModeCover    // 覆盖
+};
+
 #endif /* XPYEnums_h */

@@ -112,6 +112,9 @@
         return;
     }
     __block XPYChapterModel *nextChapter = [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter];
+    if (!nextChapter) {
+        return;
+    }
     if (XPYIsEmptyObject(nextChapter.content)) {
         [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[nextChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
             nextChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:nextChapter.chapterId];
@@ -126,6 +129,9 @@
 
 + (void)preloadLastChapterWithCurrentChapter:(XPYChapterModel *)currentChapter complete:(void (^)(XPYChapterModel * _Nullable))complete {
     __block XPYChapterModel *lastChapter = [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
+    if (!lastChapter) {
+        return;
+    }
     if (XPYIsEmptyObject(lastChapter.content)) {
         [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[lastChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
             lastChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:lastChapter.chapterId];

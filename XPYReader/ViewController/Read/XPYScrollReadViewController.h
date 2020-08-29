@@ -4,9 +4,9 @@
 //
 //  Created by zhangdu_imac on 2020/8/18.
 //  Copyright © 2020 xiang. All rights reserved.
-//  上下滚动翻页模式控制器
+//  上下滚动翻页模式和自动阅读滚屏模式控制器(因为使用的都是滚动列表)
 
-#import "XPYBaseViewController.h"
+#import "XPYBaseReadViewController.h"
 @class XPYBookModel, XPYChapterModel;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,11 +18,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface XPYScrollReadViewController : XPYBaseViewController
+@interface XPYScrollReadViewController : XPYBaseReadViewController
+
+@property (nonatomic, weak) id <XPYScrollReadViewControllerDelegate> scrollReadDelegate;
 
 - (instancetype)initWithBook:(XPYBookModel *)book;
 
-@property (nonatomic, weak) id <XPYScrollReadViewControllerDelegate> scrollReadDelegate;
+/// 更新自动阅读状态
+/// @param status YES开始 NO停止
+- (void)updateAutoReadStatus:(BOOL)status;
 
 @end
 
