@@ -110,17 +110,7 @@
 #pragma mark - Actions
 /// 开始阅读
 - (void)readAction {
-    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
-    [XPYReadHelper readyForReadingWithBook:self.bookModel success:^(XPYBookModel * _Nonnull book) {
-        [MBProgressHUD xpy_hideHUD];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            XPYReaderManagerController *readPageController = [[XPYReaderManagerController alloc] init];
-            readPageController.book = book;
-            [self.navigationController pushViewController:readPageController animated:YES];
-        });
-    } failure:^(NSString * _Nonnull tip) {
-        [MBProgressHUD xpy_showTips:tip];
-    }];
+    [XPYReadHelper readWithBook:self.bookModel];
 }
 
 /// 加入/移出书架

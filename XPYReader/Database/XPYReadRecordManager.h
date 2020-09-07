@@ -45,6 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获取所有在书架上的书籍
 + (NSArray *)allBooksInStack;
 
+/// 获取所有阅读过的书籍
++ (NSArray *)allReadBooks;
+
 
 @end
 

@@ -107,7 +107,7 @@
     }
     if ((isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1) || (!isNext && currentPageModel.pageIndex == 0)) {
         // 下一章或上一章
-        XPYChapterModel *otherChapter = isNext ? [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter] : [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
+        __block XPYChapterModel *otherChapter = isNext ? [XPYChapterHelper nextChapterOfCurrentChapter:currentChapter] : [XPYChapterHelper lastChapterOfCurrentChapter:currentChapter];
         if (!otherChapter) {
             return nil;
         }
@@ -115,6 +115,7 @@
             // 下一章或上一章的章节内容为空
             // 获取章节内容
             [XPYChapterHelper chapterWithBookId:self.bookModel.bookId chapterId:otherChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
+                otherChapter = [chapter copy];
                 otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
                 if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
                     // 仿真模式
@@ -146,7 +147,12 @@
                 // 跨章节时更新阅读记录
                 [self updateReadRecord];
             } failure:^(NSString * _Nonnull tip) {
+                // 获取章节内容失败
                 [MBProgressHUD xpy_showTips:tip];
+                if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
+                    XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentController.pageModel isBackView:NO];
+                    [self setViewControllers:@[readController] direction:direction animated:NO completion:nil];
+                }
             }];
         } else {
             // 上一章/下一章有内容，则直接分页

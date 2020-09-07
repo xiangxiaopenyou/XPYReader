@@ -11,6 +11,7 @@
 #import "XPYReadRecordManager.h"
 #import "XPYChapterDataManager.h"
 #import "XPYViewControllerHelper.h"
+#import "XPYReaderManagerController.h"
 
 #import "XPYBookModel.h"
 #import "XPYChapterModel.h"
@@ -18,6 +19,21 @@
 #import "XPYNetworkService+Book.h"
 
 @implementation XPYReadHelper
+
++ (void)readWithBook:(XPYBookModel *)bookModel {
+    if (!bookModel) {
+        return;
+    }
+    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
+    [self readyForReadingWithBook:bookModel success:^(XPYBookModel * _Nonnull book) {
+        [MBProgressHUD xpy_hideHUD];
+        XPYReaderManagerController *reader = [[XPYReaderManagerController alloc] init];
+        reader.book = book;
+        [[XPYViewControllerHelper currentViewController].navigationController pushViewController:reader animated:YES];
+    } failure:^(NSString * _Nonnull tip) {
+        [MBProgressHUD xpy_showTips:tip];
+    }];
+}
 
 + (void)readyForReadingWithBook:(XPYBookModel *)bookModel success:(void (^)(XPYBookModel * _Nonnull))success failure:(void (^)(NSString * _Nonnull))failure {
     if (bookModel.chapter) {
@@ -82,25 +98,76 @@
 }
 
 + (void)synchronizeStackBooksAndReadRecordsComplete:(void (^)(void))complete {
-    NSArray *stackBooks = [[XPYReadRecordManager allBooksInStack] copy];
-    if (stackBooks.count == 0) {
-        // 无书架书籍，直接完成
+    NSArray *readRecord = [[XPYReadRecordManager allReadBooks] copy];
+    if (readRecord.count == 0) {
+        // 无任何阅读记录，直接完成
         !complete ?: complete();
         return;
     }
     [XPYAlertManager showAlertWithTitle:@"温馨提示" message:@"是否将书架和阅读记录数据同步至本账号" cancel:@"取消同步" confirm:@"立即同步" inController:[XPYViewControllerHelper currentViewController] confirmHandler:^{
+        // 需要同步的书架书籍ID
         NSMutableArray *needSynchronizeBookIds = [[NSMutableArray alloc] init];
-        for (XPYBookModel *book in stackBooks) {
-            // 拼接BookId
-            [needSynchronizeBookIds addObject:[NSString stringWithFormat:@"%@-0-0", book.bookId]];
+        // 需要同步的阅读记录
+        NSMutableArray *needSynchronizeRecords = [[NSMutableArray alloc] init];
+        for (XPYBookModel *book in readRecord) {
+            if (book.chapter) {
+                NSDictionary *record = @{@"book_id" : book.bookId,
+                                         @"chapter_id" : book.chapter.chapterId,
+                                         @"utime" : @(book.openTime)};
+                [needSynchronizeRecords addObject:record];
+            }
+            if (book.isInStack) {
+                // 拼接BookId
+                [needSynchronizeBookIds addObject:[NSString stringWithFormat:@"%@-0-0", book.bookId]];
+            }
         }
-        NSString *bookIdsString = [needSynchronizeBookIds componentsJoinedByString:@","];
-        // 同步书架书籍到服务端
-        [[XPYNetworkService sharedService] synchronizeStackBooksWithBooksString:bookIdsString success:^(id result) {
-            !complete ?: complete();
-        } failure:^(NSError *error) {
-            !complete ?: complete();
-        }];
+        
+        // 同步书架和同步阅读记录分两个接口
+        // GCD队列组用信号量处理多个异步网络请求
+        dispatch_group_t group = dispatch_group_create();
+        dispatch_queue_t queue = dispatch_queue_create("semaphore", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_group_async(group, queue, ^{
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            // 同步书架网络请求
+            if (needSynchronizeBookIds.count == 0) {
+                // 没有需要同步的书籍，直接发送信号
+                dispatch_semaphore_signal(semaphore);
+            } else {
+                NSString *bookIdsString = [needSynchronizeBookIds componentsJoinedByString:@","];
+                // 同步书架书籍到服务端
+                [[XPYNetworkService sharedService] synchronizeStackBooksWithBooksString:bookIdsString success:^(id result) {
+                    dispatch_semaphore_signal(semaphore);
+                } failure:^(NSError *error) {
+                    dispatch_semaphore_signal(semaphore);
+                }];
+            }
+            // 信号量等待
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        });
+        
+        dispatch_group_async(group, queue, ^{
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            // 同步阅读记录请求
+            if (needSynchronizeRecords.count == 0) {
+                // 没有需要同步的阅读记录，直接发送信号
+                dispatch_semaphore_signal(semaphore);
+            } else {
+                // 同步阅读记录到服务端
+                [[XPYNetworkService sharedService] synchronizeReadRecordWithRecords:needSynchronizeRecords success:^(id result) {
+                    dispatch_semaphore_signal(semaphore);
+                } failure:^(NSError *error) {
+                    dispatch_semaphore_signal(semaphore);
+                }];
+            }
+            // 信号量等待
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        });
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            // 完成同步
+            if (complete) {
+                complete();
+            }
+        });
     } cancelHandler:^{
         // 选择不同步数据，则删除本地数据
         [XPYReadRecordManager deleteAllReadRecords];

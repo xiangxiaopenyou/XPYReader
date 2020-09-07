@@ -8,6 +8,7 @@
 
 #import "XPYReaderManagerController.h"
 #import "XPYPageReadViewController.h"
+#import "XPYHorizontalScrollReadViewController.h"
 #import "XPYScrollReadViewController.h"
 #import "XPYAutoReadCoverViewController.h"
 #import "XPYReadViewController.h"
@@ -20,10 +21,13 @@
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
-@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
+@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
 
-/// 仿真、左右平移、无效果翻页控制器
+/// 仿真、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
+
+/// 左右平移翻页控制器
+@property (nonatomic, strong) XPYHorizontalScrollReadViewController *horizontalScrollReadController;
 
 /// 上下滑动翻页和自动阅读滚屏模式控制器
 @property (nonatomic, strong) XPYScrollReadViewController *scrollReadController;
@@ -101,6 +105,11 @@
         [_pageViewController removeFromParentViewController];
         _pageViewController = nil;
     }
+    if (_horizontalScrollReadController) {
+        [_horizontalScrollReadController.view removeFromSuperview];
+        [_horizontalScrollReadController removeFromParentViewController];
+        _horizontalScrollReadController = nil;
+    }
     if (_scrollReadController) {
         [_scrollReadController.view removeFromSuperview];
         [_scrollReadController removeFromParentViewController];
@@ -125,9 +134,12 @@
         XPYReadPageType pageType = [XPYReadConfigManager sharedInstance].pageType;
         switch (pageType) {
             case XPYReadPageTypeCurl:
-            case XPYReadPageTypeNone:
-            case XPYReadPageTypeTranslation: {
+            case XPYReadPageTypeNone: {
                 [self addChildViewController:self.pageViewController];
+            }
+                break;
+            case XPYReadPageTypeTranslation: {
+                [self addChildViewController:self.horizontalScrollReadController];
             }
                 break;
             case XPYReadPageTypeVerticalScroll: {
@@ -141,19 +153,29 @@
 #pragma mark - Actions
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
-    // 自动阅读和上下滚动翻页模式弹出菜单点击区域为全屏
-    // 其他情况限制弹出菜单工具栏的点击区域为屏幕中间，宽度为屏幕一半
+    // 自动阅读和上下滚动翻页模式弹出菜单左右点击区域为全屏
+    // 弹出菜单的情况下上下点击区域需要减去菜单高度
+    // 其他情况限制弹出菜单工具栏的左右点击区域为屏幕中间，宽度为屏幕一半，上下为全屏
     CGFloat width = CGRectGetWidth(self.view.bounds) / 4.0;
     // 左边无效区域边界
     CGFloat leftWidth = 0;
     // 右边无效区域边界
-    CGFloat rightWidth = CGRectGetWidth(self.view.bounds);
+    CGFloat rightWidth = 0;
+    // 顶部无效区域边界
+    CGFloat topHeight = 0;
+    // 底部无效区域边界
+    CGFloat bottomHeight = 0;
     if (![XPYReadConfigManager sharedInstance].isAutoRead && [XPYReadConfigManager sharedInstance].pageType != XPYReadPageTypeVerticalScroll) {
         leftWidth = width;
-        rightWidth = width * 3;
+        rightWidth = width;
     }
-    if (touchPoint.x < leftWidth || touchPoint.x > rightWidth) {
-        // 点击无效区域直接返回
+    if (self.readMenu.isShowing) {
+        topHeight = kXPYTopBarHeight;
+        bottomHeight = kXPYBottomBarHeight;
+    }
+    // 点击是否在边界内
+    BOOL isTouchInRect = CGRectContainsPoint(CGRectMake(leftWidth, topHeight, CGRectGetWidth(self.view.bounds) - leftWidth - rightWidth, CGRectGetHeight(self.view.bounds) - topHeight - bottomHeight), touchPoint);
+    if (!isTouchInRect) {
         return;
     }
     if ([XPYReadConfigManager sharedInstance].isAutoRead) {
@@ -205,6 +227,13 @@
 
 #pragma mark - XPYPageReadViewControllerDelegate
 - (void)pageReadViewControllerWillTransition {
+    if (self.readMenu.isShowing) {
+        [self.readMenu hiddenWithComplete:nil];
+    }
+}
+
+#pragma mark - XPYHorizontalScrollReadViewControllerDelegate
+- (void)horizontalScrollReadViewControllerWillBeginScroll {
     if (self.readMenu.isShowing) {
         [self.readMenu hiddenWithComplete:nil];
     }
@@ -285,6 +314,15 @@
     }
     return _pageViewController;
 }
+- (XPYHorizontalScrollReadViewController *)horizontalScrollReadController {
+    if (!_horizontalScrollReadController) {
+        _horizontalScrollReadController = [[XPYHorizontalScrollReadViewController alloc] initWithBook:self.book];
+        _horizontalScrollReadController.delegate = self;
+        [self.view addSubview:_horizontalScrollReadController.view];
+        [self.view sendSubviewToBack:_horizontalScrollReadController.view];
+    }
+    return _horizontalScrollReadController;
+}
 - (XPYScrollReadViewController *)scrollReadController {
     if (!_scrollReadController) {
         _scrollReadController = [[XPYScrollReadViewController alloc] initWithBook:self.book];
@@ -327,10 +365,6 @@
 }
 - (BOOL)prefersStatusBarHidden {
     return !self.readMenu.isShowing;
-}
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 @end

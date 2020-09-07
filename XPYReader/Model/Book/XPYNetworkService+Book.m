@@ -68,4 +68,17 @@
     }];
 }
 
+- (void)synchronizeReadRecordWithRecords:(NSArray *)records success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure {
+    NSDictionary *params = @{@"data" : [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:records options:0 error:nil] encoding:NSUTF8StringEncoding]};
+    [self request:XPYHTTPRequestTypePost path:@"/user-readhistory?action=data_sync" parameters:params success:^(id result) {
+        if (success) {
+            success(result);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
 @end

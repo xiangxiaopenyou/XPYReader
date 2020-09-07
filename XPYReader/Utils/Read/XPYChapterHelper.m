@@ -116,11 +116,10 @@
         return;
     }
     if (XPYIsEmptyObject(nextChapter.content)) {
-        [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[nextChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
-            nextChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:nextChapter.chapterId];
-            !complete ?: complete(nextChapter);
+        [self reqeustChapterContentWithChapter:nextChapter success:^(id result) {
+            !complete ?: complete((XPYChapterModel *)result);
+        } failure:^(NSString *tip) {
         }];
-        [XPYChapterHelper downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[nextChapter.chapterId] progress:nil complete:nil];
     } else {
         // 已经存在章节内容直接返回
         !complete ?: complete(nextChapter);
@@ -133,9 +132,9 @@
         return;
     }
     if (XPYIsEmptyObject(lastChapter.content)) {
-        [self downloadChaptersContentWithBookId:currentChapter.bookId chapterIds:@[lastChapter.chapterId] progress:nil complete:^(BOOL success, NSString * _Nonnull tip, NSArray * _Nullable failureChapterIds) {
-            lastChapter = [XPYChapterDataManager chapterWithBookId:currentChapter.bookId chapterId:lastChapter.chapterId];
-            !complete ?: complete(lastChapter);
+        [self reqeustChapterContentWithChapter:lastChapter success:^(id result) {
+            !complete ?: complete((XPYChapterModel *)result);
+        } failure:^(NSString *tip) {
         }];
     } else {
         // 已经存在章节内容直接返回

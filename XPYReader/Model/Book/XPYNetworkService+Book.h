@@ -25,6 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param booksString bookId拼接字符串
 - (void)synchronizeStackBooksWithBooksString:(NSString *)booksString success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
 
+/// 同步阅读记录
+/// @param records 记录数组（书籍）
+- (void)synchronizeReadRecordWithRecords:(NSArray *)records success:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

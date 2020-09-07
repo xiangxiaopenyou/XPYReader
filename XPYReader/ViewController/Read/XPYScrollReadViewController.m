@@ -95,12 +95,6 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
     
     [self.view addSubview:self.tableView];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
-        make.trailing.equalTo(self.view.mas_trailing).mas_offset(- XPYReadViewRightSpacing);
-        make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing);
-        make.bottom.equalTo(self.view.mas_bottom).mas_offset(- XPYReadViewBottomSpacing);
-    }];
 }      
 
 #pragma mark - Instance methods

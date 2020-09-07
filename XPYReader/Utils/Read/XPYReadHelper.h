@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYReadHelper : NSObject
 
+/// 阅读
+/// @param bookModel 书籍
++ (void)readWithBook:(XPYBookModel *)bookModel;
+
 /// 获取书籍章节信息准备阅读
 /// @param bookModel 书籍模型
 /// @param success 获取信息成功回调
