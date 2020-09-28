@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYBookStackViewController : XPYBaseViewController
 
+/// 将要打开书籍视图
+@property (nonatomic, strong, readonly) UIView *selectedBookView;
+
 @end
 
 NS_ASSUME_NONNULL_END

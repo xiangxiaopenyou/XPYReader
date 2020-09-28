@@ -34,11 +34,9 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 @property (nonatomic, strong) NSMutableArray <NSString *> *chapterIds;
 /// 当前阅读章节数组(只保存本次阅读列表)
 @property (nonatomic, strong) NSMutableArray <XPYChapterModel *> *chapters;
-/// 保存当前正在显示的indexPath
-@property (nonatomic, strong) NSIndexPath *currentIndexPath;
-/// 保存需要更新的indexPath（willDisplayCell时保存，didEndDisplayingCell时更新）
+/// 保存需要更新的indexPath（willDisplayCell时保存）
 @property (nonatomic, strong) NSIndexPath *needUpdateIndexPath;
-/// 保存滑动开始位置
+/// 保存滑动开始位置，用于判断是否翻页
 @property (nonatomic, assign) CGFloat offsetX;
 
 @end
@@ -322,7 +320,7 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 /// 动画减速结束
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (_offsetX != scrollView.contentOffset.x) {
-        // 更新阅读记录
+        // 翻页时更新阅读记录
         self.bookModel.page = self.needUpdateIndexPath.item;
         self.bookModel.chapter = self.chapters[self.needUpdateIndexPath.section];
         [self updateReadRecord];

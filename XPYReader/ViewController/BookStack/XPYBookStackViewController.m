@@ -11,6 +11,8 @@
 
 #import "XPYBookStackCollectionViewCell.h"
 
+#import "XPYOpenBookAnimation.h"
+
 #import "XPYBookModel.h"
 #import "XPYNetworkService+Book.h"
 #import "XPYNetworkService+Chapter.h"
@@ -23,6 +25,7 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 @interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UIView *selectedBookView;
 
 @property (nonatomic, copy) NSArray<XPYBookModel *> *dataSource;
 
@@ -118,6 +121,12 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 
 #pragma mark - Collection view delegate & flow layout
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    XPYBookStackCollectionViewCell *cell = (XPYBookStackCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    // 设置将要打开的书籍视图
+    UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];
+    snapshotView.frame = [snapshotView convertRect:cell.frame toView:XPYKeyWindow];
+    self.selectedBookView = snapshotView;
+    
     XPYBookModel *book = self.dataSource[indexPath.item];
     [XPYReadHelper readWithBook:book];
 }
