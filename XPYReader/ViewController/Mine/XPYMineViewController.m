@@ -27,7 +27,7 @@
     [self.view addSubview:self.avartarImageView];
     [self.avartarImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
-        make.top.equalTo(self.view.mas_top).mas_offset(40);
+        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).mas_offset(40);
         make.size.mas_offset(CGSizeMake(70, 70));
     }];
     

@@ -7,9 +7,6 @@
 //
 
 #import "XPYNavigationController.h"
-#import "XPYBookStackViewController.h"
-#import "XPYReaderManagerController.h"
-#import "XPYOpenBookAnimation.h"
 
 @interface XPYNavigationController ()
 
@@ -19,7 +16,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationBar.translucent = NO;
 }
 
 /**

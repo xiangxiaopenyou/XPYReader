@@ -30,7 +30,9 @@
     
     [self.view addSubview:self.booksTableView];
     [self.booksTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
+        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        make.leading.trailing.equalTo(self.view);
     }];
     
     [self booksListRequest];

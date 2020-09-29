@@ -43,7 +43,9 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
+        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        make.leading.trailing.equalTo(self.view);
     }];
     
     // 设置NavigationController代理，实现自定义转场动画

@@ -48,7 +48,7 @@
     
     [self.bookCoverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view.mas_leading).mas_offset(20);
-        make.top.equalTo(self.view.mas_top).mas_offset(20);
+        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).mas_offset(20);
         make.size.mas_offset(CGSizeMake(120, 160));
     }];
     
