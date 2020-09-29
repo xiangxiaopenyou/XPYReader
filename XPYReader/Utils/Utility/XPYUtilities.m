@@ -41,6 +41,10 @@
         int val = (int)orientation;
         [invocation setArgument:&val atIndex:2];
         [invocation invoke];
+        
+        /** 下面两行代码是为了当前导航栏或底部栏旋转至设备方向*/
+        [UINavigationController attemptRotationToDeviceOrientation];
+        [UITabBarController attemptRotationToDeviceOrientation];
     }
 }
 

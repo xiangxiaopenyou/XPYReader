@@ -20,12 +20,13 @@
 #import "XPYReadHelper.h"
 #import "XPYUserManager.h"
 
+#import "UIViewController+Transition.h"
+
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
-@interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UIView *selectedBookView;
 
 @property (nonatomic, copy) NSArray<XPYBookModel *> *dataSource;
 
@@ -44,6 +45,9 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+    
+    // 设置NavigationController代理，实现自定义转场动画
+    self.navigationController.delegate = self;
     
     // 请求网络书架中的书籍
     [self booksRequest];
@@ -123,9 +127,9 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     XPYBookStackCollectionViewCell *cell = (XPYBookStackCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     // 设置将要打开的书籍视图
-    UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];
-    snapshotView.frame = [snapshotView convertRect:cell.frame toView:XPYKeyWindow];
-    self.selectedBookView = snapshotView;
+    UIView *snapshotView = [cell.bookCoverImageView snapshotViewAfterScreenUpdates:NO];
+    snapshotView.frame = [cell.bookCoverImageView convertRect:cell.bookCoverImageView.frame toView:XPYKeyWindow];
+    self.bookCoverView = snapshotView;
     
     XPYBookModel *book = self.dataSource[indexPath.item];
     [XPYReadHelper readWithBook:book];

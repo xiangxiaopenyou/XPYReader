@@ -12,11 +12,13 @@
 #import "XPYChapterDataManager.h"
 #import "XPYViewControllerHelper.h"
 #import "XPYReaderManagerController.h"
+#import "XPYBookStackViewController.h"
 
 #import "XPYBookModel.h"
 #import "XPYChapterModel.h"
 
 #import "XPYNetworkService+Book.h"
+#import "UIViewController+Transition.h"
 
 @implementation XPYReadHelper
 
@@ -29,6 +31,10 @@
         [MBProgressHUD xpy_hideHUD];
         XPYReaderManagerController *reader = [[XPYReaderManagerController alloc] init];
         reader.book = book;
+        if ([[XPYViewControllerHelper currentViewController] isMemberOfClass:[XPYBookStackViewController class]]) {
+            // 只有书架进入阅读器时需要自定义转场动画
+            [XPYViewControllerHelper currentViewController].toClass = [XPYReaderManagerController class];
+        }
         [[XPYViewControllerHelper currentViewController].navigationController pushViewController:reader animated:YES];
     } failure:^(NSString * _Nonnull tip) {
         [MBProgressHUD xpy_showTips:tip];

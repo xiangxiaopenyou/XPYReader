@@ -54,6 +54,7 @@
 		6C91FB0124E77F3000D7D2B2 /* XPYViewControllerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAFF24E77F3000D7D2B2 /* XPYViewControllerHelper.m */; };
 		6CAEFD742505C16E006DC948 /* XPYHorizontalScrollReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAEFD732505C16E006DC948 /* XPYHorizontalScrollReadViewController.m */; };
 		6CAEFD772505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */; };
+		6CC6B35B2522CBC500F567EE /* UIViewController+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC6B35A2522CBC500F567EE /* UIViewController+Transition.m */; };
 		6CCDDC8424EB766E00612B7B /* XPYScrollReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC8324EB766E00612B7B /* XPYScrollReadViewController.m */; };
 		6CCDDC8B24EBA94100612B7B /* XPYChapterPageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC8A24EBA94100612B7B /* XPYChapterPageModel.m */; };
 		6CCDDC8E24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */; };
@@ -172,6 +173,8 @@
 		6CAEFD732505C16E006DC948 /* XPYHorizontalScrollReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYHorizontalScrollReadViewController.m; sourceTree = "<group>"; };
 		6CAEFD752505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYHorizontalScrollCollectionViewCell.h; sourceTree = "<group>"; };
 		6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYHorizontalScrollCollectionViewCell.m; sourceTree = "<group>"; };
+		6CC6B3592522CBC500F567EE /* UIViewController+Transition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Transition.h"; sourceTree = "<group>"; };
+		6CC6B35A2522CBC500F567EE /* UIViewController+Transition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Transition.m"; sourceTree = "<group>"; };
 		6CCDDC8224EB766E00612B7B /* XPYScrollReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYScrollReadViewController.h; sourceTree = "<group>"; };
 		6CCDDC8324EB766E00612B7B /* XPYScrollReadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYScrollReadViewController.m; sourceTree = "<group>"; };
 		6CCDDC8924EBA94100612B7B /* XPYChapterPageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYChapterPageModel.h; sourceTree = "<group>"; };
@@ -319,18 +322,10 @@
 			path = BookStore;
 			sourceTree = "<group>";
 		};
-		6C51B60625217FF9005C97D1 /* UIViewController */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UIViewController;
-			sourceTree = "<group>";
-		};
 		6C51B60D252182C7005C97D1 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
-				6C51B60E25218333005C97D1 /* XPYOpenBookAnimation.h */,
-				6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */,
+				6CC6B3582522CB4900F567EE /* Transition */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -403,7 +398,6 @@
 		6C7BA8DB24D904EC0054B971 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				6C51B60625217FF9005C97D1 /* UIViewController */,
 				6C03F0F124E0D84A0070328E /* NSString */,
 				6C7BA8DC24D9050F0054B971 /* MBProgressHUD */,
 			);
@@ -503,6 +497,17 @@
 				6C91FAFF24E77F3000D7D2B2 /* XPYViewControllerHelper.m */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		6CC6B3582522CB4900F567EE /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				6CC6B3592522CBC500F567EE /* UIViewController+Transition.h */,
+				6CC6B35A2522CBC500F567EE /* UIViewController+Transition.m */,
+				6C51B60E25218333005C97D1 /* XPYOpenBookAnimation.h */,
+				6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */,
+			);
+			path = Transition;
 			sourceTree = "<group>";
 		};
 		6CE9250A24D7EF4A000AA12F = {
@@ -666,7 +671,7 @@
 		6CE9250B24D7EF4A000AA12F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = xiang;
 				TargetAttributes = {
 					6CE9251224D7EF4A000AA12F = {
@@ -792,6 +797,7 @@
 				6CE9253724D7F55E000AA12F /* XPYBookStoreViewController.m in Sources */,
 				6C033EC724F3C06E002B86A3 /* XPYBaseReadViewController.m in Sources */,
 				6C91FAF524E65DFA00D7D2B2 /* XPYNetworkService+User.m in Sources */,
+				6CC6B35B2522CBC500F567EE /* UIViewController+Transition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,6 +841,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -893,6 +900,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -928,7 +936,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -948,7 +956,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

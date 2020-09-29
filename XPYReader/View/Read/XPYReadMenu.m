@@ -306,6 +306,10 @@
         [self.delegate readMenuDidChangeAutoReadMode:mode];
     }
 }
+- (void)autoReadSettingBarDidChangeReadSpeed:(NSInteger)speed {
+    
+}
+
 
 #pragma mark - Getters
 - (XPYReadMenuTopBar *)topBar {

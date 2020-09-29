@@ -13,6 +13,8 @@
 #import "XPYAutoReadCoverViewController.h"
 #import "XPYReadViewController.h"
 
+#import "XPYReadView.h"
+
 #import "XPYReadMenu.h"
 
 #import "XPYBookModel.h"
@@ -154,27 +156,18 @@
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
     // 自动阅读和上下滚动翻页模式弹出菜单左右点击区域为全屏
-    // 弹出菜单的情况下上下点击区域需要减去菜单高度
-    // 其他情况限制弹出菜单工具栏的左右点击区域为屏幕中间，宽度为屏幕一半，上下为全屏
+    // 其他情况限制弹出菜单工具栏的左右点击区域为屏幕中间，宽度为屏幕一半
     CGFloat width = CGRectGetWidth(self.view.bounds) / 4.0;
     // 左边无效区域边界
     CGFloat leftWidth = 0;
     // 右边无效区域边界
     CGFloat rightWidth = 0;
-    // 顶部无效区域边界
-    CGFloat topHeight = 0;
-    // 底部无效区域边界
-    CGFloat bottomHeight = 0;
     if (![XPYReadConfigManager sharedInstance].isAutoRead && [XPYReadConfigManager sharedInstance].pageType != XPYReadPageTypeVerticalScroll) {
         leftWidth = width;
         rightWidth = width;
     }
-    if (self.readMenu.isShowing) {
-        topHeight = kXPYTopBarHeight;
-        bottomHeight = kXPYBottomBarHeight;
-    }
     // 点击是否在边界内
-    BOOL isTouchInRect = CGRectContainsPoint(CGRectMake(leftWidth, topHeight, CGRectGetWidth(self.view.bounds) - leftWidth - rightWidth, CGRectGetHeight(self.view.bounds) - topHeight - bottomHeight), touchPoint);
+    BOOL isTouchInRect = CGRectContainsPoint(CGRectMake(leftWidth, 0, CGRectGetWidth(self.view.bounds) - leftWidth - rightWidth, CGRectGetHeight(self.view.bounds)), touchPoint);
     if (!isTouchInRect) {
         return;
     }
@@ -251,6 +244,10 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 - (void)readMenuDidExitReader {
+    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+        // 如果阅读器为横屏则强制旋转屏幕
+        XPYChangeInterfaceOrientation(UIInterfaceOrientationPortrait);
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (void)readMenuDidChangePageType {
@@ -280,11 +277,13 @@
 }
 
 #pragma mark - Gesture recognizer delegete
+// 防止手势覆盖失效
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if ([otherGestureRecognizer isMemberOfClass:[UITapGestureRecognizer class]]) {
-        return YES;
-    }
-    return NO;
+    return YES;
+}
+// 根据点击位置判断是否有效点击
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return [touch.view isMemberOfClass:[XPYReadView class]];
 }
 
 #pragma mark - UITraitEnvironment

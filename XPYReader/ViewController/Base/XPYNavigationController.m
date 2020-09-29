@@ -11,7 +11,7 @@
 #import "XPYReaderManagerController.h"
 #import "XPYOpenBookAnimation.h"
 
-@interface XPYNavigationController () <UINavigationControllerDelegate>
+@interface XPYNavigationController ()
 
 @end
 
@@ -20,7 +20,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationBar.translucent = NO;
-    self.delegate = self;
 }
 
 /**
@@ -35,24 +34,6 @@
         viewController.hidesBottomBarWhenPushed = YES;
     }
     [super pushViewController:viewController animated:animated];
-}
-
-#pragma mark - Navigation controller delegate
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
-    if (operation == UINavigationControllerOperationPush && [fromVC isMemberOfClass:[XPYBookStackViewController class]] && [toVC isMemberOfClass:[XPYReaderManagerController class]]) {
-        // 书架页push到阅读器
-        XPYBookStackViewController *stackController = (XPYBookStackViewController *)fromVC;
-        return [XPYOpenBookAnimation animationWithBookCover:stackController.selectedBookView];
-    }
-    if (operation == UINavigationControllerOperationPop && [fromVC isMemberOfClass:[XPYReaderManagerController class]] && [toVC isMemberOfClass:[XPYBookStackViewController class]]) {
-        // 阅读器pop到书架页
-        
-    }
-    return nil;
-}
-
-- (id<UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController {
-    return nil;
 }
 
 #pragma mark - Override methods

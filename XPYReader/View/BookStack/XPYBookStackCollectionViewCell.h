@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYBookStackCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, strong, readonly) UIImageView *bookCoverImageView;
+
 - (void)setupData:(XPYBookModel *)book;
 
 @end
