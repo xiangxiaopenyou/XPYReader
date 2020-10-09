@@ -33,6 +33,7 @@
 		6C03F10424E3834C0070328E /* XPYReadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F10324E3834C0070328E /* XPYReadHelper.m */; };
 		6C03F10724E3844C0070328E /* XPYChapterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F10624E3844C0070328E /* XPYChapterHelper.m */; };
 		6C51B61025218333005C97D1 /* XPYOpenBookAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */; };
+		6C602E9525303BA0005A2FED /* XPYCloseBookAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C602E9425303BA0005A2FED /* XPYCloseBookAnimation.m */; };
 		6C7BA8BA24D7FB9E0054B971 /* XPYBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8B924D7FB9E0054B971 /* XPYBaseModel.m */; };
 		6C7BA8C024D7FEAC0054B971 /* XPYNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8BF24D7FEAC0054B971 /* XPYNetworkManager.m */; };
 		6C7BA8C324D7FEB40054B971 /* XPYNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8C224D7FEB40054B971 /* XPYNetworkService.m */; };
@@ -127,6 +128,8 @@
 		6C03F10624E3844C0070328E /* XPYChapterHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYChapterHelper.m; sourceTree = "<group>"; };
 		6C51B60E25218333005C97D1 /* XPYOpenBookAnimation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYOpenBookAnimation.h; sourceTree = "<group>"; };
 		6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYOpenBookAnimation.m; sourceTree = "<group>"; };
+		6C602E9325303BA0005A2FED /* XPYCloseBookAnimation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYCloseBookAnimation.h; sourceTree = "<group>"; };
+		6C602E9425303BA0005A2FED /* XPYCloseBookAnimation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYCloseBookAnimation.m; sourceTree = "<group>"; };
 		6C7BA8B824D7FB9E0054B971 /* XPYBaseModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBaseModel.h; sourceTree = "<group>"; };
 		6C7BA8B924D7FB9E0054B971 /* XPYBaseModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBaseModel.m; sourceTree = "<group>"; };
 		6C7BA8BE24D7FEAC0054B971 /* XPYNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYNetworkManager.h; sourceTree = "<group>"; };
@@ -506,6 +509,8 @@
 				6CC6B35A2522CBC500F567EE /* UIViewController+Transition.m */,
 				6C51B60E25218333005C97D1 /* XPYOpenBookAnimation.h */,
 				6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */,
+				6C602E9325303BA0005A2FED /* XPYCloseBookAnimation.h */,
+				6C602E9425303BA0005A2FED /* XPYCloseBookAnimation.m */,
 			);
 			path = Transition;
 			sourceTree = "<group>";
@@ -771,6 +776,7 @@
 				6CCDDC9724EE0AB200612B7B /* XPYReadMenuBackgroundBar.m in Sources */,
 				6C51B61025218333005C97D1 /* XPYOpenBookAnimation.m in Sources */,
 				6C03F0CE24D94C5D0070328E /* XPYDatabaseManager.mm in Sources */,
+				6C602E9525303BA0005A2FED /* XPYCloseBookAnimation.m in Sources */,
 				6CAEFD772505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m in Sources */,
 				6CCDDC8424EB766E00612B7B /* XPYScrollReadViewController.m in Sources */,
 				6C033ED124F4F651002B86A3 /* XPYReadMenuSettingBar.m in Sources */,

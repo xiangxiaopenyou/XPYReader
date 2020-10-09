@@ -31,9 +31,8 @@
     } else {
         targetView = targetController.view;
     }
-    CGRect frame = XPYKeyWindow.frame;
     // 截图(afterScreenUpdates:是否所有效果应用在视图以后再截图)
-    UIView *fromView = self.bookCoverView; // [self.bookCoverView snapshotViewAfterScreenUpdates:NO];
+    UIView *fromView = [self.bookCoverView snapshotViewAfterScreenUpdates:NO];
     UIView *toView = [targetView snapshotViewAfterScreenUpdates:YES];
     
     //fromView和toView加入到containerView中
@@ -41,7 +40,7 @@
     [transitionContext.containerView addSubview:fromView];
     
     // 保存frame
-    CGRect fromFrame = fromView.frame;
+    CGRect fromFrame = self.bookCoverView.frame;
     CGRect toFrame = toView.frame;
     
     NSTimeInterval duration = [self transitionDuration:transitionContext];

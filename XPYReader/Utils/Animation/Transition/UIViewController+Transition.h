@@ -12,9 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (Transition)
 
-/// 转场动画目标Class
-@property (nonatomic, assign) Class toClass;
-
 /// 书籍封面视图
 @property (nonatomic, strong) UIView *bookCoverView;
 

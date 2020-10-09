@@ -12,6 +12,7 @@
 #import "XPYScrollReadViewController.h"
 #import "XPYAutoReadCoverViewController.h"
 #import "XPYReadViewController.h"
+#import "XPYBookStackViewController.h"
 
 #import "XPYReadView.h"
 
@@ -22,6 +23,8 @@
 #import "XPYReadHelper.h"
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
+
+#import "UIViewController+Transition.h"
 
 @interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
 
@@ -64,8 +67,6 @@
         [MBProgressHUD xpy_showTips:tip];
         [self.navigationController popViewControllerAnimated:YES];
     }];
-    
-    
 }
 
 /// 初始化内容
@@ -244,11 +245,13 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 - (void)readMenuDidExitReader {
-    if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
-        // 如果阅读器为横屏则强制旋转屏幕
-        XPYChangeInterfaceOrientation(UIInterfaceOrientationPortrait);
-    }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.readMenu hiddenWithComplete:^{
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            // 如果阅读器为横屏则强制旋转屏幕
+            XPYChangeInterfaceOrientation(UIInterfaceOrientationPortrait);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
 }
 - (void)readMenuDidChangePageType {
     [self createReader];
