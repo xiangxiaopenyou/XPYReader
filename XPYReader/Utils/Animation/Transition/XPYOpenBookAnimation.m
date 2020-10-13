@@ -8,39 +8,42 @@
 
 #import "XPYOpenBookAnimation.h"
 
-@interface XPYOpenBookAnimation () <UIViewControllerAnimatedTransitioning>
+#import "UIViewController+Transition.h"
 
-@property (nonatomic, strong) UIView *bookCoverView;
+@interface XPYOpenBookAnimation () <UIViewControllerAnimatedTransitioning>
 
 @end
 
 @implementation XPYOpenBookAnimation
 
-+ (id<UIViewControllerAnimatedTransitioning>)animationWithBookCover:(UIView *)bookCover {
++ (id<UIViewControllerAnimatedTransitioning>)openBookAnimation {
     XPYOpenBookAnimation *animation = [[XPYOpenBookAnimation alloc] init];
-    animation.bookCoverView = bookCover;
     return animation;
 }
 
 - (void)animateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
     // 获取目标视图
-    UIViewController *targetController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *targetView = nil;
+    UIViewController *fromController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UIViewController *toController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    UIView *tempFromView = nil;
+    UIView *tempToView = nil;
     if ([transitionContext respondsToSelector:@selector(viewForKey:)]) {    //iOS8
-        targetView = [transitionContext viewForKey:UITransitionContextToViewKey];
+        tempToView = [transitionContext viewForKey:UITransitionContextToViewKey];
+        tempFromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
     } else {
-        targetView = targetController.view;
+        tempToView = toController.view;
+        tempFromView = fromController.view;
     }
     // 截图(afterScreenUpdates:是否所有效果应用在视图以后再截图)
-    UIView *fromView = [self.bookCoverView snapshotViewAfterScreenUpdates:NO];
-    UIView *toView = [targetView snapshotViewAfterScreenUpdates:YES];
+    UIView *fromView = [fromController.bookCoverView snapshotViewAfterScreenUpdates:NO];
+    UIView *toView = [tempToView snapshotViewAfterScreenUpdates:YES];
     
     //fromView和toView加入到containerView中
     [transitionContext.containerView addSubview:toView];
     [transitionContext.containerView addSubview:fromView];
     
     // 保存frame
-    CGRect fromFrame = self.bookCoverView.frame;
+    CGRect fromFrame = fromController.bookCoverView.frame;
     CGRect toFrame = toView.frame;
     
     NSTimeInterval duration = [self transitionDuration:transitionContext];
@@ -63,10 +66,15 @@
         // 动画结束移除截图
         [fromView removeFromSuperview];
         [toView removeFromSuperview];
+        
+        // bookCoverView设为nil
+        fromController.bookCoverView = nil;
+        
         // containerView添加目标视图
-        [transitionContext.containerView addSubview:targetView];
+        [transitionContext.containerView addSubview:tempToView];
         // 还原子视图
         [transitionContext.containerView.layer setSublayerTransform:CATransform3DIdentity];
+        // 结束转场（这里使用!transitionContext.transitionWasCancelled，避免手势取消时造成卡顿现象）
         [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
     }];
     

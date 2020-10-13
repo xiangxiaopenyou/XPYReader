@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (Transition)
 
 /// 书籍封面视图
-@property (nonatomic, strong) UIView *bookCoverView;
+@property (nonatomic, strong, nullable) UIView *bookCoverView;
 
 @end
 

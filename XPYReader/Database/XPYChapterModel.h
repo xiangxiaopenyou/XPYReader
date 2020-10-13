@@ -7,6 +7,7 @@
 //
 
 #import "XPYBaseModel.h"
+
 @class XPYChapterPageModel;
 
 NS_ASSUME_NONNULL_BEGIN

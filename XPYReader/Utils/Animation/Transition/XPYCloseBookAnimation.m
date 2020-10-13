@@ -8,6 +8,8 @@
 
 #import "XPYCloseBookAnimation.h"
 
+#import "UIViewController+Transition.h"
+
 @interface XPYCloseBookAnimation () <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, strong) UIView *bookCoverView;
@@ -16,9 +18,8 @@
 
 @implementation XPYCloseBookAnimation
 
-+ (id<UIViewControllerAnimatedTransitioning>)animationWithBookCover:(UIView *)bookCover {
++ (id<UIViewControllerAnimatedTransitioning>)closeBookAnimation {
     XPYCloseBookAnimation *animation = [[XPYCloseBookAnimation alloc] init];
-    animation.bookCoverView = bookCover;
     return animation;
 }
 
@@ -34,14 +35,14 @@
         tempFromView = fromController.view;
         tempToView = toController.view;
     }
-    UIView *toView = [self.bookCoverView snapshotViewAfterScreenUpdates:YES];
+    UIView *toView = [fromController.bookCoverView snapshotViewAfterScreenUpdates:YES];
     UIView *fromView = [tempFromView snapshotViewAfterScreenUpdates:NO];
     [transitionContext.containerView addSubview:fromView];
     [transitionContext.containerView addSubview:toView];
     
     // 保存frame
     CGRect fromFrame = fromView.frame;
-    CGRect toFrame = self.bookCoverView.frame;
+    CGRect toFrame = fromController.bookCoverView.frame;
     
     NSTimeInterval duration = [self transitionDuration:transitionContext];
     
@@ -67,6 +68,9 @@
         // 动画结束移除截图
         [fromView removeFromSuperview];
         [toView removeFromSuperview];
+        
+        // bookCoverView设为nil
+        fromController.bookCoverView = nil;
         
         // 还原子视图
         [transitionContext.containerView.layer setSublayerTransform:CATransform3DIdentity];

@@ -21,14 +21,13 @@
 
 #pragma mark - Navigation controller delegate
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC {
-    if (operation == UINavigationControllerOperationPush && [fromVC isMemberOfClass:[XPYBookStackViewController class]] && [toVC isMemberOfClass:[XPYReaderManagerController class]]) {
+    if (operation == UINavigationControllerOperationPush && [fromVC isMemberOfClass:[XPYBookStackViewController class]] && [toVC isMemberOfClass:[XPYReaderManagerController class]] && fromVC.bookCoverView) {
         // push
-        toVC.bookCoverView = self.bookCoverView;
-        return [XPYOpenBookAnimation animationWithBookCover:self.bookCoverView];
+        return [XPYOpenBookAnimation openBookAnimation];
     }
-    if (operation == UINavigationControllerOperationPop && [fromVC isMemberOfClass:[XPYReaderManagerController class]] && [toVC isMemberOfClass:[XPYBookStackViewController class]]) {
+    if (operation == UINavigationControllerOperationPop && [fromVC isMemberOfClass:[XPYReaderManagerController class]] && [toVC isMemberOfClass:[XPYBookStackViewController class]] && fromVC.bookCoverView) {
         // pop
-        return [XPYCloseBookAnimation animationWithBookCover:self.bookCoverView];
+        return [XPYCloseBookAnimation closeBookAnimation];
     }
     return nil;
 }
