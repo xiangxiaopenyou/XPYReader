@@ -54,5 +54,4 @@
     return _contentString;
 }
 
-
 @end

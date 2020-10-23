@@ -24,9 +24,7 @@
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
-#import "UIViewController+Transition.h"
-
-@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate, UINavigationControllerDelegate>
+@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
 
 /// 仿真、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
@@ -67,9 +65,6 @@
         [MBProgressHUD xpy_showTips:tip];
         [self.navigationController popViewControllerAnimated:YES];
     }];
-    
-    // 设置NavigationController代理，实现自定义转场动画
-    self.navigationController.delegate = self;
 }
 
 /// 初始化内容

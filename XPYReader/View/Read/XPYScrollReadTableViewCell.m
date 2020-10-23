@@ -24,7 +24,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
-        // self.contentView.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.scrollReadView];
         [self.scrollReadView mas_makeConstraints:^(MASConstraintMaker *make) {

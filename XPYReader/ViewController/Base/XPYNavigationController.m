@@ -8,6 +8,8 @@
 
 #import "XPYNavigationController.h"
 
+#import "XPYTransitionManager.h"
+
 @interface XPYNavigationController ()
 
 @end
@@ -16,6 +18,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // 设置NavigationController代理，实现自定义转场动画
+    self.delegate = [XPYTransitionManager shareManager];
 }
 
 /**

@@ -58,4 +58,5 @@
     self.currentUser = nil;
     _isLogin = NO;
 }
+
 @end

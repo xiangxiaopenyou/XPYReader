@@ -8,16 +8,17 @@
 
 #import "XPYOpenBookAnimation.h"
 
-#import "UIViewController+Transition.h"
-
 @interface XPYOpenBookAnimation () <UIViewControllerAnimatedTransitioning>
+
+@property (nonatomic, strong) UIView *coverView;
 
 @end
 
 @implementation XPYOpenBookAnimation
 
-+ (id<UIViewControllerAnimatedTransitioning>)openBookAnimation {
++ (id<UIViewControllerAnimatedTransitioning>)animationWithCoverView:(UIView *)coverView {
     XPYOpenBookAnimation *animation = [[XPYOpenBookAnimation alloc] init];
+    animation.coverView = coverView;
     return animation;
 }
 
@@ -35,7 +36,7 @@
         tempFromView = fromController.view;
     }
     // 截图(afterScreenUpdates:是否所有效果应用在视图以后再截图)
-    UIView *fromView = [fromController.bookCoverView snapshotViewAfterScreenUpdates:NO];
+    UIView *fromView = [self.coverView snapshotViewAfterScreenUpdates:NO];
     UIView *toView = [tempToView snapshotViewAfterScreenUpdates:YES];
     
     //fromView和toView加入到containerView中
@@ -43,7 +44,7 @@
     [transitionContext.containerView addSubview:fromView];
     
     // 保存frame
-    CGRect fromFrame = fromController.bookCoverView.frame;
+    CGRect fromFrame = self.coverView.frame;
     CGRect toFrame = toView.frame;
     
     NSTimeInterval duration = [self transitionDuration:transitionContext];
@@ -68,7 +69,7 @@
         [toView removeFromSuperview];
         
         // bookCoverView设为nil
-        fromController.bookCoverView = nil;
+        self.coverView = nil;
         
         // containerView添加目标视图
         [transitionContext.containerView addSubview:tempToView];

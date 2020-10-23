@@ -19,12 +19,11 @@
 #import "XPYReadRecordManager.h"
 #import "XPYReadHelper.h"
 #import "XPYUserManager.h"
-
-#import "UIViewController+Transition.h"
+#import "XPYTransitionManager.h"
 
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
-@interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UINavigationControllerDelegate>
+@interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -60,9 +59,6 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    // 设置NavigationController代理，实现自定义转场动画
-    self.navigationController.delegate = self;
 }
 
 #pragma mark - Network
@@ -131,29 +127,20 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 #pragma mark - Collection view delegate & flow layout
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     XPYBookModel *bookModel = self.dataSource[indexPath.item];
-    [XPYReadHelper readyForReadingWithBook:bookModel success:^(XPYBookModel * _Nonnull book) {
-        XPYBookStackCollectionViewCell *cell = (XPYBookStackCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        // 截图
-        UIView *snapshotView = [cell.bookCoverImageView snapshotViewAfterScreenUpdates:NO];
-        snapshotView.frame = [cell.bookCoverImageView convertRect:cell.bookCoverImageView.frame toView:XPYKeyWindow];
-        // 设置当前控制器的书籍封面视图
-        self.bookCoverView = snapshotView;
-        // 创建阅读器
-        XPYReaderManagerController *reader = [[XPYReaderManagerController alloc] init];
-        reader.book = book;
-        
-        // 阅读器书籍封面视图使用同一个截图但是frame不同
-        UIView *readerSnapshotView = [cell.bookCoverImageView snapshotViewAfterScreenUpdates:NO];
-        // 进入阅读器后默认将书籍排在最前位置，所以需要获取第一本书籍的frame
-        XPYBookStackCollectionViewCell *firstCell = (XPYBookStackCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
-        readerSnapshotView.frame = [firstCell.bookCoverImageView convertRect:firstCell.bookCoverImageView.frame toView:XPYKeyWindow];
-        // 设置阅读器的书籍封面视图
-        reader.bookCoverView = readerSnapshotView;
-        
-        [self.navigationController pushViewController:reader animated:YES];
-    } failure:^(NSString * _Nonnull tip) {
-        [MBProgressHUD xpy_showTips:tip];
-    }];
+    XPYBookStackCollectionViewCell *cell = (XPYBookStackCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    // 书籍封面截图
+    UIView *snapshotView = [cell.bookCoverImageView snapshotViewAfterScreenUpdates:NO];
+    snapshotView.frame = [cell.bookCoverImageView convertRect:cell.bookCoverImageView.frame toView:XPYKeyWindow];
+    // 设置pushView
+    [XPYTransitionManager shareManager].pushView = snapshotView;
+    [XPYReadHelper readWithBook:bookModel];
+    
+    // 进入阅读器后默认将书籍排在最前位置，所以需要获取第一本书籍的frame
+    XPYBookStackCollectionViewCell *firstCell = (XPYBookStackCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    UIView *readerSnapshotView = [cell.bookCoverImageView snapshotViewAfterScreenUpdates:NO];
+    readerSnapshotView.frame = [firstCell.bookCoverImageView convertRect:firstCell.bookCoverImageView.frame toView:XPYKeyWindow];
+    // 设置popView
+    [XPYTransitionManager shareManager].popView = readerSnapshotView;
 }
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return 10;

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYOpenBookAnimation : NSObject
 
-+ (id <UIViewControllerAnimatedTransitioning>)openBookAnimation;
++ (id <UIViewControllerAnimatedTransitioning>)animationWithCoverView:(UIView *)coverView;
 
 @end
 
