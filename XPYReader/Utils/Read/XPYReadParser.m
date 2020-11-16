@@ -9,8 +9,12 @@
 #import "XPYReadParser.h"
 
 #import "XPYChapterPageModel.h"
+#import "XPYChapterModel.h"
 
 #import <CoreText/CoreText.h>
+
+/// 本地书分章节正则表达
+static NSString * const kParseLocalBookPattern = @"(\\s+?)([☆、【0-9]{0,10})(第[0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟\\s]{1,10}[章节回集卷])(.*)";
 
 @implementation XPYReadParser
 
@@ -100,6 +104,80 @@
     return pageModels;
 }
 
++ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> * _Nonnull))success failure:(XPYFailureHandler)failure {
+    if (!filePath) {
+        !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @"文件路径为空"}]);
+        return;
+    }
+    NSString *content = [self contentWithFilePath:filePath];
+    if (XPYIsEmptyObject(content)) {
+        !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @"书籍内容为空或者书籍格式错误"}]);
+        return;
+    }
+    NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:kParseLocalBookPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray *matches = [expression matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
+    NSMutableArray *chapters = [[NSMutableArray alloc] init];
+    if (matches == 0) {
+        // 全书分为一章
+        XPYChapterModel *chapter = [[XPYChapterModel alloc] init];
+        chapter.chapterId = @"1000000";
+        chapter.chapterIndex = 1;
+        chapter.chapterName = @"开始";
+        chapter.content = content;
+        [chapters addObject:chapter];
+    } else {
+        // 当前标题在全文中的位置
+        NSRange currentRange = NSMakeRange(0, 0);
+        // 当前章节编号
+        NSInteger chapterIndex = 1;
+        NSTextCheckingResult *startResult = matches[0];
+        NSRange startRange = startResult.range;
+        // 获取开始章节
+        NSString *startContent = [content substringWithRange:NSMakeRange(0, startRange.location)];
+        if (!XPYIsEmptyObject(startContent)) {
+            XPYChapterModel *startChapter = [[XPYChapterModel alloc] init];
+            startChapter.chapterName = @"开始";
+            startChapter.chapterIndex = chapterIndex;
+            startChapter.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
+            startChapter.content = [self resetContent:startContent];
+            [chapters addObject:startChapter];
+            chapterIndex += 1;
+        }
+        currentRange = startRange;
+        // 循环处理其他章节
+        for (NSInteger i = 1; i < matches.count; i++) {
+            @autoreleasepool {  // 自动释放池保证瞬时内存不会过高
+                NSTextCheckingResult *result = matches[i];
+                // 下一个标题在全文中的位置
+                NSRange resultRange = result.range;
+                // 截取两个标题之间内容为当前章节内容
+                NSString *chapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, resultRange.location - currentRange.location - currentRange.length)];
+                XPYChapterModel *chapterModel = [[XPYChapterModel alloc] init];
+                chapterModel.chapterIndex = chapterIndex;
+                chapterModel.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
+                chapterModel.chapterName = [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                chapterModel.content = [self resetContent:chapterContent];
+                [chapters addObject:chapterModel];
+                chapterIndex += 1;
+                currentRange = resultRange;
+            };
+        }
+        NSString *endChapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, content.length - currentRange.location - currentRange.length)];
+        if (!XPYIsEmptyObject(endChapterContent)) {
+            // 最后一章
+            XPYChapterModel *endChapterModel = [[XPYChapterModel alloc] init];
+            endChapterModel.chapterIndex = chapterIndex;
+            endChapterModel.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
+            endChapterModel.chapterName = [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            endChapterModel.content = [self resetContent:endChapterContent];
+            [chapters addObject:endChapterModel];
+        }
+    }
+    if (chapters.count > 0 && success) {
+        success(chapters);
+    }
+}
+
 /// 处理章节内容
 /// @param content 内容
 + (NSString *)resetContent:(NSString *)content {
@@ -158,4 +236,38 @@
     return heightValue;
 }
 
+/// 获取本地书籍文件内容
+/// @param filePath 文件路径
++ (NSString *)contentWithFilePath:(NSString *)filePath {
+    // 一些热门的文件编码，几乎可以满足所有的文件，可自行添加其他的
+    NSArray *encodings = @[
+        @(NSUTF8StringEncoding),
+        @(0x80000632),
+        @(0x80000631),
+        @(kCFStringEncodingGB_2312_80),
+        @(kCFStringEncodingHZ_GB_2312),
+        @(kCFStringEncodingMacChineseSimp),
+        @(kCFStringEncodingDOSChineseSimplif),
+        @(kCFStringEncodingGB_18030_2000),
+        @(NSUTF16StringEncoding),
+        @(NSUTF16LittleEndianStringEncoding),
+        @(NSUTF16BigEndianStringEncoding),
+        @(NSUTF32StringEncoding),
+        @(NSUTF32LittleEndianStringEncoding),
+        @(NSUTF32BigEndianStringEncoding)
+    ];
+    NSString *result = nil;
+    for (NSInteger i = 0; i < encodings.count; i++) {
+        unsigned int encoding = [encodings[i] unsignedIntValue];
+        NSError *error = nil;
+        NSString *content = [NSString stringWithContentsOfFile:filePath encoding:CFStringConvertEncodingToNSStringEncoding(encoding) error:&error];
+        if (!error && !XPYIsEmptyObject(content)) {
+            result = content;
+            break;
+        }
+    }
+    return result;
+}
+
 @end
+

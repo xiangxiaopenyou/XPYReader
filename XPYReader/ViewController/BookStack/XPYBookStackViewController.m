@@ -21,6 +21,8 @@
 #import "XPYUserManager.h"
 #import "XPYTransitionManager.h"
 
+#import <Aspects.h>
+
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
 @interface XPYBookStackViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>

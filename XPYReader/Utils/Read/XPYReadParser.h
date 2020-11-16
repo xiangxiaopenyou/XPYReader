@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class XPYChapterPageModel;
+@class XPYChapterPageModel, XPYChapterModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,6 +29,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param content 内容
 /// @param chapterName 章节名
 + (NSArray <XPYChapterPageModel *> *)parseChapterWithChapterContent:(NSString *)content chapterName:(NSString *)chapterName;
+
+/// 解析本地书
+/// @param filePath 本地书路径
+/// @param success 成功回调（章节数组）
+/// @param failure 失败回调
++ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> *))success failure:(XPYFailureHandler)failure;
 
 @end
 

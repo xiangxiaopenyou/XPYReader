@@ -29,4 +29,7 @@ target 'XPYReader' do
   # 全屏侧滑手势
   pod 'FDFullscreenPopGesture'
   
+  # AOP
+  pod 'Aspects'
+  
 end
