@@ -26,6 +26,12 @@ typedef NS_ENUM(NSUInteger, XPYHTTPRequestType) {
     XPYHTTPRequestTypeDownloadFile  // Download
 };
 
+/// 书籍类型
+typedef NS_ENUM(NSUInteger, XPYBookType) {
+    XPYBookTypeInternal,            // 网络书籍（通过接口请求获取）
+    XPYBookTypeLocal                // 本地书籍（保存在本地，当前的本地测试书籍直接放在项目中）
+};
+
 /// 阅读翻页模式
 typedef NS_ENUM(NSInteger, XPYReadPageType) {
     XPYReadPageTypeCurl = 0,            // 仿真

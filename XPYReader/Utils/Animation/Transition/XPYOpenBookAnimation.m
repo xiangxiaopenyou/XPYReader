@@ -8,7 +8,7 @@
 
 #import "XPYOpenBookAnimation.h"
 
-@interface XPYOpenBookAnimation () <UIViewControllerAnimatedTransitioning>
+@interface XPYOpenBookAnimation ()
 
 @property (nonatomic, strong) UIView *coverView;
 

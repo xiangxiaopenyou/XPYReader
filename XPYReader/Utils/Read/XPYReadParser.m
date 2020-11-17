@@ -14,7 +14,7 @@
 #import <CoreText/CoreText.h>
 
 /// 本地书分章节正则表达
-static NSString * const kParseLocalBookPattern = @"(\\s+?)([☆、【0-9]{0,10})(第[0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟\\s]{1,10}[章节回集卷])(.*)";
+static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10})(第[0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟\\s]{1,10}[章节回集卷])(.*)";
 
 @implementation XPYReadParser
 
@@ -104,7 +104,7 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([☆、【0-9]{0,10})
     return pageModels;
 }
 
-+ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> * _Nonnull))success failure:(XPYFailureHandler)failure {
++ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> * _Nonnull chapters))success failure:(XPYFailureHandler)failure {
     if (!filePath) {
         !failure ?: failure([NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:@{NSUnderlyingErrorKey : @"文件路径为空"}]);
         return;
@@ -117,7 +117,7 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([☆、【0-9]{0,10})
     NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:kParseLocalBookPattern options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray *matches = [expression matchesInString:content options:NSMatchingReportCompletion range:NSMakeRange(0, content.length)];
     NSMutableArray *chapters = [[NSMutableArray alloc] init];
-    if (matches == 0) {
+    if (matches.count == 0) {
         // 全书分为一章
         XPYChapterModel *chapter = [[XPYChapterModel alloc] init];
         chapter.chapterId = @"1000000";

@@ -22,20 +22,23 @@
     if (chapters.count == 0) {
         return;
     }
-    [[XPYDatabaseManager sharedInstance].database runTransaction:^BOOL{
-        for (XPYChapterModel *chapterModel in chapters) {
-            XPYChapterModel *tempModel = [self chapterWithBookId:chapterModel.bookId chapterId:chapterModel.chapterId];
-            if (tempModel) {
+    for (XPYChapterModel *chapterModel in chapters) {
+        XPYChapterModel *tempModel = [self chapterWithBookId:chapterModel.bookId chapterId:chapterModel.chapterId];
+        if (tempModel) {
+            if (chapterModel.content.length > 0) {
                 // 更新章节内容
-                if (chapterModel.content.length > 0) {
+                [[XPYDatabaseManager sharedInstance].database runTransaction:^BOOL{
                     [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYChapterTable onProperty:XPYChapterModel.content withObject:chapterModel where:XPYChapterModel.bookId.is(tempModel.bookId) && XPYChapterModel.chapterId.is(tempModel.chapterId)];
-                }
-            } else {
-                [self insertOrReplaceChapterWithModel:chapterModel];
+                    return YES;
+                }];
             }
+        } else {
+            [[XPYDatabaseManager sharedInstance].database runTransaction:^BOOL{
+                [self insertOrReplaceChapterWithModel:chapterModel];
+                return YES;
+            }];
         }
-        return YES;
-    }];
+    }
 }
 
 + (XPYChapterModel *)chapterWithBookId:(NSString *)bookId chapterId:(NSString *)chapterId {

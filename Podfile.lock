@@ -28,6 +28,8 @@ PODS:
     - SQLiteRepairKit (~> 1.2.0)
     - WCDBOptimizedSQLCipher (~> 1.2.0)
   - WCDBOptimizedSQLCipher (1.2.1)
+  - XPYKit (1.0.4):
+    - MBProgressHUD
   - YYModel (1.0.4)
 
 DEPENDENCIES:
@@ -39,6 +41,7 @@ DEPENDENCIES:
   - MBProgressHUD
   - SDWebImage (~> 5.6.0)
   - WCDB
+  - XPYKit (from `https://github.com/xiangxiaopenyou/XPYKit.git`)
   - YYModel
 
 SPEC REPOS:
@@ -55,6 +58,15 @@ SPEC REPOS:
     - WCDBOptimizedSQLCipher
     - YYModel
 
+EXTERNAL SOURCES:
+  XPYKit:
+    :git: https://github.com/xiangxiaopenyou/XPYKit.git
+
+CHECKOUT OPTIONS:
+  XPYKit:
+    :commit: e8a917714daf5ea9a949c1003c48d9b402d9831b
+    :git: https://github.com/xiangxiaopenyou/XPYKit.git
+
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
@@ -66,8 +78,9 @@ SPEC CHECKSUMS:
   SQLiteRepairKit: 35aaae5a8838adb85f5b1eb4d796055be6060a4b
   WCDB: 8e90babdeb7784c569353a4bd22a66c0a175a882
   WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
+  XPYKit: eff4000c77634d47be3895f74f2440b5cf7af08d
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: e7073c338cafdc8672b15afe89f1b92d0a37b437
+PODFILE CHECKSUM: 85f43b261ab5bd63c05cf66eb4839a091e50faa5
 
 COCOAPODS: 1.9.1

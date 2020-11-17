@@ -24,9 +24,9 @@
     if (!bookModel) {
         return;
     }
-    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
+    [MBProgressHUD xpy_showHUD];
     [self readyForReadingWithBook:bookModel success:^(XPYBookModel * _Nonnull book) {
-        [MBProgressHUD xpy_hideHUD];
+        [MBProgressHUD xpy_dismissHUD];
         XPYReaderManagerController *reader = [[XPYReaderManagerController alloc] init];
         reader.book = book;
         [[XPYViewControllerHelper currentViewController].navigationController pushViewController:reader animated:YES];

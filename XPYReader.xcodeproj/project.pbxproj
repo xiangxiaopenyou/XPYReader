@@ -32,6 +32,10 @@
 		6C03F10124E2787B0070328E /* XPYBookDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F10024E2787B0070328E /* XPYBookDetailsViewController.m */; };
 		6C03F10424E3834C0070328E /* XPYReadHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F10324E3834C0070328E /* XPYReadHelper.m */; };
 		6C03F10724E3844C0070328E /* XPYChapterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C03F10624E3844C0070328E /* XPYChapterHelper.m */; };
+		6C3393602563A0FE00CDB9CA /* 从灵气复苏到末法时代.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C33935C2563A0FD00CDB9CA /* 从灵气复苏到末法时代.txt */; };
+		6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C33935D2563A0FD00CDB9CA /* 孤单的飞.txt */; };
+		6C3393622563A0FE00CDB9CA /* 诡异天地.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C33935E2563A0FD00CDB9CA /* 诡异天地.txt */; };
+		6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6C33935F2563A0FE00CDB9CA /* 汉末文枭.txt */; };
 		6C4F71162542BEC500FC3699 /* XPYTransitionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4F71152542BEC500FC3699 /* XPYTransitionManager.m */; };
 		6C51B61025218333005C97D1 /* XPYOpenBookAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C51B60F25218333005C97D1 /* XPYOpenBookAnimation.m */; };
 		6C602E9525303BA0005A2FED /* XPYCloseBookAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C602E9425303BA0005A2FED /* XPYCloseBookAnimation.m */; };
@@ -42,7 +46,6 @@
 		6C7BA8D224D80E310054B971 /* XPYBookModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D124D80E310054B971 /* XPYBookModel.mm */; };
 		6C7BA8D624D80FDB0054B971 /* XPYBookStackCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D524D80FDB0054B971 /* XPYBookStackCollectionViewCell.m */; };
 		6C7BA8DA24D8FAD40054B971 /* XPYNetworkService+Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */; };
-		6C7BA8DF24D9050F0054B971 /* MBProgressHUD+XPYExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8DE24D9050F0054B971 /* MBProgressHUD+XPYExtension.m */; };
 		6C91FADC24E4E2DB00D7D2B2 /* XPYReadMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */; };
 		6C91FADF24E4E90600D7D2B2 /* XPYReadMenuTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */; };
 		6C91FAE224E5237A00D7D2B2 /* XPYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */; };
@@ -51,8 +54,6 @@
 		6C91FAEE24E6376100D7D2B2 /* XPYUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAED24E6376100D7D2B2 /* XPYUserManager.m */; };
 		6C91FAF224E65DE400D7D2B2 /* XPYLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAF124E65DE400D7D2B2 /* XPYLoginViewController.m */; };
 		6C91FAF524E65DFA00D7D2B2 /* XPYNetworkService+User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAF424E65DFA00D7D2B2 /* XPYNetworkService+User.m */; };
-		6C91FAFC24E77E2100D7D2B2 /* XPYAlertManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAF824E77E2100D7D2B2 /* XPYAlertManager.m */; };
-		6C91FAFD24E77E2100D7D2B2 /* XPYAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAFA24E77E2100D7D2B2 /* XPYAlertController.m */; };
 		6C91FB0124E77F3000D7D2B2 /* XPYViewControllerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAFF24E77F3000D7D2B2 /* XPYViewControllerHelper.m */; };
 		6CAEFD742505C16E006DC948 /* XPYHorizontalScrollReadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAEFD732505C16E006DC948 /* XPYHorizontalScrollReadViewController.m */; };
 		6CAEFD772505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */; };
@@ -126,6 +127,10 @@
 		6C03F10324E3834C0070328E /* XPYReadHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadHelper.m; sourceTree = "<group>"; };
 		6C03F10524E3844C0070328E /* XPYChapterHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYChapterHelper.h; sourceTree = "<group>"; };
 		6C03F10624E3844C0070328E /* XPYChapterHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYChapterHelper.m; sourceTree = "<group>"; };
+		6C33935C2563A0FD00CDB9CA /* 从灵气复苏到末法时代.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "从灵气复苏到末法时代.txt"; sourceTree = "<group>"; };
+		6C33935D2563A0FD00CDB9CA /* 孤单的飞.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "孤单的飞.txt"; sourceTree = "<group>"; };
+		6C33935E2563A0FD00CDB9CA /* 诡异天地.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "诡异天地.txt"; sourceTree = "<group>"; };
+		6C33935F2563A0FE00CDB9CA /* 汉末文枭.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "汉末文枭.txt"; sourceTree = "<group>"; };
 		6C4F71142542BEC500FC3699 /* XPYTransitionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYTransitionManager.h; sourceTree = "<group>"; };
 		6C4F71152542BEC500FC3699 /* XPYTransitionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPYTransitionManager.m; sourceTree = "<group>"; };
 		6C51B60E25218333005C97D1 /* XPYOpenBookAnimation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYOpenBookAnimation.h; sourceTree = "<group>"; };
@@ -150,8 +155,6 @@
 		6C7BA8D724D8F21C0054B971 /* XPYMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYMacros.h; sourceTree = "<group>"; };
 		6C7BA8D824D8FAD40054B971 /* XPYNetworkService+Book.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XPYNetworkService+Book.h"; sourceTree = "<group>"; };
 		6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XPYNetworkService+Book.m"; sourceTree = "<group>"; };
-		6C7BA8DD24D9050F0054B971 /* MBProgressHUD+XPYExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+XPYExtension.h"; sourceTree = "<group>"; };
-		6C7BA8DE24D9050F0054B971 /* MBProgressHUD+XPYExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+XPYExtension.m"; sourceTree = "<group>"; };
 		6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenu.h; sourceTree = "<group>"; };
 		6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenu.m; sourceTree = "<group>"; };
 		6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuTopBar.h; sourceTree = "<group>"; };
@@ -168,10 +171,6 @@
 		6C91FAF124E65DE400D7D2B2 /* XPYLoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYLoginViewController.m; sourceTree = "<group>"; };
 		6C91FAF324E65DFA00D7D2B2 /* XPYNetworkService+User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XPYNetworkService+User.h"; sourceTree = "<group>"; };
 		6C91FAF424E65DFA00D7D2B2 /* XPYNetworkService+User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XPYNetworkService+User.m"; sourceTree = "<group>"; };
-		6C91FAF824E77E2100D7D2B2 /* XPYAlertManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPYAlertManager.m; sourceTree = "<group>"; };
-		6C91FAF924E77E2100D7D2B2 /* XPYAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYAlertController.h; sourceTree = "<group>"; };
-		6C91FAFA24E77E2100D7D2B2 /* XPYAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPYAlertController.m; sourceTree = "<group>"; };
-		6C91FAFB24E77E2100D7D2B2 /* XPYAlertManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYAlertManager.h; sourceTree = "<group>"; };
 		6C91FAFF24E77F3000D7D2B2 /* XPYViewControllerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPYViewControllerHelper.m; sourceTree = "<group>"; };
 		6C91FB0024E77F3000D7D2B2 /* XPYViewControllerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPYViewControllerHelper.h; sourceTree = "<group>"; };
 		6CAEFD722505C16E006DC948 /* XPYHorizontalScrollReadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYHorizontalScrollReadViewController.h; sourceTree = "<group>"; };
@@ -232,7 +231,7 @@
 			path = XPYWeakTimer;
 			sourceTree = "<group>";
 		};
-		6C03F0C824D93B910070328E /* Read */ = {
+		6C03F0C824D93B910070328E /* Reader */ = {
 			isa = PBXGroup;
 			children = (
 				6C03F0C924D93BD90070328E /* XPYReaderManagerController.h */,
@@ -248,7 +247,7 @@
 				6C033ED824F8B25E002B86A3 /* XPYAutoReadCoverViewController.h */,
 				6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */,
 			);
-			path = Read;
+			path = Reader;
 			sourceTree = "<group>";
 		};
 		6C03F0DF24DB9EB50070328E /* Read */ = {
@@ -323,6 +322,17 @@
 				6C03F0F724E23D7E0070328E /* XPYBookStoreCell.m */,
 			);
 			path = BookStore;
+			sourceTree = "<group>";
+		};
+		6C33933525635F0300CDB9CA /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				6C33935C2563A0FD00CDB9CA /* 从灵气复苏到末法时代.txt */,
+				6C33935D2563A0FD00CDB9CA /* 孤单的飞.txt */,
+				6C33935E2563A0FD00CDB9CA /* 诡异天地.txt */,
+				6C33935F2563A0FE00CDB9CA /* 汉末文枭.txt */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		6C51B60D252182C7005C97D1 /* Animation */ = {
@@ -402,18 +412,8 @@
 			isa = PBXGroup;
 			children = (
 				6C03F0F124E0D84A0070328E /* NSString */,
-				6C7BA8DC24D9050F0054B971 /* MBProgressHUD */,
 			);
 			path = Category;
-			sourceTree = "<group>";
-		};
-		6C7BA8DC24D9050F0054B971 /* MBProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				6C7BA8DD24D9050F0054B971 /* MBProgressHUD+XPYExtension.h */,
-				6C7BA8DE24D9050F0054B971 /* MBProgressHUD+XPYExtension.m */,
-			);
-			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 		6C7BA8E024D90C480054B971 /* Database */ = {
@@ -477,20 +477,8 @@
 			isa = PBXGroup;
 			children = (
 				6C033EC824F4E77A002B86A3 /* XPYWeakTimer */,
-				6C91FAF724E77E2100D7D2B2 /* XPYAlert */,
 			);
 			path = Vendor;
-			sourceTree = "<group>";
-		};
-		6C91FAF724E77E2100D7D2B2 /* XPYAlert */ = {
-			isa = PBXGroup;
-			children = (
-				6C91FAF824E77E2100D7D2B2 /* XPYAlertManager.m */,
-				6C91FAF924E77E2100D7D2B2 /* XPYAlertController.h */,
-				6C91FAFA24E77E2100D7D2B2 /* XPYAlertController.m */,
-				6C91FAFB24E77E2100D7D2B2 /* XPYAlertManager.h */,
-			);
-			path = XPYAlert;
 			sourceTree = "<group>";
 		};
 		6C91FAFE24E77F2700D7D2B2 /* Helper */ = {
@@ -543,6 +531,7 @@
 				6C91FAF624E77E0C00D7D2B2 /* Vendor */,
 				6C7BA8BC24D7FE660054B971 /* Utils */,
 				6C7BA8C924D7FFA70054B971 /* Macros */,
+				6C33933525635F0300CDB9CA /* Resource */,
 				6CE9251624D7EF4A000AA12F /* AppDelegate.h */,
 				6CE9251724D7EF4A000AA12F /* AppDelegate.m */,
 				6CE9252224D7EF4D000AA12F /* Assets.xcassets */,
@@ -560,7 +549,7 @@
 				6CE9253824D7F561000AA12F /* Base */,
 				6CE9253324D7F52E000AA12F /* BookStack */,
 				6CE9253424D7F540000AA12F /* BookStore */,
-				6C03F0C824D93B910070328E /* Read */,
+				6C03F0C824D93B910070328E /* Reader */,
 				6C91FAE324E630D700D7D2B2 /* Mine */,
 				6C91FAEF24E63ECD00D7D2B2 /* Login */,
 			);
@@ -708,7 +697,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */,
+				6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */,
+				6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */,
+				6C3393622563A0FE00CDB9CA /* 诡异天地.txt in Resources */,
 				6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */,
+				6C3393602563A0FE00CDB9CA /* 从灵气复苏到末法时代.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,11 +747,9 @@
 				6C03F0FB24E241940070328E /* XPYReadRecordManager.mm in Sources */,
 				6C03F10724E3844C0070328E /* XPYChapterHelper.m in Sources */,
 				6C7BA8C324D7FEB40054B971 /* XPYNetworkService.m in Sources */,
-				6C7BA8DF24D9050F0054B971 /* MBProgressHUD+XPYExtension.m in Sources */,
 				6CE9252924D7EF4D000AA12F /* main.m in Sources */,
 				6C03F0DE24DB9B5C0070328E /* XPYReadViewController.m in Sources */,
 				6C03F0ED24DCF0AD0070328E /* XPYReadConfigManager.m in Sources */,
-				6C91FAFD24E77E2100D7D2B2 /* XPYAlertController.m in Sources */,
 				6C03F0D124D950310070328E /* XPYChapterModel.mm in Sources */,
 				6C03F0E624DBAB2A0070328E /* XPYNetworkService+Chapter.m in Sources */,
 				6C91FAEA24E6333600D7D2B2 /* XPYUserModel.m in Sources */,
@@ -769,7 +760,6 @@
 				6C91FADF24E4E90600D7D2B2 /* XPYReadMenuTopBar.m in Sources */,
 				6C91FAEE24E6376100D7D2B2 /* XPYUserManager.m in Sources */,
 				6C033ECD24F4E77A002B86A3 /* XPYTimerProxy.m in Sources */,
-				6C91FAFC24E77E2100D7D2B2 /* XPYAlertManager.m in Sources */,
 				6C03F10124E2787B0070328E /* XPYBookDetailsViewController.m in Sources */,
 				6C03F0F824E23D7E0070328E /* XPYBookStoreCell.m in Sources */,
 				6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */,

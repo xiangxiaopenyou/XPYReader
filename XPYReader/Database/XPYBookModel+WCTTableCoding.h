@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYBookModel (WCTTableCoding) <WCTTableCoding>
 
+WCDB_PROPERTY(bookType)
 WCDB_PROPERTY(bookId)
 WCDB_PROPERTY(bookName)
 WCDB_PROPERTY(bookIntroduction)

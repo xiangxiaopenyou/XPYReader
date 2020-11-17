@@ -7,21 +7,22 @@
 //
 
 #import "XPYBookStackViewController.h"
-#import "XPYReaderManagerController.h"
 
 #import "XPYBookStackCollectionViewCell.h"
 
 #import "XPYOpenBookAnimation.h"
 
 #import "XPYBookModel.h"
-#import "XPYNetworkService+Book.h"
-#import "XPYNetworkService+Chapter.h"
+#import "XPYChapterModel.h"
 #import "XPYReadRecordManager.h"
+#import "XPYChapterDataManager.h"
+#import "XPYReadParser.h"
 #import "XPYReadHelper.h"
 #import "XPYUserManager.h"
 #import "XPYTransitionManager.h"
 
-#import <Aspects.h>
+#import "XPYNetworkService+Book.h"
+#import "XPYNetworkService+Chapter.h"
 
 static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCollectionViewCellIdentifier";
 
@@ -39,6 +40,37 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // 首次安装解析本地测试书籍
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:XPYIsFirstInstallKey]) {
+        NSArray *bookNames = @[@"从灵气复苏到末法时代", @"孤单的飞", @"诡异天地", @"汉末文枭"];
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(bookNames.count);
+        for (NSString *bookName in bookNames) {
+            NSString *localFilePath = [[NSBundle mainBundle] pathForResource:bookName ofType:@"txt"];
+            // 书籍分章节
+            [XPYReadParser parseLocalBookWithFilePath:localFilePath success:^(NSArray<XPYChapterModel *> * _Nonnull chapters) {
+                // 创建书籍模型
+                XPYBookModel *bookModel = [[XPYBookModel alloc] init];
+                bookModel.bookType = XPYBookTypeLocal;
+                bookModel.bookName = bookName;
+                // 本地书随机生成ID
+                bookModel.bookId = [NSString stringWithFormat:@"%@", @([[NSDate date] timeIntervalSince1970] * 1000)];
+                bookModel.chapterCount = chapters.count;
+                for (XPYChapterModel *chapter in chapters) {
+                    chapter.bookId = bookModel.bookId;
+                }
+                [XPYReadHelper addToBookStackWithBook:bookModel complete:^{
+                    [XPYChapterDataManager insertChaptersWithModels:chapters];
+                    dispatch_semaphore_signal(semaphore);
+                }];
+            } failure:^(NSError *error) {
+                [MBProgressHUD xpy_showErrorTips:error.userInfo[NSUnderlyingErrorKey]];
+                dispatch_semaphore_signal(semaphore);
+            }];
+        }
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        [[NSUserDefaults standardUserDefaults] setObject:@NO forKey:XPYIsFirstInstallKey];
+    }
+    
     // 获取本地书架所有书籍
     self.dataSource = [[XPYReadRecordManager allBooksInStack] copy];
     
@@ -49,8 +81,8 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
         make.leading.trailing.equalTo(self.view);
     }];
     
-    // 请求网络书架中的书籍
-    [self booksRequest];
+    // 请求网络书架中的书籍（服务器到期暂时注释了网络书籍请求）
+    //[self booksRequest];
     
     // 注册书架书籍发生变化通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stackBooksChanged:) name:XPYBookStackDidChangeNotification object:nil];

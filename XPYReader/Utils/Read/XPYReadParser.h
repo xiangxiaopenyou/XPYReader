@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param filePath 本地书路径
 /// @param success 成功回调（章节数组）
 /// @param failure 失败回调
-+ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> *))success failure:(XPYFailureHandler)failure;
++ (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> *chapters))success failure:(XPYFailureHandler)failure;
 
 @end
 

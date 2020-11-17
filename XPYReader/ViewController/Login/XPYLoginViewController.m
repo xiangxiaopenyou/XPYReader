@@ -55,9 +55,9 @@
 
 #pragma mark - Actions
 - (void)loginAction {
-    [MBProgressHUD xpy_showActivityHUDWithTips:@"正在登录..."];
+    [MBProgressHUD xpy_showHUDWithTips:@"正在登录..."];
     [[XPYNetworkService sharedService] loginWithPhone:self.usernameTextField.text password:XPYMD5StringWithString(self.passwordTextField.text) success:^(id result) {
-        [MBProgressHUD xpy_hideHUD];
+        [MBProgressHUD xpy_dismissHUD];
         // 保存用户信息
         [[XPYUserManager sharedInstance] saveUser:(XPYUserModel *)result];
         // 同步书架数据

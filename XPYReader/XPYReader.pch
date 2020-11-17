@@ -11,12 +11,12 @@
 
 #import "XPYMacros.h"
 #import "XPYUtilitiesDefine.h"
-#import "MBProgressHUD+XPYExtension.h"
-#import "XPYAlertManager.h"
 #import "XPYReadConfigDefines.h"
 
 #import <Masonry.h>
 #import <UINavigationController+FDFullscreenPopGesture.h>
 #import <SDWebImage.h>
+#import <XPYAlertManager.h>
+#import <MBProgressHUD+XPYExtension.h>
 
 #endif /* XPYReader_pch */

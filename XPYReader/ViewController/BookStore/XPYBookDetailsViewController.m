@@ -115,7 +115,7 @@
 
 /// 加入/移出书架
 - (void)stackOperateAction {
-    [MBProgressHUD xpy_showActivityHUDWithTips:nil];
+    [MBProgressHUD xpy_showHUD];
     if ([XPYUserManager sharedInstance].isLogin) {
         // 登录情况下加入/移出书架需要上传服务端
     } else {

@@ -7,6 +7,8 @@
 //  常量
 
 #import <UIKit/UIKit.h>
+/// 是否第一次安装Key
+FOUNDATION_EXTERN NSString * const XPYIsFirstInstallKey;
 /// 用户信息保存Key
 FOUNDATION_EXTERN NSString * const XPYUserCacheKey;
 /// 阅读配置保存Key

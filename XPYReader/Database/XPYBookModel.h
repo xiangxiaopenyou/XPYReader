@@ -13,18 +13,21 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYBookModel : XPYBaseModel
-
+/// 书籍类型
+@property (nonatomic, assign) XPYBookType bookType;
+/// 书籍ID
 @property (nonatomic, copy) NSString *bookId;
+/// 书名
 @property (nonatomic, copy) NSString *bookName;
-/// 书本封面图网络链接
+/// 书籍封面图网络链接
 @property (nonatomic, copy) NSString *bookCoverURL;
-/// 书本介绍
+/// 书籍介绍
 @property (nonatomic, copy) NSString *bookIntroduction;
-/// 最后打开书本时间
+/// 最后打开书籍时间
 @property (nonatomic, assign) NSTimeInterval openTime;
 /// 是否加入书架
 @property (nonatomic, assign) BOOL isInStack;
-///总章节数
+/// 总章节数
 @property (nonatomic, assign) NSInteger chapterCount;
 /// 当前章节信息
 @property (nonatomic, strong) XPYChapterModel *chapter;

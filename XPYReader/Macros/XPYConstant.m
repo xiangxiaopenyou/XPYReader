@@ -8,6 +8,8 @@
 
 #import "XPYConstant.h"
 
+NSString * const XPYIsFirstInstallKey = @"XPYIsFirstInstall";
+
 NSString * const XPYUserCacheKey = @"XPYUserCache";
 
 NSString * const XPYReadConfigKey = @"XPYReadConfig";

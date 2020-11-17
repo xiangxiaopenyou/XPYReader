@@ -8,7 +8,7 @@
 
 #import "XPYCloseBookAnimation.h"
 
-@interface XPYCloseBookAnimation () <UIViewControllerAnimatedTransitioning>
+@interface XPYCloseBookAnimation ()
 
 @property (nonatomic, strong) UIView *coverView;
 

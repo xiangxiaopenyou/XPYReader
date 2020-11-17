@@ -43,9 +43,12 @@
     if (!book) {
         return;
     }
-    [self.bookCoverImageView sd_setImageWithURL:[NSURL URLWithString:book.bookCoverURL]];
+    if (book.bookType == XPYBookTypeInternal) {
+        [self.bookCoverImageView sd_setImageWithURL:[NSURL URLWithString:book.bookCoverURL]];
+    } else {
+        self.bookCoverImageView.image = [UIImage imageNamed:@"book_cover"];
+    }
     self.bookNameLabel.text = book.bookName;
-    
 }
 
 #pragma mark - Getters
