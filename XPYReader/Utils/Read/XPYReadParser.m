@@ -80,26 +80,28 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     CFRelease(framesetterRef);
     NSMutableArray <XPYChapterPageModel *> *pageModels = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < pageRanges.count; i ++) {
-        XPYChapterPageModel *pageModel = [[XPYChapterPageModel alloc] init];
-        NSRange range = [pageRanges[i] rangeValue];
-        NSAttributedString *content = [contentAttributedString attributedSubstringFromRange:range];
-        pageModel.pageIndex = i;
-        pageModel.pageRange = range;
-        pageModel.pageContent = content;
-        
-        // contentHeight和extraHeaderHeight只在上下滚动翻页模式使用
-        pageModel.contentHeight = [self heightOfAttributedString:content];
-        if (i == 0) {
-            // 第一页
-            pageModel.extraHeaderHeight = 0;
-        } else if ([content.string hasPrefix:@"　　"]) {
-            // 开头存在两个空格，则为新的一段开始，额外头部高度为段间距
-            pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].paragraphSpacing floatValue];
-        } else {
-            // 额外头部高度为行间距
-            pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].lineSpacing floatValue];
-        }
-        [pageModels addObject:pageModel];
+        @autoreleasepool {
+            XPYChapterPageModel *pageModel = [[XPYChapterPageModel alloc] init];
+            NSRange range = [pageRanges[i] rangeValue];
+            NSAttributedString *content = [contentAttributedString attributedSubstringFromRange:range];
+            pageModel.pageIndex = i;
+            pageModel.pageRange = range;
+            pageModel.pageContent = content;
+            
+            // contentHeight和extraHeaderHeight只在上下滚动翻页模式使用
+            pageModel.contentHeight = [self heightOfAttributedString:content];
+            if (i == 0) {
+                // 第一页
+                pageModel.extraHeaderHeight = 0;
+            } else if ([content.string hasPrefix:@"　　"]) {
+                // 开头存在两个空格，则为新的一段开始，额外头部高度为段间距
+                pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].paragraphSpacing floatValue];
+            } else {
+                // 额外头部高度为行间距
+                pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].lineSpacing floatValue];
+            }
+            [pageModels addObject:pageModel];
+        };
     }
     return pageModels;
 }

@@ -19,7 +19,7 @@
 /// 覆盖视图上阅读视图
 @property (nonatomic, strong) XPYReadView *coverReadView;
 /// 覆盖模式阅读进度位置
-@property (nonatomic, strong) UIImageView *coverImageView;
+@property (nonatomic, strong) UIView *coverView;
 
 @property (nonatomic, strong) XPYChapterModel *chapterModel;
 @property (nonatomic, strong) XPYChapterPageModel *pageModel;
@@ -54,8 +54,8 @@
     
     [self addSubview:self.coverReadView];
     
-    [self addSubview:self.coverImageView];
-    [self.coverImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self addSubview:self.coverView];
+    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.mas_bottom);
         make.leading.trailing.equalTo(self);
         make.height.mas_offset(kXPYCoverViewMinHeight);
@@ -69,12 +69,13 @@
     }
     return _coverReadView;
 }
-- (UIImageView *)coverImageView {
-    if (!_coverImageView) {
-        _coverImageView = [[UIImageView alloc] initWithImage:[XPYReadConfigManager sharedInstance].isDarkMode ? [UIImage imageNamed:@"reading_self_motion_night"] : [UIImage imageNamed:@"reading_self_motion"]];
-        _coverImageView.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+- (UIView *)coverView {
+    if (!_coverView) {
+        _coverView = [[UIImageView alloc] init];
+        
+        _coverView.backgroundColor = [UIColor grayColor];
     }
-    return _coverImageView;
+    return _coverView;
 }
 
 @end

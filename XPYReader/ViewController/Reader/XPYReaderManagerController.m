@@ -19,6 +19,7 @@
 #import "XPYReadMenu.h"
 
 #import "XPYBookModel.h"
+#import "XPYChapterModel.h"
 
 #import "XPYReadHelper.h"
 #import "XPYChapterHelper.h"
@@ -191,7 +192,7 @@
         if (self.readMenu.isShowing) {
             [self.readMenu hiddenWithComplete:nil];
         } else {
-            [self.readMenu show];
+            [self.readMenu showWithBook:self.book];
         }
     }
 }
@@ -247,6 +248,44 @@
         }
         [self.navigationController popViewControllerAnimated:YES];
     }];
+}
+- (void)readMenuDidChangePageProgress:(NSInteger)progress {
+    // 更新当前页
+    if (self.book.page == progress - 1) {
+        return;
+    }
+    self.book.page = progress - 1;
+    // 更新记录
+    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+    [self createReader];
+}
+- (void)readMenuDidChangeChapter:(BOOL)isNext {
+    // 先隐藏菜单
+    if (self.readMenu.isShowing) {
+        [self.readMenu hiddenWithComplete:nil];
+    }
+    XPYChapterModel *changedChapter = isNext ? [[XPYChapterHelper nextChapterOfCurrentChapter:self.book.chapter] copy] : [[XPYChapterHelper lastChapterOfCurrentChapter:self.book.chapter] copy];
+    if (XPYIsEmptyObject(changedChapter.content)) {
+        // 章节内容为空，需要获取章节信息
+        [XPYChapterHelper chapterWithBookId:self.book.bookId chapterId:changedChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
+            self.book.chapter = chapter;
+            self.book.page = 0;
+            // 更新记录
+            [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+            // 刷新阅读器
+            [self createReader];
+        } failure:^(NSString * _Nonnull tip) {
+            [MBProgressHUD xpy_showErrorTips:tip];
+        }];
+    } else {
+        // 存在章节内容
+        self.book.chapter = changedChapter;
+        self.book.page = 0;
+        // 更新记录
+        [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+        // 刷新阅读器
+        [self createReader];
+    }
 }
 - (void)readMenuDidChangePageType {
     [self createReader];

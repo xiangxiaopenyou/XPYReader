@@ -44,7 +44,7 @@
 
 #pragma mark - UI
 - (void)configureUI {
-    self.backgroundColor = XPYColorFromHex(0x232428);
+    self.backgroundColor = XPYColorFromHex(0x222222);
     
     [self addSubview:self.speedLabel];
     [self.speedLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -163,7 +163,6 @@
         [_exitAutoReadButton setTitleColor:XPYColorFromHex(0x8F8F90) forState:UIControlStateNormal];
         _exitAutoReadButton.titleLabel.font = FontRegular(14);
         _exitAutoReadButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 5);
-        [_exitAutoReadButton setImage:[UIImage imageNamed:@"auto_read_exit"] forState:UIControlStateNormal];
         [_exitAutoReadButton addTarget:self action:@selector(exitAutoReadAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _exitAutoReadButton;

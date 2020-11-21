@@ -29,16 +29,12 @@ static NSInteger const XPYMinAutoReadSpeed = 1;
 /// 最大自动阅读速度
 static NSInteger const XPYMaxAutoReadSpeed = 15;
 
-/// 默认听书速度
-static NSInteger const XPYDefaultSpeechSpeed = 7;
-
-
-#pragma mark - 阅读背景颜色
-#define XPYReadBackgroundColor1 XPYColorFromHex(0xE9E9E9)
-#define XPYReadBackgroundColor2 XPYColorFromHex(0xF3DDC0)
-#define XPYReadBackgroundColor3 XPYColorFromHex(0x393436)
-#define XPYReadBackgroundColor4 XPYColorFromHex(0xD1E7D0)
-#define XPYReadBackgroundColor5 XPYColorFromHex(0x0F1F29)
-#define XPYReadBackgroundColor6 XPYColorFromHex(0x080b10)
+#pragma mark - 阅读背景颜色，这里随便设置了六种
+#define XPYReadBackgroundColor1 [UIColor whiteColor]
+#define XPYReadBackgroundColor2 XPYColorFromHex(0xF33333)
+#define XPYReadBackgroundColor3 [UIColor grayColor]
+#define XPYReadBackgroundColor4 XPYColorFromHex(0xD1E1D1)
+#define XPYReadBackgroundColor5 [UIColor lightGrayColor]
+#define XPYReadBackgroundColor6 [UIColor blackColor]
 
 #endif /* XPYReadConfigDefines_h */

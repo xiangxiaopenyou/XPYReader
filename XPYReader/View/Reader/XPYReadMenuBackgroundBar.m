@@ -41,42 +41,37 @@
 #pragma mark - UI
 - (void)configureUI {
     
-    self.backgroundColor = XPYColorFromHex(0x232428);
+    self.backgroundColor = XPYColorFromHex(0x222222);
     
-    UIImageView *minLightImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"read_light_min"]];
-    [self addSubview:minLightImageView];
-    [minLightImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    UILabel *lightLabel = [[UILabel alloc] init];
+    lightLabel.text = @"亮度";
+    lightLabel.font = [UIFont systemFontOfSize:14];
+    lightLabel.textColor = [UIColor whiteColor];
+    [self addSubview:lightLabel];
+    [lightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
-            make.left.equalTo(self.mas_safeAreaLayoutGuideLeft).mas_offset(8);
+            make.left.equalTo(self.mas_safeAreaLayoutGuideLeft).mas_offset(10);
         } else {
-            make.leading.equalTo(self.mas_leading).mas_offset(8);
+            make.leading.equalTo(self.mas_leading).mas_offset(10);
         }
         make.top.equalTo(self.mas_top).mas_offset(15);
-        make.size.mas_equalTo(CGSizeMake(25, 25));
-    }];
-    
-    UIImageView *maxLightImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"read_light_max"]];
-    [self addSubview:maxLightImageView];
-    [maxLightImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        if (@available(iOS 11.0, *)) {
-            make.right.equalTo(self.mas_safeAreaLayoutGuideRight).mas_offset(- 8);
-        } else {
-            make.trailing.equalTo(self.mas_trailing).mas_offset(- 8);
-        }
-        make.top.equalTo(self.mas_top).mas_offset(15);
-        make.size.mas_equalTo(CGSizeMake(25, 25));
+        make.height.mas_equalTo(25);
     }];
     
     [self addSubview:self.lightSlider];
     [self.lightSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(minLightImageView.mas_trailing).mas_offset(2);
+        if (@available(iOS 11.0, *)) {
+            make.right.equalTo(self.mas_safeAreaLayoutGuideRight).mas_offset(- 10);
+        } else {
+            make.trailing.equalTo(self.mas_trailing).mas_offset(- 10);
+        }
+        make.leading.equalTo(lightLabel.mas_trailing).mas_offset(10);
         make.top.equalTo(self.mas_top).mas_offset(15);
-        make.trailing.equalTo(maxLightImageView.mas_leading).mas_offset(- 2);
         make.height.mas_equalTo(25);
     }];
     
     self.buttonsView = [[UIView alloc] init];
-    self.buttonsView.backgroundColor = XPYColorFromHex(0x232428);
+    self.buttonsView.backgroundColor = XPYColorFromHex(0x222222);
     [self addSubview:self.buttonsView];
     [self.buttonsView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(self);
@@ -88,7 +83,6 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.backgroundColor = obj;
         button.tag = idx + 1000;
-        button.layer.cornerRadius = 15;
         button.layer.borderWidth = 1;
         button.layer.borderColor = [UIColor whiteColor].CGColor;
         if (idx == _currentColorIndex) {
@@ -166,9 +160,8 @@
         _lightSlider = [[UISlider alloc] init];
         _lightSlider.minimumValue = 0.0;;
         _lightSlider.maximumValue = 1.0;
-        _lightSlider.minimumTrackTintColor = XPYColorFromHex(0xf46663);
-        _lightSlider.maximumTrackTintColor = XPYColorFromHex(0x555555);
-        [_lightSlider setThumbImage:[UIImage imageNamed:@"lightness"] forState:UIControlStateNormal];
+        _lightSlider.minimumTrackTintColor = [UIColor yellowColor];
+        _lightSlider.maximumTrackTintColor = [UIColor grayColor];
         [_lightSlider addTarget:self action:@selector(lightChanged:) forControlEvents:UIControlEventValueChanged];
         _lightSlider.value = [UIScreen mainScreen].brightness;
     }

@@ -8,6 +8,9 @@
 
 #import "XPYReadMenuBottomBar.h"
 
+#import "XPYBookModel.h"
+#import "XPYChapterModel.h"
+
 @interface XPYReadMenuBottomBar ()
 
 /// 章节进度
@@ -40,7 +43,7 @@
 
 #pragma mark - UI
 - (void)configureUI {
-    self.backgroundColor = XPYColorFromHex(0x232428);
+    self.backgroundColor = XPYColorFromHex(0x222222);
     
     [self addSubview:self.lastChapterButton];
     [self addSubview:self.nextChapterButton];
@@ -120,16 +123,46 @@
     }];
 }
 
+#pragma mark - Instance methods
+- (void)updatePageProgressWithBook:(XPYBookModel *)book {
+    if (!book) {
+        return;
+    }
+    // 设置最大值
+    self.slider.maximumValue = book.chapter.pageModels.count;
+    // 设置当前值
+    self.slider.value = book.page + 1;
+    // 设置上/下一章按钮是否可点击
+    self.nextChapterButton.enabled = book.chapter.chapterIndex != book.chapterCount;
+    self.lastChapterButton.enabled = book.chapter.chapterIndex != 1;
+}
+
 #pragma mark - Actions
 - (void)lastChapterAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickLastChapter)]) {
+        [self.delegate bottomBarDidClickLastChapter];
+    }
 }
 - (void)nextChapterAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickNextChapter)]) {
+        [self.delegate bottomBarDidClickNextChapter];
+    }
 }
-- (void)lightChanged:(UISlider *)slider {
-    
+/// 页码进度选择
+- (void)sliderValueChanged {
+    NSInteger value = (NSInteger)self.slider.value;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidChangePage:)]) {
+        [self.delegate bottomBarDidChangePage:value];
+    }
 }
+/// 页码进度选择完成
+- (void)sliderTouchedUp {
+    NSInteger value = (NSInteger)self.slider.value;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidChangePageProgress:)]) {
+        [self.delegate bottomBarDidChangePageProgress:value];
+    }
+}
+
 - (void)catalogAction {
     
 }
@@ -177,18 +210,18 @@
         _slider = [[UISlider alloc] init];
         _slider.minimumValue = 1;
         _slider.maximumValue = 1;
-        _slider.minimumTrackTintColor = XPYColorFromHex(0xf46663);
-        _slider.maximumTrackTintColor = XPYColorFromHex(0x555555);
-        [_slider setThumbImage:[UIImage imageNamed:@"lightness"] forState:UIControlStateNormal];
-        [_slider addTarget:self action:@selector(lightChanged:) forControlEvents:UIControlEventValueChanged];
+        _slider.minimumTrackTintColor = [UIColor yellowColor];
+        _slider.maximumTrackTintColor = [UIColor grayColor];
+        [_slider addTarget:self action:@selector(sliderValueChanged) forControlEvents:UIControlEventValueChanged];
+        [_slider addTarget:self action:@selector(sliderTouchedUp) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     return _slider;
 }
 - (UIButton *)catalogButton {
     if (!_catalogButton) {
         _catalogButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_catalogButton setImage:[UIImage imageNamed:@"read_menu_catalog"] forState:UIControlStateNormal];
-        [_catalogButton setTitle:@"目录" forState:UIControlStateNormal];
+        [_catalogButton setTitle:@"章节目录" forState:UIControlStateNormal];
         [_catalogButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         _catalogButton.titleLabel.font = FontRegular(11);
         [_catalogButton addTarget:self action:@selector(catalogAction) forControlEvents:UIControlEventTouchUpInside];
@@ -198,8 +231,7 @@
 - (UIButton *)backgorundButton {
     if (!_backgorundButton) {
         _backgorundButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_backgorundButton setImage:[UIImage imageNamed:@"read_menu_background"] forState:UIControlStateNormal];
-        [_backgorundButton setTitle:@"背景" forState:UIControlStateNormal];
+        [_backgorundButton setTitle:@"背景模式" forState:UIControlStateNormal];
         [_backgorundButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         _backgorundButton.titleLabel.font = FontRegular(11);
         [_backgorundButton addTarget:self action:@selector(backgroundAction) forControlEvents:UIControlEventTouchUpInside];
@@ -209,8 +241,7 @@
 - (UIButton *)pageTypeButton {
     if (!_pageTypeButton) {
         _pageTypeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_pageTypeButton setImage:[UIImage imageNamed:@"read_menu_page_type"] forState:UIControlStateNormal];
-        [_pageTypeButton setTitle:@"翻页" forState:UIControlStateNormal];
+        [_pageTypeButton setTitle:@"翻页模式" forState:UIControlStateNormal];
         [_pageTypeButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         _pageTypeButton.titleLabel.font = FontRegular(11);
         [_pageTypeButton addTarget:self action:@selector(pageTypeAction) forControlEvents:UIControlEventTouchUpInside];
@@ -220,7 +251,6 @@
 - (UIButton *)settingButton {
     if (!_settingButton) {
         _settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_settingButton setImage:[UIImage imageNamed:@"read_menu_setting"] forState:UIControlStateNormal];
         [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
         [_settingButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         _settingButton.titleLabel.font = FontRegular(11);

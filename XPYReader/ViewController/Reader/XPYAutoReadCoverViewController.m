@@ -27,6 +27,11 @@
 @property (nonatomic, strong) XPYReadView *readView;
 /// 覆盖视图
 @property (nonatomic, strong) XPYAutoReadCoverView *coverView;
+/// 章节名
+@property (nonatomic, strong) UILabel *chapterNameLabel;
+/// 当前页码
+@property (nonatomic, strong) UILabel *currentPageLabel;
+
 /// 自动阅读计时器
 @property (nonatomic, strong) CADisplayLink *timer;
 
@@ -73,6 +78,8 @@
     
     [self configureUI];
     
+    [self refreshInformationViews];
+    
     // 设置当前页面信息
     self.currentPageModel = self.currentChapterModel.pageModels[self.bookModel.page];
     
@@ -87,18 +94,39 @@
                 nextChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:nextChapter.content chapterName:nextChapter.chapterName] copy];
                 // 设置下一章
                 self.nextChapterModel = nextChapter;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    // 加入覆盖视图
-                    [self configureCoverView];
-                    // 更新覆盖视图内容
-                    [self updateCoverViewContent];
-                    // 设置拖动手势
-                    [self configurePanGesture];
-                    // 初始化计时器
-                    [self loadTimer];
-                });
+            } else {
+                self.nextChapterModel = nil;
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // 加入覆盖视图
+                [self configureCoverView];
+                // 更新覆盖视图内容
+                [self updateCoverViewContent];
+                // 设置拖动手势
+                [self configurePanGesture];
+                // 初始化计时器
+                [self loadTimer];
+            });
         }];
+    } else {
+        self.nextChapterModel = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 加入覆盖视图
+            [self configureCoverView];
+            // 更新覆盖视图内容
+            [self updateCoverViewContent];
+            // 设置拖动手势
+            [self configurePanGesture];
+            // 初始化计时器
+            [self loadTimer];
+        });
+    }
+}
+
+- (void)dealloc {
+    if (self.timer) {
+        [self.timer invalidate];
+        self.timer = nil;
     }
 }
 
@@ -112,6 +140,19 @@
         make.trailing.equalTo(self.view.mas_trailing).mas_offset(- XPYReadViewRightSpacing);
         make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing);
         make.bottom.equalTo(self.view.mas_bottom).mas_offset(- XPYReadViewBottomSpacing);
+    }];
+    
+    [self.view addSubview:self.chapterNameLabel];
+    [self.chapterNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
+        make.bottom.equalTo(self.readView.mas_top).mas_offset(-10);
+        make.width.equalTo(self.readView.mas_width).multipliedBy(0.5).mas_offset(-XPYReadViewLeftSpacing - 5);
+    }];
+    
+    [self.view addSubview:self.currentPageLabel];
+    [self.currentPageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.trailing.equalTo(self.view.mas_trailing).mas_offset(-XPYReadViewRightSpacing);
+        make.bottom.equalTo(self.readView.mas_top).mas_offset(-10);
     }];
 }
 
@@ -144,6 +185,10 @@
 }
 
 #pragma mark - Private methods
+- (void)refreshInformationViews {
+    self.chapterNameLabel.text = self.bookModel.chapter.chapterName;
+    self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.bookModel.page + 1), @(self.bookModel.chapter.pageModels.count)];
+}
 /// 预加载下一章
 - (void)preloadNextChapter {
     if (self.currentChapterModel.chapterIndex == self.bookModel.chapterCount) {
@@ -222,6 +267,8 @@
     self.bookModel.chapter = self.currentChapterModel;
     self.bookModel.page = self.currentPageModel.pageIndex;
     [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    
+    [self refreshInformationViews];
 }
 
 /// 加载计时器
@@ -293,12 +340,21 @@
     }
     return _coverView;
 }
-
-- (void)dealloc {
-    if (self.timer) {
-        [self.timer invalidate];
-        self.timer = nil;
+- (UILabel *)chapterNameLabel {
+    if (!_chapterNameLabel) {
+        _chapterNameLabel = [[UILabel alloc] init];
+        _chapterNameLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _chapterNameLabel.font = [UIFont systemFontOfSize:12];
     }
+    return _chapterNameLabel;
+}
+- (UILabel *)currentPageLabel {
+    if (!_currentPageLabel) {
+        _currentPageLabel = [[UILabel alloc] init];
+        _currentPageLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _currentPageLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _currentPageLabel;
 }
 
 @end

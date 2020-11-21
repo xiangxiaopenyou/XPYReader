@@ -13,10 +13,16 @@
 #import "XPYChapterPageModel.h"
 #import "XPYChapterModel.h"
 
+#import "XPYReadRecordManager.h"
+
 
 @interface XPYReadViewController ()
 
 @property (nonatomic, strong) XPYReadView *readView;
+/// 章节名
+@property (nonatomic, strong) UILabel *chapterNameLabel;
+/// 当前页码
+@property (nonatomic, strong) UILabel *currentPageLabel;
 
 @property (nonatomic, strong) XPYChapterModel *chapterModel;
 @property (nonatomic, strong) XPYChapterPageModel *pageModel;
@@ -31,13 +37,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.readView];
-    [self.readView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
-        make.trailing.equalTo(self.view.mas_trailing).mas_offset(- XPYReadViewRightSpacing);
-        make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing);
-        make.bottom.equalTo(self.view.mas_bottom).mas_offset(- XPYReadViewBottomSpacing);
-    }];
+    [self configureUI];
+    
+    [self refreshInformationViews];
     
     if ([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeTranslation || [XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone) {
         // 左右平移和无动画翻页模式添加点击边缘翻页事件
@@ -62,6 +64,30 @@
     }
 }
 
+#pragma mark - UI
+- (void)configureUI {
+    [self.view addSubview:self.readView];
+    [self.readView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
+        make.trailing.equalTo(self.view.mas_trailing).mas_offset(-XPYReadViewRightSpacing);
+        make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing);
+        make.bottom.equalTo(self.view.mas_bottom).mas_offset(-XPYReadViewBottomSpacing);
+    }];
+    
+    [self.view addSubview:self.chapterNameLabel];
+    [self.chapterNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
+        make.bottom.equalTo(self.readView.mas_top).mas_offset(-10);
+        make.width.equalTo(self.readView.mas_width).multipliedBy(0.5).mas_offset(-XPYReadViewLeftSpacing - 5);
+    }];
+    
+    [self.view addSubview:self.currentPageLabel];
+    [self.currentPageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.trailing.equalTo(self.view.mas_trailing).mas_offset(-XPYReadViewRightSpacing);
+        make.bottom.equalTo(self.readView.mas_top).mas_offset(-10);
+    }];
+}
+
 #pragma mark - Instance methods
 - (void)setupChapter:(XPYChapterModel *)chapter pageModel:(XPYChapterPageModel *)pageModel isBackView:(BOOL)isBackView {
     self.chapterModel = chapter;
@@ -70,6 +96,12 @@
     [self.view setNeedsLayout];
     
     _backView = isBackView;
+}
+
+#pragma mark - Private methods
+- (void)refreshInformationViews {
+    self.chapterNameLabel.text = self.chapterModel.chapterName;
+    self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.pageModel.pageIndex + 1), @(self.chapterModel.pageModels.count)];
 }
 
 #pragma mark - Actions
@@ -89,7 +121,6 @@
             [self.delegate readViewControllerShowNextPage];
         }
     }
-    
 }
 - (void)pan:(UIPanGestureRecognizer *)pan {
     // 滑动最短距离
@@ -117,6 +148,23 @@
         _readView = [[XPYReadView alloc] initWithFrame:CGRectMake(XPYReadViewLeftSpacing, XPYReadViewTopSpacing, XPYScreenWidth - XPYReadViewLeftSpacing - XPYReadViewRightSpacing, XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)];
     }
     return _readView;
+}
+
+- (UILabel *)chapterNameLabel {
+    if (!_chapterNameLabel) {
+        _chapterNameLabel = [[UILabel alloc] init];
+        _chapterNameLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _chapterNameLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _chapterNameLabel;
+}
+- (UILabel *)currentPageLabel {
+    if (!_currentPageLabel) {
+        _currentPageLabel = [[UILabel alloc] init];
+        _currentPageLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _currentPageLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _currentPageLabel;
 }
 
 @end

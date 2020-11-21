@@ -250,7 +250,7 @@
 			path = Reader;
 			sourceTree = "<group>";
 		};
-		6C03F0DF24DB9EB50070328E /* Read */ = {
+		6C03F0DF24DB9EB50070328E /* Reader */ = {
 			isa = PBXGroup;
 			children = (
 				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
@@ -276,7 +276,7 @@
 				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
 				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
 			);
-			path = Read;
+			path = Reader;
 			sourceTree = "<group>";
 		};
 		6C03F0E324DBAB040070328E /* Chapter */ = {
@@ -607,7 +607,7 @@
 			children = (
 				6C7BA8D324D80FBD0054B971 /* BookStack */,
 				6C03F0F524E23D4F0070328E /* BookStore */,
-				6C03F0DF24DB9EB50070328E /* Read */,
+				6C03F0DF24DB9EB50070328E /* Reader */,
 			);
 			path = View;
 			sourceTree = "<group>";

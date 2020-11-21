@@ -238,7 +238,7 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         NSInteger chapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.bookModel.page inSection:chapterIndex] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.bookModel.page inSection:chapterIndex] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     });
     
     [self updateReadRecord];

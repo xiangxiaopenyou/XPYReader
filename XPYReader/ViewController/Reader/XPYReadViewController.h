@@ -26,9 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id <XPYReadViewControllerDelegate> delegate;
 
-/// 当前
+/// 当前页数据
 @property (nonatomic, strong, readonly) XPYChapterPageModel *pageModel;
-/// 当前章节
+/// 当前章节数据
 @property (nonatomic, strong, readonly) XPYChapterModel *chapterModel;
 /// 是否页面背面（仿真模式使用）
 @property (nonatomic, assign, getter=isBackView, readonly) BOOL backView;

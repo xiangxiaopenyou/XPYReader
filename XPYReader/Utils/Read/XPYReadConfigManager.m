@@ -71,6 +71,7 @@
 }
 
 - (UIColor *)currentTextColor {
+    // 当前文字颜色可以自行设置，这里只简单设置了两种
     return [self isDarkMode] ? XPYColorFromHexWithAlpha(0xFFFFFF, 0.5) : XPYColorFromHex(0x333333);
 }
 

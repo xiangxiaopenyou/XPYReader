@@ -36,7 +36,7 @@
 
 #pragma mark - UI
 - (void)configureUI {
-    self.backgroundColor = XPYColorFromHex(0x232428);
+    self.backgroundColor = XPYColorFromHex(0x222222);
     
     [self addSubview:self.backButton];
     [self.backButton mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -24,14 +24,12 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 
 @interface XPYScrollReadViewController () <UITableViewDataSource, UITableViewDelegate>
 
-/// 书名
-@property (nonatomic, strong) UILabel *bookNameLabel;
-/// 章节名
-@property (nonatomic, strong) UILabel *chapterNameLabel;
-/// 阅读进度（页码）
-@property (nonatomic, strong) UILabel *progressLabel;
 /// 主阅读视图列表
 @property (nonatomic, strong) UITableView *tableView;
+/// 章节名
+@property (nonatomic, strong) UILabel *chapterNameLabel;
+/// 当前页码
+@property (nonatomic, strong) UILabel *currentPageLabel;
 
 /// 当前书籍
 @property (nonatomic, strong) XPYBookModel *bookModel;
@@ -82,6 +80,8 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     
     [self configureUI];
     
+    [self refreshInformationViews];
+    
     // 列表滚动至阅读记录位置
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.bookModel.page inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     
@@ -90,11 +90,31 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     }
 }
 
+- (void)dealloc {
+    if (self.autoReadTimer) {
+        [self.autoReadTimer invalidate];
+        self.autoReadTimer = nil;
+    }
+}
+
 #pragma mark - UI
 - (void)configureUI {
     self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
     
     [self.view addSubview:self.tableView];
+    
+    [self.view addSubview:self.chapterNameLabel];
+    [self.chapterNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.view.mas_leading).mas_offset(XPYReadViewLeftSpacing);
+        make.bottom.equalTo(self.tableView.mas_top).mas_offset(-10);
+        make.width.equalTo(self.tableView.mas_width).multipliedBy(0.5).mas_offset(-XPYReadViewLeftSpacing - 5);
+    }];
+    
+    [self.view addSubview:self.currentPageLabel];
+    [self.currentPageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.trailing.equalTo(self.view.mas_trailing).mas_offset(-XPYReadViewRightSpacing);
+        make.bottom.equalTo(self.tableView.mas_top).mas_offset(-10);
+    }];
 }      
 
 #pragma mark - Instance methods
@@ -111,6 +131,10 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 }
 
 #pragma mark - Private methods
+- (void)refreshInformationViews {
+    self.chapterNameLabel.text = self.bookModel.chapter.chapterName;
+    self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.bookModel.page + 1), @(self.bookModel.chapter.pageModels.count)];
+}
 - (void)preloadChapters {
     XPYChapterModel *currentChapter = self.bookModel.chapter;
     if (currentChapter.chapterIndex == 1) {
@@ -233,6 +257,9 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     self.bookModel.chapter = self.chapters[indexPath.section];
     self.bookModel.page = indexPath.row;
     [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    
+    // 更新信息视图
+    [self refreshInformationViews];
 }
 
 /// 加载计时器
@@ -364,12 +391,21 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     }
     return _tableView;
 }
-#pragma mark - Override method
-- (void)dealloc {
-    if (self.autoReadTimer) {
-        [self.autoReadTimer invalidate];
-        self.autoReadTimer = nil;
+- (UILabel *)chapterNameLabel {
+    if (!_chapterNameLabel) {
+        _chapterNameLabel = [[UILabel alloc] init];
+        _chapterNameLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _chapterNameLabel.font = [UIFont systemFontOfSize:12];
     }
+    return _chapterNameLabel;
+}
+- (UILabel *)currentPageLabel {
+    if (!_currentPageLabel) {
+        _currentPageLabel = [[UILabel alloc] init];
+        _currentPageLabel.textColor = [XPYReadConfigManager sharedInstance].currentTextColor;
+        _currentPageLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _currentPageLabel;
 }
 
 @end

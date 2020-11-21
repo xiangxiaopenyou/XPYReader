@@ -43,6 +43,7 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     // 首次安装解析本地测试书籍
     if (![[NSUserDefaults standardUserDefaults] objectForKey:XPYIsFirstInstallKey]) {
         NSArray *bookNames = @[@"从灵气复苏到末法时代", @"孤单的飞", @"诡异天地", @"汉末文枭"];
+        // 使用信号量控制所有书籍处理完再继续
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(bookNames.count);
         for (NSString *bookName in bookNames) {
             NSString *localFilePath = [[NSBundle mainBundle] pathForResource:bookName ofType:@"txt"];

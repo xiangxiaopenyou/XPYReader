@@ -28,10 +28,10 @@
 
 #pragma mark - UI
 - (void)configureUI {
-    self.backgroundColor = XPYColorFromHex(0x232428);
+    self.backgroundColor = XPYColorFromHex(0x222222);
     
     self.buttonsView = [[UIView alloc] init];
-    self.buttonsView.backgroundColor = XPYColorFromHex(0x232428);
+    self.buttonsView.backgroundColor = XPYColorFromHex(0x222222);
     [self addSubview:self.buttonsView];
     [self.buttonsView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(self);

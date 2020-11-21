@@ -15,6 +15,9 @@
 #import "XPYReadMenuSettingBar.h"
 #import "XPYReadMenuAutoReadSettingBar.h"
 
+#import "XPYBookModel.h"
+#import "XPYChapterModel.h"
+
 @interface XPYReadMenu () <XPYReadMenuTopBarDelegate, XPYReadMenuBottomBarDelegate, XPYReadMenuBackgroundBarDelegate, XPYReadMenuPageTypeBarDelegate, XPYReadMenuSettingBarDelegate, XPYReadMenuAutoReadSettingBarDelegate>
 
 @property (nonatomic, strong) UIView *sourceView;
@@ -23,6 +26,8 @@
 @property (nonatomic, strong) XPYReadMenuTopBar *topBar;
 /// 底部栏
 @property (nonatomic, strong) XPYReadMenuBottomBar *bottomBar;
+/// 当前章节页码进度
+@property (nonatomic, strong) UILabel *pageProgressLabel;
 /// 背景选择栏
 @property (nonatomic, strong) XPYReadMenuBackgroundBar *backgroundBar;
 /// 翻页模式选择栏
@@ -40,6 +45,8 @@
 @property (nonatomic, assign) BOOL isShowingSettingBar;
 /// 是否显示自动阅读设置栏
 @property (nonatomic, assign) BOOL showingAutoReadSetting;
+
+@property (nonatomic, strong) XPYBookModel *book;
 
 @end
 
@@ -90,6 +97,13 @@
         make.height.mas_offset(kXPYBottomBarHeight);
     }];
     
+    [self.sourceView addSubview:self.pageProgressLabel];
+    [self.pageProgressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.sourceView.mas_bottom).mas_offset(- kXPYBottomBarHeight - 10);
+        make.centerX.equalTo(self.sourceView);
+        make.size.mas_offset(CGSizeMake(200, 34));
+    }];
+    
     [self.sourceView addSubview:self.backgroundBar];
     [self.backgroundBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.trailing.equalTo(self.sourceView);
@@ -120,17 +134,22 @@
 }
 
 #pragma mark - Instance methods
-- (void)show {
+- (void)showWithBook:(XPYBookModel *)book {
+    self.book = book;
     [self.topBar mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.sourceView.mas_top);
     }];
     [self.bottomBar mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.sourceView.mas_bottom);
     }];
+    [self.bottomBar updatePageProgressWithBook:self.book];
+    self.pageProgressLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.book.page + 1), @(self.book.chapter.pageModels.count)];
     [UIView animateWithDuration:kXPYReadMenuAnimationDuration animations:^{
         [self.sourceView layoutIfNeeded];
     } completion:^(BOOL finished) {
         self.showing = YES;
+        // 显示页码进度视图
+        self.pageProgressLabel.hidden = NO;
         if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuHideStatusDidChange:)]) {
             [self.delegate readMenuHideStatusDidChange:YES];
         }
@@ -144,6 +163,10 @@
     if (!self.backgroundBar.hidden) {
         // 如果背景选择栏已显示，则需要手动隐藏
         self.backgroundBar.hidden = YES;
+    }
+    if (!self.pageProgressLabel.hidden) {
+        // 隐藏页码进度视图
+        self.pageProgressLabel.hidden = YES;
     }
     [self.topBar mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.sourceView.mas_top).mas_offset(- (kXPYTopBarHeight));
@@ -225,6 +248,29 @@
 }
 
 #pragma mark - XPYReadMenuBottomBarDelegate
+- (void)bottomBarDidClickNextChapter {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangeChapter:)]) {
+        [self.delegate readMenuDidChangeChapter:YES];
+    }
+}
+- (void)bottomBarDidClickLastChapter {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangeChapter:)]) {
+        [self.delegate readMenuDidChangeChapter:NO];
+    }
+}
+- (void)bottomBarDidChangePage:(NSInteger)progress {
+    // 页码滑动时只改变页码显示
+    self.pageProgressLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(progress), @(self.book.chapter.pageModels.count)];
+}
+- (void)bottomBarDidChangePageProgress:(NSInteger)progress {
+    self.pageProgressLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(progress), @(self.book.chapter.pageModels.count)];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangePageProgress:)]) {
+        [self.delegate readMenuDidChangePageProgress:progress];
+    }
+}
+- (void)bottomBarDidClickCatalog {
+    
+}
 - (void)bottomBarDidClickBackground {
     if (!self.pageTypeBar.hidden) {
         // 如果翻页模式选择栏已显示，则需要手动隐藏
@@ -232,6 +278,8 @@
     }
     // 背景选择栏显示和隐藏
     self.backgroundBar.hidden = !self.backgroundBar.hidden;
+    // 控制页码进度视图显示和隐藏
+    self.pageProgressLabel.hidden = !self.backgroundBar.hidden;
 }
 - (void)bottomBarDidClickPageType {
     if (!self.backgroundBar.hidden) {
@@ -240,6 +288,8 @@
     }
     // 控制翻页模式选择栏显示和隐藏
     self.pageTypeBar.hidden = !self.pageTypeBar.hidden;
+    // 控制页码进度视图显示和隐藏
+    self.pageProgressLabel.hidden = !self.pageTypeBar.hidden;
 }
 - (void)bottomBarDidClickSetting {
     if (!self.backgroundBar.hidden) {
@@ -249,6 +299,10 @@
     if (!self.pageTypeBar.hidden) {
         // 如果翻页模式选择栏已显示，则需要手动隐藏
         self.pageTypeBar.hidden = YES;
+    }
+    if (!self.pageProgressLabel.hidden) {
+        // 隐藏页码进度视图
+        self.pageProgressLabel.hidden = YES;
     }
     [self.bottomBar mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.sourceView.mas_bottom).mas_offset(kXPYBottomBarHeight);
@@ -266,7 +320,6 @@
             self.isShowingSettingBar = YES;
         }];
     }];
-    
 }
 
 #pragma mark - XPYReadMenuBackgroundBarDelegate
@@ -310,7 +363,6 @@
     
 }
 
-
 #pragma mark - Getters
 - (XPYReadMenuTopBar *)topBar {
     if (!_topBar) {
@@ -325,6 +377,19 @@
         _bottomBar.delegate = self;
     }
     return _bottomBar;
+}
+- (UILabel *)pageProgressLabel {
+    if (!_pageProgressLabel) {
+        _pageProgressLabel = [[UILabel alloc] init];
+        _pageProgressLabel.layer.masksToBounds = YES;
+        _pageProgressLabel.layer.cornerRadius = 4;
+        _pageProgressLabel.backgroundColor = XPYColorFromHex(0x222222);
+        _pageProgressLabel.textColor = [UIColor whiteColor];
+        _pageProgressLabel.textAlignment = NSTextAlignmentCenter;
+        _pageProgressLabel.font = [UIFont systemFontOfSize:15];
+        _pageProgressLabel.hidden = YES;
+    }
+    return _pageProgressLabel;
 }
 - (XPYReadMenuBackgroundBar *)backgroundBar {
     if (!_backgroundBar) {

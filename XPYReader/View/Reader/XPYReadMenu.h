@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#define kXPYTopBarHeight [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait ? (44 + XPYStatusBarHeight) : 64
-#define kXPYBottomBarHeight XPYDeviceIsIphoneX ? 144 : 110
+@class XPYBookModel;
+
+#define kXPYTopBarHeight ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait ? (44 + XPYStatusBarHeight) : 64)
+#define kXPYBottomBarHeight (XPYDeviceIsIphoneX ? 144 : 110)
 #define kXPYSettingBarHeight [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait ? (XPYDeviceIsIphoneX ? 190 : 168) : (XPYDeviceIsIphoneX ? 140 : 120)
 #define kXPYAutoReadSettingBarHeight XPYDeviceIsIphoneX ? 174 : 140
 
@@ -26,7 +28,15 @@ static CGFloat const kXPYReadMenuAnimationDuration = 0.2;
 /// 退出阅读器
 - (void)readMenuDidExitReader;
 
-/// 切换翻阅模式
+/// 选择上/下一章
+/// @param isNext 是否下一章
+- (void)readMenuDidChangeChapter:(BOOL)isNext;
+
+/// 当前章节页码选择
+/// @param progress 进度
+- (void)readMenuDidChangePageProgress:(NSInteger)progress;
+
+/// 切换翻页模式
 - (void)readMenuDidChangePageType;
 
 /// 切换背景
@@ -60,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithView:(UIView * _Nullable)sourceView;
 
 /// 显示菜单
-- (void)show;
+- (void)showWithBook:(XPYBookModel *)book;
 
 /// 隐藏菜单
 /// @param complete 动画完成回调（可增加额外操作）
