@@ -13,8 +13,8 @@
 
 #define kXPYTopBarHeight ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait ? (44 + XPYStatusBarHeight) : 64)
 #define kXPYBottomBarHeight (XPYDeviceIsIphoneX ? 144 : 110)
-#define kXPYSettingBarHeight [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait ? (XPYDeviceIsIphoneX ? 190 : 168) : (XPYDeviceIsIphoneX ? 140 : 120)
-#define kXPYAutoReadSettingBarHeight XPYDeviceIsIphoneX ? 174 : 140
+#define kXPYSettingBarHeight kXPYBottomBarHeight
+#define kXPYAutoReadSettingBarHeight (XPYDeviceIsIphoneX ? 174 : 140)
 
 static CGFloat const kXPYBackgroundBarHeight = 100.f;
 static CGFloat const kXPYPageTypeBarHeight = 79.f;
@@ -41,6 +41,12 @@ static CGFloat const kXPYReadMenuAnimationDuration = 0.2;
 
 /// 切换背景
 - (void)readMenuDidChangeBackground;
+
+/// 字体大小
+- (void)readMenuDidChangeFontSize;
+
+/// 间距大小
+- (void)readMenuDidChangeSpacing;
 
 /// 开启自动阅读
 - (void)readMenuDidOpenAutoRead;

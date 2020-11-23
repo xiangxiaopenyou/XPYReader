@@ -235,7 +235,6 @@
             make.bottom.equalTo(self.sourceView.mas_bottom).mas_offset(kXPYSettingBarHeight);
         }
     }];
-    [self.settingBar updateViewsConstraints];
     [self.backgroundBar updateButtonsConstraints];
     [self.pageTypeBar updateButtonsConstraints];
 }
@@ -342,6 +341,16 @@
     // 开启自动阅读
     if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidOpenAutoRead)]) {
         [self.delegate readMenuDidOpenAutoRead];
+    }
+}
+- (void)settingBarDidChangeFontSize {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangeFontSize)]) {
+        [self.delegate readMenuDidChangeFontSize];
+    }
+}
+- (void)settingBarDidChangeSpacing {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangeSpacing)]) {
+        [self.delegate readMenuDidChangeSpacing];
     }
 }
 

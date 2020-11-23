@@ -294,6 +294,12 @@
     self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
     [self createReader];
 }
+- (void)readMenuDidChangeFontSize {
+    [self createReader];
+}
+- (void)readMenuDidChangeSpacing {
+    [self createReader];
+}
 - (void)readMenuDidOpenAutoRead {
     [self.readMenu hiddenWithComplete:^{
         if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {

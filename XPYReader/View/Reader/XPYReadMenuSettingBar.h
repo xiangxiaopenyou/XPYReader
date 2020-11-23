@@ -15,13 +15,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// 点击自动阅读
 - (void)settingBarClickAutoRead;
 
+/// 字体大小变化
+- (void)settingBarDidChangeFontSize;
+
+/// 间距大小变化
+- (void)settingBarDidChangeSpacing;
+
 @end
 
 @interface XPYReadMenuSettingBar : UIView
 
 @property (nonatomic, weak) id <XPYReadMenuSettingBarDelegate> delegate;
-
-- (void)updateViewsConstraints;
 
 @end
 

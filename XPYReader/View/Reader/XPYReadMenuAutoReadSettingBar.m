@@ -108,7 +108,7 @@
 - (UILabel *)speedLabel {
     if (!_speedLabel) {
         _speedLabel = [[UILabel alloc] init];
-        _speedLabel.font = FontRegular(14);
+        _speedLabel.font = XPYFontRegular(14);
         _speedLabel.textColor = XPYColorFromHex(0x8F8F90);
         _speedLabel.textAlignment = NSTextAlignmentLeft;
         _speedLabel.text = [NSString stringWithFormat:@"自动翻页速度: %@", @(_speed)];
@@ -123,7 +123,7 @@
         _minusSpeedButton.layer.cornerRadius = 3;
         _minusSpeedButton.layer.borderColor = XPYColorFromHex(0x8F8F90).CGColor;
         _minusSpeedButton.layer.borderWidth = 1;
-        _minusSpeedButton.titleLabel.font = FontRegular(14);
+        _minusSpeedButton.titleLabel.font = XPYFontRegular(14);
         [_minusSpeedButton addTarget:self action:@selector(minusSpeedAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _minusSpeedButton;
@@ -136,7 +136,7 @@
         _plusSpeedButton.layer.cornerRadius = 3;
         _plusSpeedButton.layer.borderColor = XPYColorFromHex(0x8F8F90).CGColor;
         _plusSpeedButton.layer.borderWidth = 1;
-        _plusSpeedButton.titleLabel.font = FontRegular(14);
+        _plusSpeedButton.titleLabel.font = XPYFontRegular(14);
         [_plusSpeedButton addTarget:self action:@selector(plusSpeedAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _plusSpeedButton;
@@ -144,7 +144,7 @@
 - (UIButton *)changeModeButton {
     if (!_changeModeButton) {
         _changeModeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _changeModeButton.titleLabel.font = FontRegular(14);
+        _changeModeButton.titleLabel.font = XPYFontRegular(14);
         _changeModeButton.layer.cornerRadius = 4;
         _changeModeButton.layer.borderWidth = 1;
         _changeModeButton.layer.borderColor = XPYColorFromHex(0x8F8F90).CGColor;
@@ -161,7 +161,7 @@
         _exitAutoReadButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_exitAutoReadButton setTitle:@"退出自动翻页" forState:UIControlStateNormal];
         [_exitAutoReadButton setTitleColor:XPYColorFromHex(0x8F8F90) forState:UIControlStateNormal];
-        _exitAutoReadButton.titleLabel.font = FontRegular(14);
+        _exitAutoReadButton.titleLabel.font = XPYFontRegular(14);
         _exitAutoReadButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 5);
         [_exitAutoReadButton addTarget:self action:@selector(exitAutoReadAction) forControlEvents:UIControlEventTouchUpInside];
     }

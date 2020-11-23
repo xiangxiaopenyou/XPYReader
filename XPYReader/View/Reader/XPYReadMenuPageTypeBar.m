@@ -39,22 +39,18 @@
         make.height.mas_offset(33);
     }];
     
-    NSArray <NSString *> *pageTypes = @[@"仿真", @"上下", @"平移", @"无"];
+    NSArray <NSString *> *pageTypes = @[@"仿真翻页", @"上下翻页", @"平移翻页", @"无效果"];
     NSMutableArray *buttons = [[NSMutableArray alloc] init];
     [pageTypes enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.titleLabel.font = FontRegular(14);
+        button.titleLabel.font = XPYFontRegular(13);
         [button setTitle:obj forState:UIControlStateNormal];
-        [button setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
-        [button setTitleColor:XPYColorFromHex(0xf46663) forState:UIControlStateSelected];
-        button.layer.cornerRadius = 4;
-        button.layer.borderWidth = 1;
-        button.layer.borderColor = XPYColorFromHex(0x555555).CGColor;
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor yellowColor] forState:UIControlStateSelected];
         button.tag = 1000 + idx;
         [button addTarget:self action:@selector(pageTypeSelectAction:) forControlEvents:UIControlEventTouchUpInside];
         if (idx == [XPYReadConfigManager sharedInstance].pageType) {
             button.selected = YES;
-            button.layer.borderColor = XPYColorFromHex(0xf46663).CGColor;
             self.selectedTypeButton = button;
         }
         [self.buttonsView addSubview:button];
@@ -86,9 +82,7 @@
         return;
     }
     self.selectedTypeButton.selected = NO;
-    self.selectedTypeButton.layer.borderColor = XPYColorFromHex(0x555555).CGColor;
     sender.selected = YES;
-    sender.layer.borderColor = XPYColorFromHex(0xf46663).CGColor;
     self.selectedTypeButton = sender;
     
     // 更新阅读页翻页模式配置

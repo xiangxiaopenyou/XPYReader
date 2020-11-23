@@ -12,8 +12,11 @@
 
 @property (nonatomic, assign) NSInteger lightColorIndex;
 @property (nonatomic, assign) NSInteger darkColorIndex;
+@property (nonatomic, assign) NSInteger fontSize;
+@property (nonatomic, assign) NSInteger spacingLevel;
 @property (nonatomic, assign) XPYReadPageType pageType;
 @property (nonatomic, assign) XPYAutoReadMode autoReadMode;
+@property (nonatomic, assign) NSInteger autoReadSpeed;
 
 @end
 
@@ -39,8 +42,7 @@
     if (self) {
         self.lightColorIndex = 0;
         self.darkColorIndex = 5;
-        self.lineSpacing = @10;
-        self.paragraphSpacing = @20;
+        self.spacingLevel = 3;
         self.fontSize = 19;
         self.pageType = XPYReadPageTypeCurl;
         // 自动阅读模式默认关闭
@@ -86,6 +88,16 @@
 
 - (void)updatePageType:(XPYReadPageType)pageType {
     self.pageType = pageType;
+    [self updateConfigs];
+}
+
+- (void)updateFontSizeWithSize:(NSInteger)size {
+    self.fontSize = size;
+    [self updateConfigs];
+}
+
+- (void)updateSpacingLevel:(NSInteger)level {
+    self.spacingLevel = level;
     [self updateConfigs];
 }
 

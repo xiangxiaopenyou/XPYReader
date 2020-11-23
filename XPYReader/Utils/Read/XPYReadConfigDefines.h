@@ -14,12 +14,18 @@
 #pragma mark - 阅读字号和字号等级
 /// 默认阅读字号 19号字体
 static NSInteger const XPYDefaultReadFontSize = 19;
-/// 默认字号等级3对应19号默认字体
-static NSInteger const XPYDefaultReadFontSizeLevel = 3;
 /// 最小字号等级
-static NSInteger const XPYMinReadFontSizeLevel = 1;
+static NSInteger const XPYMinReadFontSize = 25;
 /// 最大字号等级
-static NSInteger const XPYMaxReadFontSizeLevel = 8;
+static NSInteger const XPYMaxReadFontSize = 13;
+
+#pragma mark - 阅读间距
+/// 默认阅读间距等级
+static NSInteger const XPYDefaultReadSpacingLevel = 2;
+/// 最小阅读间距等级
+static NSInteger const XPYMinReadSpacingLevel = 0;
+/// 最大阅读间距等级
+static NSInteger const XPYMaxReadSpacingLevel = 4;
 
 #pragma mark - 自动阅读速度
 /// 默认自动阅读速度

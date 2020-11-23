@@ -42,8 +42,8 @@
 #define XPYReadViewHeight (XPYScreenHeight - XPYReadViewTopSpacing - XPYReadViewBottomSpacing)
 
 #pragma mark - Font
-#define FontBold(x) [UIFont fontWithName:@"PingFangSC-Semibold" size:x]
-#define FontRegular(x) [UIFont fontWithName:@"PingFangSC-Regular" size:x]
-#define FontMedium(x) [UIFont fontWithName:@"PingFangSC-Medium" size:x]
-#define FontLight(x) [UIFont fontWithName:@"PingFangSC-Light" size:x]
+#define XPYFontBold(x) [UIFont fontWithName:@"PingFangSC-Semibold" size:x]
+#define XPYFontRegular(x) [UIFont fontWithName:@"PingFangSC-Regular" size:x]
+#define XPYFontMedium(x) [UIFont fontWithName:@"PingFangSC-Medium" size:x]
+#define XPYFontLight(x) [UIFont fontWithName:@"PingFangSC-Light" size:x]
 

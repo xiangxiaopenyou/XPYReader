@@ -188,7 +188,7 @@
         _lastChapterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_lastChapterButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         [_lastChapterButton setTitleColor:XPYColorFromHex(0x3c3c3c) forState:UIControlStateDisabled];
-        _lastChapterButton.titleLabel.font = FontRegular(13);
+        _lastChapterButton.titleLabel.font = XPYFontRegular(13);
         [_lastChapterButton setTitle:@"上一章" forState:UIControlStateNormal];
         [_lastChapterButton addTarget:self action:@selector(lastChapterAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -199,7 +199,7 @@
         _nextChapterButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_nextChapterButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
         [_nextChapterButton setTitleColor:XPYColorFromHex(0x3c3c3c) forState:UIControlStateDisabled];
-        _nextChapterButton.titleLabel.font = FontRegular(13);
+        _nextChapterButton.titleLabel.font = XPYFontRegular(13);
         [_nextChapterButton setTitle:@"下一章" forState:UIControlStateNormal];
         [_nextChapterButton addTarget:self action:@selector(nextChapterAction) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -223,7 +223,7 @@
         _catalogButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_catalogButton setTitle:@"章节目录" forState:UIControlStateNormal];
         [_catalogButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
-        _catalogButton.titleLabel.font = FontRegular(11);
+        _catalogButton.titleLabel.font = XPYFontRegular(11);
         [_catalogButton addTarget:self action:@selector(catalogAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _catalogButton;
@@ -233,7 +233,7 @@
         _backgorundButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_backgorundButton setTitle:@"背景模式" forState:UIControlStateNormal];
         [_backgorundButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
-        _backgorundButton.titleLabel.font = FontRegular(11);
+        _backgorundButton.titleLabel.font = XPYFontRegular(11);
         [_backgorundButton addTarget:self action:@selector(backgroundAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backgorundButton;
@@ -243,7 +243,7 @@
         _pageTypeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_pageTypeButton setTitle:@"翻页模式" forState:UIControlStateNormal];
         [_pageTypeButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
-        _pageTypeButton.titleLabel.font = FontRegular(11);
+        _pageTypeButton.titleLabel.font = XPYFontRegular(11);
         [_pageTypeButton addTarget:self action:@selector(pageTypeAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _pageTypeButton;
@@ -253,7 +253,7 @@
         _settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_settingButton setTitle:@"设置" forState:UIControlStateNormal];
         [_settingButton setTitleColor:XPYColorFromHex(0xdddddd) forState:UIControlStateNormal];
-        _settingButton.titleLabel.font = FontRegular(11);
+        _settingButton.titleLabel.font = XPYFontRegular(11);
         [_settingButton addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _settingButton;

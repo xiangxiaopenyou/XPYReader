@@ -16,12 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) NSInteger lightColorIndex;
 /// 深色模式颜色编号
 @property (nonatomic, assign, readonly) NSInteger darkColorIndex;
-/// 行间距
-@property (nonatomic, strong) NSNumber *lineSpacing;
-/// 段落间距
-@property (nonatomic, strong) NSNumber *paragraphSpacing;
+/// 间距等级（1,2,3,4,5）
+@property (nonatomic, assign, readonly) NSInteger spacingLevel;
 /// 字号
-@property (nonatomic, assign) NSInteger fontSize;
+@property (nonatomic, assign, readonly) NSInteger fontSize;
 /// 翻页模式
 @property (nonatomic, assign, readonly) XPYReadPageType pageType;
 /// 是否自动阅读模式（自动阅读每次初始化时默认关闭）
@@ -29,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 自动阅读模式（滚屏和覆盖）
 @property (nonatomic, assign, readonly) XPYAutoReadMode autoReadMode;
 /// 自动阅读翻页速度
-@property (nonatomic, assign) NSInteger autoReadSpeed;
+@property (nonatomic, assign, readonly) NSInteger autoReadSpeed;
 
 + (instancetype)sharedInstance;
 
@@ -52,6 +50,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// 更新当前翻页模式
 /// @param pageType 翻页模式
 - (void)updatePageType:(XPYReadPageType)pageType;
+
+/// 更新当前字体大小
+/// @param size 字号
+- (void)updateFontSizeWithSize:(NSInteger)size;
+
+/// 更新当前间距等级
+/// @param level 间距等级
+- (void)updateSpacingLevel:(NSInteger)level;
 
 /// 更新当前自动阅读模式
 /// @param mode 自动阅读模式

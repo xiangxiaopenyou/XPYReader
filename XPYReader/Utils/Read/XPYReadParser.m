@@ -35,8 +35,8 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     attributes[NSForegroundColorAttributeName] = [XPYReadConfigManager sharedInstance].currentTextColor;
     attributes[NSFontAttributeName] = [UIFont systemFontOfSize:[XPYReadConfigManager sharedInstance].fontSize];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineSpacing = [[XPYReadConfigManager sharedInstance].lineSpacing floatValue];
-    paragraphStyle.paragraphSpacing = [[XPYReadConfigManager sharedInstance].paragraphSpacing floatValue];
+    paragraphStyle.lineSpacing = [XPYReadConfigManager sharedInstance].spacingLevel * 2.0;
+    paragraphStyle.paragraphSpacing = [XPYReadConfigManager sharedInstance].spacingLevel * 3.0;
     paragraphStyle.alignment = NSTextAlignmentJustified;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     return attributes;
@@ -95,10 +95,10 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
                 pageModel.extraHeaderHeight = 0;
             } else if ([content.string hasPrefix:@"　　"]) {
                 // 开头存在两个空格，则为新的一段开始，额外头部高度为段间距
-                pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].paragraphSpacing floatValue];
+                pageModel.extraHeaderHeight = [XPYReadConfigManager sharedInstance].spacingLevel * 3.0;
             } else {
                 // 额外头部高度为行间距
-                pageModel.extraHeaderHeight = [[XPYReadConfigManager sharedInstance].lineSpacing floatValue];
+                pageModel.extraHeaderHeight = [XPYReadConfigManager sharedInstance].spacingLevel * 2.0;
             }
             [pageModels addObject:pageModel];
         };
