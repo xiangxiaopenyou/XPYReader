@@ -24,10 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *content;
 /// 章节字数
 @property (nonatomic, assign) NSInteger charNum;
-/// 0免费 1付费
-@property (nonatomic, assign) BOOL needFee;
-/// 价格
-@property (nonatomic, assign) NSInteger price;
+
 
 #pragma mark - 不保存进数据库
 /// 当前章节分页信息

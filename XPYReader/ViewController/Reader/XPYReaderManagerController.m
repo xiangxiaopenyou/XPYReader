@@ -13,6 +13,7 @@
 #import "XPYAutoReadCoverViewController.h"
 #import "XPYReadViewController.h"
 #import "XPYBookStackViewController.h"
+#import "XPYBookCatalogViewController.h"
 
 #import "XPYReadView.h"
 
@@ -25,7 +26,7 @@
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
-@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate>
+@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate, XPYBookCatalogDelegate>
 
 /// 仿真、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
@@ -236,6 +237,19 @@
     }
 }
 
+#pragma mark - XPYBookCatalogDelegate
+- (void)bookCatalog:(XPYBookCatalogViewController *)catalogController didSelectChapter:(XPYChapterModel *)chapter {
+    if (self.readMenu.isShowing) {
+        [self.readMenu hiddenWithComplete:nil];
+    }
+    self.book.chapter = chapter;
+    self.book.page = 0;
+    
+    // 更新阅读记录
+    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+    [self createReader];
+}
+
 #pragma mark - XPYReadMenuDelegate
 - (void)readMenuHideStatusDidChange:(BOOL)isHide {
     [self setNeedsStatusBarAppearanceUpdate];
@@ -287,6 +301,12 @@
         [self createReader];
     }
 }
+- (void)readMenuDidOpenCatalog {
+    XPYBookCatalogViewController *catalogController = [[XPYBookCatalogViewController alloc] init];
+    catalogController.book = self.book;
+    catalogController.delegate = self;
+    [self.navigationController pushViewController:catalogController animated:YES];
+}
 - (void)readMenuDidChangePageType {
     [self createReader];
 }
@@ -317,6 +337,15 @@
 - (void)readMenuDidChangeAutoReadMode:(XPYAutoReadMode)mode {
     [[XPYReadConfigManager sharedInstance] updateAutoReadMode:mode];
     [self createReader];
+}
+- (void)readMenuDidChangeAllowLandscape:(BOOL)yesOrNo {
+    if (!yesOrNo) {
+        if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {
+            // 切换为不允许横屏时若为横屏转态则需要强制旋转屏幕
+            XPYChangeInterfaceOrientation(UIInterfaceOrientationPortrait);
+        }
+    }
+    [[XPYReadConfigManager sharedInstance] updateAllowLandscape:yesOrNo];
 }
 
 #pragma mark - Gesture recognizer delegete
@@ -387,8 +416,8 @@
 #pragma mark - Override methods
 // 阅读器设置可以横屏
 - (BOOL)shouldAutorotate {
-    if ([XPYReadConfigManager sharedInstance].isAutoRead) {
-        // 自动阅读不允许横屏
+    if ([XPYReadConfigManager sharedInstance].isAutoRead || ![XPYReadConfigManager sharedInstance].isAllowLandscape) {
+        // 自动阅读或者设置为不跟随系统横竖屏时不允许横屏
         return NO;
     }
     return YES;

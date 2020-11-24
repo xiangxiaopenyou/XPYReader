@@ -132,36 +132,25 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
         NSRange currentRange = NSMakeRange(0, 0);
         // 当前章节编号
         NSInteger chapterIndex = 1;
-        NSTextCheckingResult *startResult = matches[0];
-        NSRange startRange = startResult.range;
-        // 获取开始章节
-        NSString *startContent = [content substringWithRange:NSMakeRange(0, startRange.location)];
-        if (!XPYIsEmptyObject(startContent)) {
-            XPYChapterModel *startChapter = [[XPYChapterModel alloc] init];
-            startChapter.chapterName = @"开始";
-            startChapter.chapterIndex = chapterIndex;
-            startChapter.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
-            startChapter.content = [self resetContent:startContent];
-            [chapters addObject:startChapter];
-            chapterIndex += 1;
-        }
-        currentRange = startRange;
-        // 循环处理其他章节
-        for (NSInteger i = 1; i < matches.count; i++) {
+        // 循环处理章节
+        for (NSInteger i = 0; i < matches.count; i++) {
             @autoreleasepool {  // 自动释放池保证瞬时内存不会过高
                 NSTextCheckingResult *result = matches[i];
                 // 下一个标题在全文中的位置
                 NSRange resultRange = result.range;
                 // 截取两个标题之间内容为当前章节内容
                 NSString *chapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, resultRange.location - currentRange.location - currentRange.length)];
-                XPYChapterModel *chapterModel = [[XPYChapterModel alloc] init];
-                chapterModel.chapterIndex = chapterIndex;
-                chapterModel.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
-                chapterModel.chapterName = [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                chapterModel.content = [self resetContent:chapterContent];
-                [chapters addObject:chapterModel];
-                chapterIndex += 1;
-                currentRange = resultRange;
+                if (!XPYIsEmptyObject(chapterContent) && resultRange.length <= 70) {
+                    // 章节内容不为空并且章节标题长度不超过70
+                    XPYChapterModel *chapterModel = [[XPYChapterModel alloc] init];
+                    chapterModel.chapterIndex = chapterIndex;
+                    chapterModel.chapterId = [NSString stringWithFormat:@"%@", @(1000000 + chapterIndex)];
+                    chapterModel.chapterName = (chapterIndex == 1) ? @"开始" : [[content substringWithRange:currentRange] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    chapterModel.content = [self resetContent:chapterContent];
+                    [chapters addObject:chapterModel];
+                    chapterIndex += 1;
+                    currentRange = resultRange;
+                }
             };
         }
         NSString *endChapterContent = [content substringWithRange:NSMakeRange(currentRange.location + currentRange.length, content.length - currentRange.location - currentRange.length)];

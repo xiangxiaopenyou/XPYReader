@@ -20,8 +20,6 @@ WCDB_PROPERTY(chapterIndex)
 WCDB_PROPERTY(chapterName)
 WCDB_PROPERTY(content)
 WCDB_PROPERTY(charNum)
-WCDB_PROPERTY(needFee)
-WCDB_PROPERTY(price)
 
 @end
 

@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) XPYAutoReadMode autoReadMode;
 /// 自动阅读翻页速度
 @property (nonatomic, assign, readonly) NSInteger autoReadSpeed;
+/// 是否跟随系统横竖屏
+@property (nonatomic, assign, getter=isAllowLandscape, readonly) BOOL allowLandscape;
 
 + (instancetype)sharedInstance;
 
@@ -62,6 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 更新当前自动阅读模式
 /// @param mode 自动阅读模式
 - (void)updateAutoReadMode:(XPYAutoReadMode)mode;
+
+/// 更新是否跟随系统横竖屏
+/// @param yesOrNo 是否允许
+- (void)updateAllowLandscape:(BOOL)yesOrNo;
 
 @end
 

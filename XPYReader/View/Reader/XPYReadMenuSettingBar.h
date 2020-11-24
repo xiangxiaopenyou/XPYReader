@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 间距大小变化
 - (void)settingBarDidChangeSpacing;
 
+/// 是否允许跟随系统横竖屏
+- (void)settingBarDidChangeAllowLandscape:(BOOL)yesOrNo;
+
 @end
 
 @interface XPYReadMenuSettingBar : UIView

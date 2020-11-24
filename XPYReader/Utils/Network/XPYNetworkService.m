@@ -11,17 +11,12 @@
 #import "XPYUserManager.h"
 
 /// 示例BaseURL
-//#if DEBUG
-static NSString * const kXPYBaseURL = @"http://testapp.zhangdu.com/v1";
-//#else
-//static NSString * const kXPYBaseURL = @"";
-//#endif
+#if DEBUG
+static NSString * const kXPYBaseURL = @"http://testapp.xxpy.com/v1";
+#else
+static NSString * const kXPYBaseURL = @"http://app.xxpy.com/v1";
+#endif
 
-/// 示例参数
-//static NSString * const kXPYChannelId = @"u1000";
-//static NSInteger const kXPYClientType = 2;
-//static NSString * const kXPYDeviceToken = @"1E8698A6-D632-4734-AAC2-97A631A0942D";
-//static NSString * const kXPYVersion = @"3.0.4";
 
 @interface XPYNetworkService ()
 
@@ -60,21 +55,16 @@ static NSString * const kXPYBaseURL = @"http://testapp.zhangdu.com/v1";
 /// @param params 接口传入参数
 - (NSDictionary *)completeParametersWithParams:(NSDictionary *)params {
     NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:params];
-//    [temp setObject:kXPYChannelId forKey:@"channel_id"];
-//    [temp setObject:@(kXPYClientType) forKey:@"client_type"];
-//    [temp setObject:kXPYDeviceToken forKey:@"device_token"];
-//    [temp setObject:kXPYVersion forKey:@"version"];
     // 先判断是否已经登录(根据需求自由发挥，这里传了userId和token)
     if ([XPYUserManager sharedInstance].isLogin) {
         [temp setObject:[XPYUserManager sharedInstance].currentUser.userId forKey:@"user_id"];
         [temp setObject:[XPYUserManager sharedInstance].currentUser.token forKey:@"token"];
     }
-
     return (NSDictionary *)[temp copy];
 }
 
 /// 解析数据
-/// @param responseObject 返回数据
+/// @param responseObject 返回数据，返回数据格式可以自己跟服务器沟通，以下代码都是示例作用
 - (id)resultWithResponseObject:(id)responseObject {
     if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
         // 返回为空或者返回格式不正确时的错误代码可自行设计，暂时设为-1

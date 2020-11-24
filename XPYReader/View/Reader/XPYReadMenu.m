@@ -268,7 +268,9 @@
     }
 }
 - (void)bottomBarDidClickCatalog {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidOpenCatalog)]) {
+        [self.delegate readMenuDidOpenCatalog];
+    }
 }
 - (void)bottomBarDidClickBackground {
     if (!self.pageTypeBar.hidden) {
@@ -341,6 +343,11 @@
     // 开启自动阅读
     if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidOpenAutoRead)]) {
         [self.delegate readMenuDidOpenAutoRead];
+    }
+}
+- (void)settingBarDidChangeAllowLandscape:(BOOL)yesOrNo {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(readMenuDidChangeAllowLandscape:)]) {
+        [self.delegate readMenuDidChangeAllowLandscape:yesOrNo];
     }
 }
 - (void)settingBarDidChangeFontSize {

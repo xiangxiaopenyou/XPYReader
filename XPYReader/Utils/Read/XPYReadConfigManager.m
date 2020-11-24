@@ -17,6 +17,7 @@
 @property (nonatomic, assign) XPYReadPageType pageType;
 @property (nonatomic, assign) XPYAutoReadMode autoReadMode;
 @property (nonatomic, assign) NSInteger autoReadSpeed;
+@property (nonatomic, assign) BOOL allowLandscape;
 
 @end
 
@@ -47,6 +48,8 @@
         self.pageType = XPYReadPageTypeCurl;
         // 自动阅读模式默认关闭
         self.isAutoRead = NO;
+        // 默认不跟随系统横竖屏
+        self.allowLandscape = NO;
         // 默认自动阅读滚屏模式
         self.autoReadMode = XPYAutoReadModeScroll;
         self.autoReadSpeed = XPYDefaultAutoReadSpeed;
@@ -103,6 +106,10 @@
 
 - (void)updateAutoReadMode:(XPYAutoReadMode)mode {
     self.autoReadMode = mode;
+    [self updateConfigs];
+}
+- (void)updateAllowLandscape:(BOOL)yesOrNo {
+    self.allowLandscape = yesOrNo;
     [self updateConfigs];
 }
 

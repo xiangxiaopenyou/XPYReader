@@ -140,7 +140,11 @@
     }
 }
 - (void)orientationChangedAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(settingBarDidChangeAllowLandscape:)]) {
+        self.orientationButton.selected = !self.orientationButton.selected;
+        [self.delegate settingBarDidChangeAllowLandscape:self.orientationButton.selected];
+        [MBProgressHUD xpy_showTips:self.orientationButton.isSelected ? @"阅读器将跟随系统横竖屏" : @"阅读页已经关闭横屏"];
+    }
 }
 - (void)minusFontSizeAction {
     NSInteger currentSize = [XPYReadConfigManager sharedInstance].fontSize;

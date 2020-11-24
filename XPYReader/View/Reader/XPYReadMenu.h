@@ -36,6 +36,9 @@ static CGFloat const kXPYReadMenuAnimationDuration = 0.2;
 /// @param progress 进度
 - (void)readMenuDidChangePageProgress:(NSInteger)progress;
 
+/// 打开书籍目录
+- (void)readMenuDidOpenCatalog;
+
 /// 切换翻页模式
 - (void)readMenuDidChangePageType;
 
@@ -57,6 +60,9 @@ static CGFloat const kXPYReadMenuAnimationDuration = 0.2;
 /// 切换自动阅读模式
 /// @param mode 自动阅读模式
 - (void)readMenuDidChangeAutoReadMode:(XPYAutoReadMode)mode;
+
+/// 切换是否跟随系统横竖屏
+- (void)readMenuDidChangeAllowLandscape:(BOOL)yesOrNo;
 
 @end
 

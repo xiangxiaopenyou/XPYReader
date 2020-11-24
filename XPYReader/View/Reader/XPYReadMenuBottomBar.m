@@ -164,7 +164,9 @@
 }
 
 - (void)catalogAction {
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickCatalog)]) {
+        [self.delegate bottomBarDidClickCatalog];
+    }
 }
 - (void)backgroundAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickBackground)]) {

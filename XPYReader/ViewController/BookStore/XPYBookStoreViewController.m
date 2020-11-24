@@ -18,6 +18,7 @@
 @interface XPYBookStoreViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *booksTableView;
+@property (nonatomic, strong) UILabel *errorLabel;
 
 @property (nonatomic, copy) NSArray <XPYBookModel *> *books;
 
@@ -46,6 +47,10 @@
             [self.booksTableView reloadData];
         });
     } failure:^(NSError *error) {
+        [self.view addSubview:self.errorLabel];
+        [self.errorLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_offset(UIEdgeInsetsMake(150, 50, 150, 50));
+        }];
     }];
 }
 
@@ -84,5 +89,16 @@
     }
     return _booksTableView;
 }
+- (UILabel *)errorLabel {
+    if (!_errorLabel) {
+        _errorLabel = [[UILabel alloc] init];
+        _errorLabel.text = @"服务器到期原因，网络相关内容暂时无法使用了，包括网络书籍相关接口（书架网络书籍列表、书城书籍列表、书籍详情等）、用户相关接口（登录、同步记录等），当前demo中只能看到本地书相关内容，但是代码都是在的，大家可以自行参考设计自己的网络接口";
+        _errorLabel.textColor = [UIColor blackColor];
+        _errorLabel.font = [UIFont boldSystemFontOfSize:15];
+        _errorLabel.numberOfLines = 0;
+    }
+    return _errorLabel;
+}
+
 
 @end

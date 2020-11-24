@@ -19,8 +19,6 @@ WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterIndex, "chapterIndex")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, chapterName, "chapterName")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, content,"content")
 WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, charNum, "charNum")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, needFee, "needFee")
-WCDB_SYNTHESIZE_COLUMN(XPYChapterModel, price, "price")
 
 
 WCDB_INDEX(XPYChapterModel, "_bookId_chapterId_index", bookId)
@@ -36,8 +34,6 @@ WCDB_INDEX(XPYChapterModel, "_bookId_content_index", content)
         @"chapterName": @"cn",
         @"chapterIndex" : @"id",
         @"charNum" : @"wc",
-        @"needFee" : @"fe",
-        @"price" : @"pr"
     };
 }
 

@@ -12,6 +12,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYNetworkService (Book)
 
+/**
+ 举例返回数据格式，data中可以是数组也可以是字典
+ {
+     "errno": 0,
+     "msg": "ok",
+     "data": [
+         {
+            "id": ""
+            "book_id": "",
+            "book_name": "",
+            "pic": "",
+            "author": "",
+            "intro": "",
+            "book_read_utime": ""
+        }
+     ]
+ }
+ **/
+
 /// 书架默认书籍
 - (void)stackBooksRequestSuccess:(XPYSuccessHandler)success failure:(XPYFailureHandler)failure;
 
