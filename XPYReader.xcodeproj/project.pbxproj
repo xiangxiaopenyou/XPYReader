@@ -49,7 +49,12 @@
 		6C8F6B93256C9ED300FA72F4 /* XPYBookCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */; };
 		6C8F6B97256CA0DF00FA72F4 /* XPYBookCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */; };
 		6C8F6B9A256D038A00FA72F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6B99256D038A00FA72F4 /* README.md */; };
-		6C8F6BA6256DFECF00FA72F4 /* page_mode.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */; };
+		6C8F6BA6256DFECF00FA72F4 /* reader_page_mode.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BA5256DFECF00FA72F4 /* reader_page_mode.gif */; };
+		6C8F6BA9256E277900FA72F4 /* reader_auto_read.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BA8256E277900FA72F4 /* reader_auto_read.gif */; };
+		6C8F6BAC256E28FB00FA72F4 /* reader_catalog.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BAB256E28FB00FA72F4 /* reader_catalog.gif */; };
+		6C8F6BAF256E2A5300FA72F4 /* reader_background.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BAE256E2A5200FA72F4 /* reader_background.gif */; };
+		6C8F6BB3256E2C8000FA72F4 /* reader_setting.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BB1256E2C7F00FA72F4 /* reader_setting.gif */; };
+		6C8F6BB4256E2C8000FA72F4 /* reader_landscape.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BB2256E2C8000FA72F4 /* reader_landscape.gif */; };
 		6C91FADC24E4E2DB00D7D2B2 /* XPYReadMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */; };
 		6C91FADF24E4E90600D7D2B2 /* XPYReadMenuTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */; };
 		6C91FAE224E5237A00D7D2B2 /* XPYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */; };
@@ -164,7 +169,12 @@
 		6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogCell.h; sourceTree = "<group>"; };
 		6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookCatalogCell.m; sourceTree = "<group>"; };
 		6C8F6B99256D038A00FA72F4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = page_mode.gif; sourceTree = "<group>"; };
+		6C8F6BA5256DFECF00FA72F4 /* reader_page_mode.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_page_mode.gif; sourceTree = "<group>"; };
+		6C8F6BA8256E277900FA72F4 /* reader_auto_read.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_auto_read.gif; sourceTree = "<group>"; };
+		6C8F6BAB256E28FB00FA72F4 /* reader_catalog.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_catalog.gif; sourceTree = "<group>"; };
+		6C8F6BAE256E2A5200FA72F4 /* reader_background.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_background.gif; sourceTree = "<group>"; };
+		6C8F6BB1256E2C7F00FA72F4 /* reader_setting.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_setting.gif; sourceTree = "<group>"; };
+		6C8F6BB2256E2C8000FA72F4 /* reader_landscape.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = reader_landscape.gif; sourceTree = "<group>"; };
 		6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenu.h; sourceTree = "<group>"; };
 		6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenu.m; sourceTree = "<group>"; };
 		6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuTopBar.h; sourceTree = "<group>"; };
@@ -320,7 +330,12 @@
 		6C33933525635F0300CDB9CA /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */,
+				6C8F6BB2256E2C8000FA72F4 /* reader_landscape.gif */,
+				6C8F6BB1256E2C7F00FA72F4 /* reader_setting.gif */,
+				6C8F6BAE256E2A5200FA72F4 /* reader_background.gif */,
+				6C8F6BAB256E28FB00FA72F4 /* reader_catalog.gif */,
+				6C8F6BA8256E277900FA72F4 /* reader_auto_read.gif */,
+				6C8F6BA5256DFECF00FA72F4 /* reader_page_mode.gif */,
 				6C33935C2563A0FD00CDB9CA /* 从灵气复苏到末法时代.txt */,
 				6C33935D2563A0FD00CDB9CA /* 孤单的飞.txt */,
 				6C33935E2563A0FD00CDB9CA /* 诡异天地.txt */,
@@ -740,10 +755,15 @@
 				6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */,
 				6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */,
 				6C8F6B9A256D038A00FA72F4 /* README.md in Resources */,
+				6C8F6BAC256E28FB00FA72F4 /* reader_catalog.gif in Resources */,
+				6C8F6BAF256E2A5300FA72F4 /* reader_background.gif in Resources */,
+				6C8F6BB3256E2C8000FA72F4 /* reader_setting.gif in Resources */,
+				6C8F6BB4256E2C8000FA72F4 /* reader_landscape.gif in Resources */,
 				6C3393622563A0FE00CDB9CA /* 诡异天地.txt in Resources */,
-				6C8F6BA6256DFECF00FA72F4 /* page_mode.gif in Resources */,
+				6C8F6BA6256DFECF00FA72F4 /* reader_page_mode.gif in Resources */,
 				6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */,
 				6C3393602563A0FE00CDB9CA /* 从灵气复苏到末法时代.txt in Resources */,
+				6C8F6BA9256E277900FA72F4 /* reader_auto_read.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
