@@ -5,7 +5,7 @@ iOS 9.0+
 
 ## 功能描述
 
-### 多种翻页模式灵活切换
+### * 多种翻页模式灵活切换
 
 ![翻页](XPYReader/Resource/page_mode.gif)
 
