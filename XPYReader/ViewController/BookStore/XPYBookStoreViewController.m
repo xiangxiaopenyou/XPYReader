@@ -31,12 +31,23 @@
     
     [self.view addSubview:self.booksTableView];
     [self.booksTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else {
+            make.top.equalTo(self.view.mas_top);
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
         make.leading.trailing.equalTo(self.view);
     }];
     
-    [self booksListRequest];
+    // 服务器到期暂时注释网络接口请求
+    //[self booksListRequest];
+    
+    [self.view addSubview:self.errorLabel];
+    [self.errorLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_offset(UIEdgeInsetsMake(150, 50, 150, 50));
+    }];
 }
 
 #pragma mark - Network
@@ -47,10 +58,6 @@
             [self.booksTableView reloadData];
         });
     } failure:^(NSError *error) {
-        [self.view addSubview:self.errorLabel];
-        [self.errorLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.mas_offset(UIEdgeInsetsMake(150, 50, 150, 50));
-        }];
     }];
 }
 
@@ -92,7 +99,7 @@
 - (UILabel *)errorLabel {
     if (!_errorLabel) {
         _errorLabel = [[UILabel alloc] init];
-        _errorLabel.text = @"服务器到期原因，网络相关内容暂时无法使用了，包括网络书籍相关接口（书架网络书籍列表、书城书籍列表、书籍详情等）、用户相关接口（登录、同步记录等），当前demo中只能看到本地书相关内容，但是代码都是在的，大家可以自行参考设计自己的网络接口";
+        _errorLabel.text = @"    服务器到期原因，网络相关内容暂时无法使用了，包括网络书籍相关接口（书架网络书籍列表、书城书籍列表、书籍详情等）、用户相关接口（登录、同步记录等），当前demo中只能看到本地书相关内容，但是网络相关代码都是在的，大家可以自行参考设计自己的网络接口";
         _errorLabel.textColor = [UIColor blackColor];
         _errorLabel.font = [UIFont boldSystemFontOfSize:15];
         _errorLabel.numberOfLines = 0;

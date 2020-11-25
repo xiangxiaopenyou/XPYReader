@@ -48,6 +48,8 @@
 		6C7BA8DA24D8FAD40054B971 /* XPYNetworkService+Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */; };
 		6C8F6B93256C9ED300FA72F4 /* XPYBookCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */; };
 		6C8F6B97256CA0DF00FA72F4 /* XPYBookCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */; };
+		6C8F6B9A256D038A00FA72F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6B99256D038A00FA72F4 /* README.md */; };
+		6C8F6BA6256DFECF00FA72F4 /* page_mode.gif in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */; };
 		6C91FADC24E4E2DB00D7D2B2 /* XPYReadMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */; };
 		6C91FADF24E4E90600D7D2B2 /* XPYReadMenuTopBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */; };
 		6C91FAE224E5237A00D7D2B2 /* XPYBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */; };
@@ -161,6 +163,8 @@
 		6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookCatalogViewController.m; sourceTree = "<group>"; };
 		6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogCell.h; sourceTree = "<group>"; };
 		6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookCatalogCell.m; sourceTree = "<group>"; };
+		6C8F6B99256D038A00FA72F4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = page_mode.gif; sourceTree = "<group>"; };
 		6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenu.h; sourceTree = "<group>"; };
 		6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenu.m; sourceTree = "<group>"; };
 		6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuTopBar.h; sourceTree = "<group>"; };
@@ -261,30 +265,9 @@
 		6C03F0DF24DB9EB50070328E /* Reader */ = {
 			isa = PBXGroup;
 			children = (
-				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
-				6C03F0E124DB9F2A0070328E /* XPYReadView.m */,
-				6CAEFD752505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.h */,
-				6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */,
-				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
-				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
-				6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */,
-				6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */,
-				6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */,
-				6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */,
-				6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */,
-				6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */,
-				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
-				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
-				6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */,
-				6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */,
-				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
-				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
-				6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */,
-				6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */,
-				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
-				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
-				6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */,
-				6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */,
+				6C8F6B9D256DE7D500FA72F4 /* Read */,
+				6C8F6B9C256DE7AF00FA72F4 /* Menu */,
+				6C8F6B9E256DE7E700FA72F4 /* Catalog */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -337,6 +320,7 @@
 		6C33933525635F0300CDB9CA /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				6C8F6BA5256DFECF00FA72F4 /* page_mode.gif */,
 				6C33935C2563A0FD00CDB9CA /* 从灵气复苏到末法时代.txt */,
 				6C33935D2563A0FD00CDB9CA /* 孤单的飞.txt */,
 				6C33935E2563A0FD00CDB9CA /* 诡异天地.txt */,
@@ -445,6 +429,51 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
+		6C8F6B9C256DE7AF00FA72F4 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */,
+				6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */,
+				6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */,
+				6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */,
+				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
+				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
+				6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */,
+				6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */,
+				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
+				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
+				6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */,
+				6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */,
+				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
+				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		6C8F6B9D256DE7D500FA72F4 /* Read */ = {
+			isa = PBXGroup;
+			children = (
+				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
+				6C03F0E124DB9F2A0070328E /* XPYReadView.m */,
+				6CAEFD752505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.h */,
+				6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */,
+				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
+				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
+				6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */,
+				6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */,
+			);
+			path = Read;
+			sourceTree = "<group>";
+		};
+		6C8F6B9E256DE7E700FA72F4 /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */,
+				6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
 		6C91FAE324E630D700D7D2B2 /* Mine */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +545,7 @@
 		6CE9250A24D7EF4A000AA12F = {
 			isa = PBXGroup;
 			children = (
+				6C8F6B99256D038A00FA72F4 /* README.md */,
 				6CE9251524D7EF4A000AA12F /* XPYReader */,
 				6CE9251424D7EF4A000AA12F /* Products */,
 				BE952BC9EECA4B3C8DB7E38D /* Pods */,
@@ -709,7 +739,9 @@
 				6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */,
 				6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */,
 				6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */,
+				6C8F6B9A256D038A00FA72F4 /* README.md in Resources */,
 				6C3393622563A0FE00CDB9CA /* 诡异天地.txt in Resources */,
+				6C8F6BA6256DFECF00FA72F4 /* page_mode.gif in Resources */,
 				6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */,
 				6C3393602563A0FE00CDB9CA /* 从灵气复苏到末法时代.txt in Resources */,
 			);
@@ -874,7 +906,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -927,7 +959,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -944,7 +976,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -964,7 +996,7 @@
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
 				INFOPLIST_FILE = XPYReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

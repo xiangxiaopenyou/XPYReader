@@ -101,6 +101,12 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (void)configureUI {
     self.view.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
     
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
     [self.view addSubview:self.tableView];
     
     [self.view addSubview:self.chapterNameLabel];
@@ -271,7 +277,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 
 #pragma mark - Actions
 - (void)scrollAutoRead:(CADisplayLink *)timer {
-    CGFloat speed = 15.0 / 8.0 + 0.35;
+    CGFloat speed = [XPYReadConfigManager sharedInstance].autoReadSpeed / 8.0 + 0.35;
     [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + speed)];
     // 更新阅读记录
     [self updateReadRecord];

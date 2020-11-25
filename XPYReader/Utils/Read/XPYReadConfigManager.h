@@ -65,6 +65,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param mode 自动阅读模式
 - (void)updateAutoReadMode:(XPYAutoReadMode)mode;
 
+/// 更新自动阅读速度
+/// @param speed 速度
+- (void)updateAutoReadSpeed:(NSInteger)speed;
+
 /// 更新是否跟随系统横竖屏
 /// @param yesOrNo 是否允许
 - (void)updateAllowLandscape:(BOOL)yesOrNo;

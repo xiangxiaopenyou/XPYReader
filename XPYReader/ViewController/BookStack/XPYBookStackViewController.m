@@ -77,8 +77,13 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
-        make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        if (@available(iOS 11.0, *)) {
+            make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop);
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom);
+        } else {
+            make.top.equalTo(self.view.mas_top);
+            make.bottom.equalTo(self.view.mas_bottom);
+        }
         make.leading.trailing.equalTo(self.view);
     }];
     

@@ -338,6 +338,15 @@
     [[XPYReadConfigManager sharedInstance] updateAutoReadMode:mode];
     [self createReader];
 }
+- (void)readMenuDidChangeAutoReadSpeed:(NSInteger)speed {
+    [[XPYReadConfigManager sharedInstance] updateAutoReadSpeed:speed];
+    // 继续自动阅读
+    if ([XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+        [self.scrollReadController updateAutoReadStatus:YES];
+    } else {
+        [self.coverReadController updateAutoReadStatus:YES];
+    }
+}
 - (void)readMenuDidChangeAllowLandscape:(BOOL)yesOrNo {
     if (!yesOrNo) {
         if ([UIApplication sharedApplication].statusBarOrientation != UIInterfaceOrientationPortrait) {

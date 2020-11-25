@@ -108,6 +108,14 @@
     self.autoReadMode = mode;
     [self updateConfigs];
 }
+
+- (void)updateAutoReadSpeed:(NSInteger)speed {
+    if (self.autoReadSpeed != speed) {
+        self.autoReadSpeed = speed;
+        [self updateConfigs];
+    }
+}
+
 - (void)updateAllowLandscape:(BOOL)yesOrNo {
     self.allowLandscape = yesOrNo;
     [self updateConfigs];
