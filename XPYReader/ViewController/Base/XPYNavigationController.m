@@ -21,6 +21,8 @@
     
     // 设置NavigationController代理，实现自定义转场动画
     self.delegate = [XPYTransitionManager shareManager];
+    
+    self.navigationBar.tintColor = XPYColorFromHex(0x333333);
 }
 
 /**

@@ -266,7 +266,7 @@
 - (void)updateReadRecord {
     self.bookModel.chapter = self.currentChapterModel;
     self.bookModel.page = self.currentPageModel.pageIndex;
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    [XPYReadRecordManager updateReadRecordWithModel:self.bookModel];
     
     [self refreshInformationViews];
 }

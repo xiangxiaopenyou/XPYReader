@@ -43,6 +43,11 @@
     [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperty:XPYBookModel.chapterCount withValue:@(count) where:XPYBookModel.bookId.is(bookId)];
 }
 
++ (void)updateReadRecordWithModel:(XPYBookModel *)bookModel {
+    bookModel.openTime = [NSDate date].timeIntervalSince1970;
+    [[XPYDatabaseManager sharedInstance].database updateRowsInTable:XPYReadRecordTable onProperties:{XPYBookModel.chapter, XPYBookModel.page, XPYBookModel.openTime} withObject:bookModel where:XPYBookModel.bookId.is(bookModel.bookId)];
+}
+
 + (NSArray *)allBooksInStack {
     return [[XPYDatabaseManager sharedInstance].database getObjectsOfClass:[XPYBookModel class] fromTable:XPYReadRecordTable where:XPYBookModel.isInStack.is(YES) orderBy:XPYBookModel.openTime.order(WCTOrderedDescending)];
 }

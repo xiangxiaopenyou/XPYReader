@@ -262,7 +262,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     }
     self.bookModel.chapter = self.chapters[indexPath.section];
     self.bookModel.page = indexPath.row;
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    [XPYReadRecordManager updateReadRecordWithModel:self.bookModel];
     
     // 更新信息视图
     [self refreshInformationViews];

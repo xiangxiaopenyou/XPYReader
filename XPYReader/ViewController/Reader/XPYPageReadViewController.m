@@ -232,7 +232,7 @@
     XPYReadViewController *currentReadController = self.viewControllers.firstObject;
     self.bookModel.chapter = currentReadController.chapterModel;
     self.bookModel.page = currentReadController.pageModel.pageIndex;
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    [XPYReadRecordManager updateReadRecordWithModel:self.bookModel];
     
     // 预加载其他章节
     if (![oldChapterId isEqualToString:self.bookModel.chapter.chapterId]) {

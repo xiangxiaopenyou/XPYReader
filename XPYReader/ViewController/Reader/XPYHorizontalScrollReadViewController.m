@@ -70,19 +70,17 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
     }
     
     [self configureUI];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    
-    // 设置页面到阅读记录位置
-    [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.view.bounds) * self.bookModel.page, 0)];
-    // 预加载
-    [self preloadChapters];
     
     // 点击事件（点击翻页）
     self.scrollTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self.view addGestureRecognizer:self.scrollTap];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // 预加载
+    [self preloadChapters];
 }
 
 #pragma mark - UI
@@ -94,6 +92,12 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     [self.view addSubview:self.collectionView];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+    
+    // 设置页面到阅读记录位置
+    [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.view.bounds) * self.bookModel.page, 0)];
 }
 
 #pragma mark - Private methods
@@ -198,7 +202,7 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 }
 - (void)updateReadRecord {
     
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.bookModel];
+    [XPYReadRecordManager updateReadRecordWithModel:self.bookModel];
     
     XPYChapterPageModel *pageModel = self.bookModel.chapter.pageModels[self.bookModel.page];
     if (pageModel.pageIndex == 0 || pageModel.pageIndex == (self.bookModel.chapter.pageModels.count - 1)) {

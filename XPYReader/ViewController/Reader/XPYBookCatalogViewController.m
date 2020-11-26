@@ -30,6 +30,8 @@ static NSString * const kXPYBookCatalogCellIdentifierKey = @"XPYBookCatalogCellI
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.title = @"目录";
+    
     [self.view addSubview:self.catalogTableView];
     [self.catalogTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);

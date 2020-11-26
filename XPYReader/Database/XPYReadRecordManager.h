@@ -42,6 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param count 数量
 + (void)updateChapterCountWithBookId:(NSString *)bookId count:(NSInteger)count;
 
+/// 更新阅读记录
+/// @param bookModel 书籍模型
++ (void)updateReadRecordWithModel:(XPYBookModel *)bookModel;
+
 /// 获取所有在书架上的书籍
 + (NSArray *)allBooksInStack;
 

@@ -246,7 +246,7 @@
     self.book.page = 0;
     
     // 更新阅读记录
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+    [XPYReadRecordManager updateReadRecordWithModel:self.book];
     [self createReader];
 }
 
@@ -270,7 +270,7 @@
     }
     self.book.page = progress - 1;
     // 更新记录
-    [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+    [XPYReadRecordManager updateReadRecordWithModel:self.book];
     [self createReader];
 }
 - (void)readMenuDidChangeChapter:(BOOL)isNext {
@@ -285,7 +285,7 @@
             self.book.chapter = chapter;
             self.book.page = 0;
             // 更新记录
-            [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+            [XPYReadRecordManager updateReadRecordWithModel:self.book];
             // 刷新阅读器
             [self createReader];
         } failure:^(NSString * _Nonnull tip) {
@@ -296,7 +296,7 @@
         self.book.chapter = changedChapter;
         self.book.page = 0;
         // 更新记录
-        [XPYReadRecordManager insertOrReplaceRecordWithModel:self.book];
+        [XPYReadRecordManager updateReadRecordWithModel:self.book];
         // 刷新阅读器
         [self createReader];
     }
