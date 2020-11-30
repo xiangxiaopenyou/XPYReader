@@ -133,7 +133,7 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)autoReadAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(settingBarClickAutoRead)]) {
         [self.delegate settingBarClickAutoRead];

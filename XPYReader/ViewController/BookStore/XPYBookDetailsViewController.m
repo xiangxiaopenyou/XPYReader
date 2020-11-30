@@ -111,7 +111,7 @@
     }];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 /// 开始阅读
 - (void)readAction {
     [XPYReadHelper readWithBook:self.bookModel];

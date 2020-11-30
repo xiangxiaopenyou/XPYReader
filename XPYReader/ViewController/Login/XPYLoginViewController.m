@@ -53,7 +53,7 @@
     }];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)loginAction {
     [MBProgressHUD xpy_showHUDWithTips:@"正在登录..."];
     [[XPYNetworkService sharedService] loginWithPhone:self.usernameTextField.text password:XPYMD5StringWithString(self.passwordTextField.text) success:^(id result) {

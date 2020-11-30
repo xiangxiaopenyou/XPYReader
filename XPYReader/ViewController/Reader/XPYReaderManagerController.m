@@ -150,7 +150,7 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
     // 自动阅读和上下滚动翻页模式弹出菜单左右点击区域为全屏

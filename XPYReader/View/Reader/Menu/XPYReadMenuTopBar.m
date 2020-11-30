@@ -45,7 +45,7 @@
     }];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)backAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(topBarDidClickBack)]) {
         [self.delegate topBarDidClickBack];

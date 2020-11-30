@@ -133,7 +133,7 @@
     self.selectedButton = tempButton;
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)lightChanged:(UISlider *)slider {
     [UIScreen mainScreen].brightness = slider.value;
 }

@@ -32,7 +32,7 @@ target 'XPYReader' do
   # AOP
   pod 'Aspects'
   
-  # Kit
+  # XPYKit
   pod 'XPYKit', :git => 'https://github.com/xiangxiaopenyou/XPYKit.git'
   
 end

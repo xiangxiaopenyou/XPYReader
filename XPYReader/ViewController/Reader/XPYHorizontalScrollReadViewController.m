@@ -254,7 +254,7 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
     [self updateReadRecord];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)tap:(UITapGestureRecognizer *)tap {
     // 点击时走代理方法，隐藏菜单工具栏
     if (self.delegate && [self.delegate respondsToSelector:@selector(horizontalScrollReadViewControllerWillBeginScroll)]) {

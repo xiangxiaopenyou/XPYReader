@@ -275,7 +275,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     self.autoReadTimer.paused = NO;
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)scrollAutoRead:(CADisplayLink *)timer {
     CGFloat speed = [XPYReadConfigManager sharedInstance].autoReadSpeed / 8.0 + 0.35;
     [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + speed)];

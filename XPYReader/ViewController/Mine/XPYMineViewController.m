@@ -66,7 +66,7 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)avatarTap:(UITapGestureRecognizer *)tap {
     if ([XPYUserManager sharedInstance].isLogin) {
         

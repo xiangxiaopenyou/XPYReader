@@ -94,7 +94,7 @@
     }
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)minusSpeedAction {
     NSInteger currentSpeed = [XPYReadConfigManager sharedInstance].autoReadSpeed;
     if (currentSpeed <= XPYMinAutoReadSpeed) {

@@ -137,7 +137,7 @@
     self.lastChapterButton.enabled = book.chapter.chapterIndex != 1;
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)lastChapterAction {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bottomBarDidClickLastChapter)]) {
         [self.delegate bottomBarDidClickLastChapter];

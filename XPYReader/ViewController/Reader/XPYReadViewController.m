@@ -104,7 +104,7 @@
     self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.pageModel.pageIndex + 1), @(self.chapterModel.pageModels.count)];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)tap:(UITapGestureRecognizer *)tap {
     CGPoint touchPoint = [tap locationInView:self.view];
     // 限制点击翻页区域为屏幕左右，宽度为屏幕四分之一

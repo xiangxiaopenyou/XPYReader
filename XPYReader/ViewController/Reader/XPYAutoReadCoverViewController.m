@@ -278,7 +278,7 @@
     self.timer.paused = NO;
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)autoRead:(CADisplayLink *)timer {
     CGFloat speed = [XPYReadConfigManager sharedInstance].autoReadSpeed / 8.0 + 0.35;
     //覆盖模式覆盖视图高度变化

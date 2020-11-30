@@ -76,7 +76,7 @@
     }];
 }
 
-#pragma mark - Actions
+#pragma mark - Event response
 - (void)pageTypeSelectAction:(UIButton *)sender {
     if (sender.isSelected) {
         return;
