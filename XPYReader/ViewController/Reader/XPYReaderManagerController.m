@@ -26,6 +26,8 @@
 #import "XPYChapterHelper.h"
 #import "XPYReadRecordManager.h"
 
+#import "UIGestureRecognizer+XPYTag.h"
+
 @interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate, XPYBookCatalogDelegate>
 
 /// 仿真、无效果翻页控制器
@@ -42,6 +44,12 @@
 
 /// 菜单工具栏管理
 @property (nonatomic, strong) XPYReadMenu *readMenu;
+
+/// 菜单工具栏显示/隐藏单机手势
+@property (nonatomic, strong) UITapGestureRecognizer *tap;
+
+///// 长按选段手势（上下翻页和自动阅读暂不支持）
+//@property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -75,10 +83,8 @@
     self.readMenu = [[XPYReadMenu alloc] initWithView:self.view];
     self.readMenu.delegate = self;
     
-    // 点击事件（弹出工具栏）
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    tap.delegate = self;
-    [self.view addGestureRecognizer:tap];
+    // 点击手势（弹出工具栏）
+    [self.view addGestureRecognizer:self.tap];
     
     // 屏幕旋转通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -196,6 +202,9 @@
             [self.readMenu showWithBook:self.book];
         }
     }
+}
+- (void)longPress:(UILongPressGestureRecognizer *)press {
+    
 }
 
 #pragma mark - Notifications
@@ -358,8 +367,11 @@
 }
 
 #pragma mark - Gesture recognizer delegete
-// 防止手势覆盖失效
+// 手势覆盖问题处理
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if (otherGestureRecognizer.tag == XPYReadViewLongPressTag || otherGestureRecognizer.tag == XPYReadViewSingleTapTag) {
+        return NO;
+    }
     return YES;
 }
 // 根据点击位置判断是否有效点击
@@ -420,6 +432,14 @@
         [self.view sendSubviewToBack:_coverReadController.view];
     }
     return _coverReadController;
+}
+
+- (UITapGestureRecognizer *)tap {
+    if (!_tap) {
+        _tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        _tap.delegate = self;
+    }
+    return _tap;
 }
 
 #pragma mark - Override methods

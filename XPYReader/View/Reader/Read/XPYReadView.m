@@ -7,11 +7,29 @@
 //
 
 #import "XPYReadView.h"
+
+#import "XPYChapterModel.h"
+#import "XPYChapterPageModel.h"
+#import "XPYParagraphModel.h"
+
+#import "XPYReadParser.h"
+
+#import "UIGestureRecognizer+XPYTag.h"
+
 #import <CoreText/CoreText.h>
 
 @interface XPYReadView ()
 
-@property (nonatomic, copy) NSAttributedString *contentString;
+/// 长按选择手势
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
+/// 单击取消手势
+@property (nonatomic, strong) UITapGestureRecognizer *singleTap;
+
+@property (nonatomic, strong) XPYChapterModel *chapterModel;
+@property (nonatomic, strong) XPYChapterPageModel *pageModel;
+
+/// 选中行数组
+@property (nonatomic, copy) NSArray *selectedRects;
 
 @end
 
@@ -22,36 +40,119 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [XPYReadConfigManager sharedInstance].currentBackgroundColor;
+        
+        [self addGestureRecognizer:self.longPress];
+        [self addGestureRecognizer:self.singleTap];
     }
     return self;
 }
 
-#pragma mark - Instance methods
-- (void)setupContent:(NSAttributedString *)content {
-    self.contentString = [content copy];
-    [self setNeedsDisplay];
-}
-
 #pragma mark - Draw
 - (void)drawRect:(CGRect)rect {
-    CTFramesetterRef frameSetterRef = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.contentString);
     CGContextRef contextRef = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(contextRef, CGAffineTransformIdentity);
     CGContextTranslateCTM(contextRef, 0, CGRectGetHeight(self.bounds));
     CGContextScaleCTM(contextRef, 1.0, - 1.0);
-    CGPathRef pathRef = CGPathCreateWithRect(self.bounds, NULL);
-    CTFrameRef frameRef = CTFramesetterCreateFrame(frameSetterRef, CFRangeMake(0, 0), pathRef, NULL);
+    CTFrameRef frameRef = [XPYReadParser frameRefWithAttributedString:self.pageModel.pageContent rect:self.bounds];
+    // 处理选中行
+    if (self.selectedRects.count > 0) {
+        for (id value in self.selectedRects) {
+            // 画出选中行矩形
+            CGRect rect = [value CGRectValue];
+            CGMutablePathRef mutablePath = CGPathCreateMutable();
+            // 设置选中颜色（暂时设置为字体颜色加0.5透明度）
+            [[[XPYReadConfigManager sharedInstance].currentTextColor colorWithAlphaComponent:0.5] setFill];
+            CGPathAddRect(mutablePath, NULL, rect);
+            CGContextAddPath(contextRef, mutablePath);
+            CGContextFillPath(contextRef);
+            CGPathRelease(mutablePath);
+        }
+    }
     CTFrameDraw(frameRef, contextRef);
-    CGPathRelease(pathRef);
-    CFRelease(frameSetterRef);
     CFRelease(frameRef);
 }
 
-- (NSAttributedString *)contentString {
-    if (!_contentString) {
-        _contentString = [[NSAttributedString alloc] initWithString:@""];
+#pragma mark - Instance methods
+- (void)setupPageModel:(XPYChapterPageModel *)pageModel chapter:(XPYChapterModel *)chapterModel {
+    self.pageModel = pageModel;
+    self.chapterModel = chapterModel;
+    [self setNeedsDisplay];
+}
+
+#pragma mark - Response events
+- (void)longPressAction:(UILongPressGestureRecognizer *)press {
+    // 触摸点在当前视图的位置
+    CGPoint point = [press locationInView:self];
+    // 触摸点在Window视图的位置
+    // CGPoint pointInWindow = [press locationInView:XPYKeyWindow];
+    switch (press.state) {
+        case UIGestureRecognizerStateBegan: {
+            
+        }
+            break;
+        case UIGestureRecognizerStateChanged: {
+            
+        }
+            break;
+        case UIGestureRecognizerStateEnded: {
+            // 获取当前页面CTFrame
+            CTFrameRef frameRef = [XPYReadParser frameRefWithAttributedString:self.pageModel.pageContent rect:self.bounds];
+            // 获取触摸点所在行
+            NSRange lineRange = [XPYReadParser touchLineRangeWithPoint:point frameRef:frameRef];
+            if (lineRange.location == NSNotFound) {
+                return;
+            }
+            // 获取页面段落
+            NSArray <XPYParagraphModel *> *paragraphs = [XPYReadParser paragraphsWithPageModel:self.pageModel chapterName:self.chapterModel.chapterName];
+            // 逆序遍历段落
+            [paragraphs enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(XPYParagraphModel *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (obj.range.location <= lineRange.location && (obj.range.location + obj.range.length) >= (lineRange.location + lineRange.length)) {
+                    // 找到触摸点所在段
+                    // 获取选中段落范围
+                    self.selectedRects = [XPYReadParser rectsWithRange:obj.range content:self.pageModel.pageContent.string frameRef:frameRef];
+                    if (self.selectedRects.count > 0) {
+                        // 单击取消手势有效
+                        self.singleTap.enabled = YES;
+                    }
+                    // 重绘
+                    [self setNeedsDisplay];
+                    *stop = YES;
+                }
+            }];
+            
+        }
+            break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed: {
+        }
+            break;
+        default:
+            break;
     }
-    return _contentString;
+}
+
+- (void)singleTap:(UITapGestureRecognizer *)tap {
+    // 单击取消当前选中内容
+    self.selectedRects = nil;
+    // 重绘
+    [self setNeedsDisplay];
+}
+
+#pragma mark - Getters
+- (UILongPressGestureRecognizer *)longPress {
+    if (!_longPress) {
+        _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)];
+        _longPress.tag = XPYReadViewLongPressTag;
+    }
+    return _longPress;
+}
+- (UITapGestureRecognizer *)singleTap {
+    if (!_singleTap) {
+        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+        _singleTap.tag = XPYReadViewSingleTapTag;
+        _singleTap.enabled = NO;
+    }
+    return _singleTap;
 }
 
 @end

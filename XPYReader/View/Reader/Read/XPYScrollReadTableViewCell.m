@@ -34,7 +34,7 @@
 }
 
 #pragma mark - Instance methods
-- (void)setupChapterPageModel:(XPYChapterPageModel *)pageModel {
+- (void)setupChapterPageModel:(XPYChapterPageModel *)pageModel chapterModel:(XPYChapterModel *)chapterModel {
     if (!pageModel) {
         return;
     }
@@ -43,7 +43,7 @@
         // 头部留间距
         make.top.equalTo(self.contentView.mas_top).mas_offset(pageModel.extraHeaderHeight);
     }];
-    [self.scrollReadView setupContent:pageModel.pageContent];
+    [self.scrollReadView setupPageModel:pageModel chapter:chapterModel];
 }
 
 #pragma mark - Getters

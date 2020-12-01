@@ -54,7 +54,7 @@
 
 #pragma mark - Instance methods
 - (void)setupChapter:(XPYChapterModel *)chapter pageModel:(XPYChapterPageModel *)pageModel {
-    [self.readView setupContent:pageModel.pageContent];
+    [self.readView setupPageModel:pageModel chapter:chapter];
     self.chapterNameLabel.text = chapter.chapterName;
     self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(pageModel.pageIndex + 1), @(chapter.pageModels.count)];
 }

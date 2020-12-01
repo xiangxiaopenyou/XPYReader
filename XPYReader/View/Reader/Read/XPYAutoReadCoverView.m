@@ -44,7 +44,7 @@
     }
     self.chapterModel = [chapter copy];
     self.pageModel = [pageModel copy];
-    [self.coverReadView setupContent:self.pageModel.pageContent];
+    [self.coverReadView setupPageModel:self.pageModel chapter:chapter];
 }
 
 #pragma mark - UI

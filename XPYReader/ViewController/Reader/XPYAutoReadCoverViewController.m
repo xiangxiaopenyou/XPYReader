@@ -84,7 +84,7 @@
     self.currentPageModel = self.currentChapterModel.pageModels[self.bookModel.page];
     
     // 设置当前阅读视图内容
-    [self.readView setupContent:self.currentPageModel.pageContent];
+    [self.readView setupPageModel:self.currentPageModel chapter:self.currentChapterModel];
     
     if (self.currentChapterModel.chapterIndex != self.bookModel.chapterCount)  {
         // 当前章节不是最后一章，先预加载下一章
@@ -226,7 +226,7 @@
         // 更新阅读记录
         [self updateReadRecord];
         // 更新视图
-        [self.readView setupContent:self.currentPageModel.pageContent];
+        [self.readView setupPageModel:self.currentPageModel chapter:self.currentChapterModel];
         // 更新覆盖视图
         [self updateCoverViewContent];
     } else {
@@ -234,7 +234,7 @@
         self.currentPageModel = self.currentChapterModel.pageModels[self.currentPageModel.pageIndex + 1];
         // 更新阅读记录
         [self updateReadRecord];
-        [self.readView setupContent:self.currentPageModel.pageContent];
+        [self.readView setupPageModel:self.currentPageModel chapter:self.currentChapterModel];
         [self updateCoverViewContent];
     }
 }

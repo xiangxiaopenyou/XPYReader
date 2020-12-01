@@ -24,17 +24,17 @@
 
 - (void)animateTransition:(nonnull id<UIViewControllerContextTransitioning>)transitionContext {
     // 获取目标视图
-    UIViewController *fromController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+//    UIViewController *fromController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *tempFromView = nil;
-    UIView *tempToView = nil;
-    if ([transitionContext respondsToSelector:@selector(viewForKey:)]) {    //iOS8
-        tempToView = [transitionContext viewForKey:UITransitionContextToViewKey];
-        tempFromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
-    } else {
-        tempToView = toController.view;
-        tempFromView = fromController.view;
-    }
+//    UIView *tempFromView = nil;
+    UIView *tempToView = toController.view;
+//    if ([transitionContext respondsToSelector:@selector(viewForKey:)]) {    //iOS8
+//        tempToView = [transitionContext viewForKey:UITransitionContextToViewKey];
+//        tempFromView = [transitionContext viewForKey:UITransitionContextFromViewKey];
+//    } else {
+//    tempToView = toController.view;
+//    tempFromView = fromController.view;
+//    }
     // 截图(afterScreenUpdates:是否所有效果应用在视图以后再截图)
     UIView *fromView = [self.coverView snapshotViewAfterScreenUpdates:NO];
     UIView *toView = [tempToView snapshotViewAfterScreenUpdates:YES];

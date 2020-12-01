@@ -10,8 +10,10 @@
 
 #import "XPYChapterPageModel.h"
 #import "XPYChapterModel.h"
+#import "XPYParagraphModel.h"
 
 #import <CoreText/CoreText.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 /// 本地书分章节正则表达
 static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10})(第[0-9零一二两三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟\\s]{1,10}[章节回集卷])(.*)";
@@ -40,6 +42,18 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     paragraphStyle.alignment = NSTextAlignmentJustified;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     return attributes;
+}
+
++ (CTFrameRef)frameRefWithAttributedString:(NSAttributedString *)attributedString rect:(CGRect)rect {
+    if (XPYIsEmptyObject(attributedString)) {
+        return NULL;
+    }
+    CTFramesetterRef frameSetterRef = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)attributedString);
+    CGPathRef pathRef = CGPathCreateWithRect(rect, NULL);
+    CTFrameRef frameRef = CTFramesetterCreateFrame(frameSetterRef, CFRangeMake(0, 0), pathRef, NULL);
+    CFRelease(frameSetterRef);
+    CGPathRelease(pathRef);
+    return frameRef;
 }
 
 + (NSAttributedString *)chapterAttributedContentWithChapterContent:(NSString *)content chapterName:(NSString *)chapterName {
@@ -104,6 +118,152 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
         };
     }
     return pageModels;
+}
+
++ (NSArray<XPYParagraphModel *> *)paragraphsWithPageModel:(XPYChapterPageModel *)pageModel chapterName:(NSString *)chapterName {
+    if (XPYIsEmptyObject(pageModel.pageContent)) {
+        return nil;
+    }
+    // 换行符分段
+    NSArray *paragraphs = [pageModel.pageContent.string componentsSeparatedByString:@"\n"];
+    NSMutableArray <XPYParagraphModel *> *results = [[NSMutableArray alloc] init];
+    // 文字位置
+    NSInteger location = 0;
+    for (NSInteger i = 0; i < paragraphs.count; i++) {
+        @autoreleasepool {
+            NSString *temp = paragraphs[i];
+            if (XPYIsEmptyObject(temp)) {
+                // 空段落跳过，增加一个换行符位置
+                location += temp.length + 1;
+                continue;
+            }
+            XPYParagraphModel *paragraph = [[XPYParagraphModel alloc] init];
+            paragraph.index = i;
+            paragraph.content = temp;
+            // 长度需要加上换行符
+            paragraph.range = NSMakeRange(location, temp.length + 1);
+            [results addObject:paragraph];
+            // 需要增加一个换行符的位置
+            location += paragraph.content.length + 1;
+        }
+    }
+    return results;
+}
+
++ (NSRange)touchLineRangeWithPoint:(CGPoint)point frameRef:(CTFrameRef)frameRef {
+    NSRange range = NSMakeRange(NSNotFound, 0);
+    if (!frameRef) {
+        return range;
+    }
+    // 先获取触摸点所在行
+    CTLineRef lineRef = [self touchLineWithPoint:point frameRef:frameRef];
+    if (lineRef == NULL) {
+        return range;
+    }
+    // 获取行范围
+    CFRange rangeCf = CTLineGetStringRange(lineRef);
+    range = NSMakeRange(rangeCf.location == kCFNotFound ? NSNotFound : rangeCf.location, rangeCf.length);
+    return range;
+}
+
++ (CTLineRef)touchLineWithPoint:(CGPoint)point frameRef:(CTFrameRef)frameRef {
+    CTLineRef line = NULL;
+    if (!frameRef) {
+        return line;
+    }
+    CGPathRef pathRef = CTFrameGetPath(frameRef);
+    // 页面Rect
+    CGRect bounds = CGPathGetBoundingBox(pathRef);
+    CFArrayRef lines = CTFrameGetLines(frameRef);
+    NSInteger lineCount = CFArrayGetCount(lines);
+    if (lineCount == 0) {
+        return line;
+    }
+    // 保存每行初始位置
+    CGPoint origins[lineCount];
+    CTFrameGetLineOrigins(frameRef, CFRangeMake(0, 0), origins);
+    // 遍历行
+    for (int i = 0; i < lineCount; i++) {
+        CGPoint origin = origins[i];
+        CTLineRef singleLine = CFArrayGetValueAtIndex(lines, i);
+        CGFloat lineAscent = 0, lineDescnet = 0, lineLeading = 0;
+        CTLineGetTypographicBounds(singleLine, &lineAscent, &lineDescnet, &lineLeading);
+        // 行宽和高
+        CGFloat lineWith = CGRectGetWidth(bounds);
+        CGFloat lineHeight = lineAscent + lineDescnet + lineLeading;
+        CGRect lineRect = CGRectMake(origin.x, CGRectGetHeight(bounds) - origin.y - lineAscent, lineWith, lineHeight);
+        // 扩展判断区域
+        lineRect = CGRectInset(lineRect, -10, -([XPYReadConfigManager sharedInstance].spacingLevel));
+        if (CGRectContainsPoint(lineRect, point)) {
+            // 找到行
+            line = singleLine;
+            break;
+        }
+    }
+    return line;
+}
+
++ (NSArray *)rectsWithRange:(NSRange)range content:(NSString *)content frameRef:(CTFrameRef)frameRef {
+    if (!frameRef || XPYIsEmptyObject(content) || range.location == NSNotFound) {
+        return nil;
+    }
+    // 总行数
+    CFArrayRef lines = CTFrameGetLines(frameRef);
+    NSInteger count = CFArrayGetCount(lines);
+    if (count == 0) {
+        return nil;
+    }
+    CGPoint origins[count];
+    CTFrameGetLineOrigins(frameRef, CFRangeMake(0, 0), origins);
+    NSMutableArray *rects = [[NSMutableArray alloc] init];
+    // 遍历行
+    for (int i = 0; i < count; i++) {
+        // 获取单行
+        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+        // 单行范围
+        CFRange lineCFRange = CTLineGetStringRange(line);
+        // 转化为OC
+        NSRange lineRange = NSMakeRange(lineCFRange.location == kCFNotFound ? NSNotFound : lineCFRange.location, lineCFRange.length);
+        NSRange contentRange = NSMakeRange(NSNotFound, 0);
+        if (lineRange.location < (range.location + range.length) && (lineRange.location + lineRange.length) > range.location) {
+            // 限制条件：单行开始位置小于内容结束位置，单行结束位置大于内容开始位置，否则当行不符合
+            
+            // 获取起始位置（较大值）
+            contentRange.location = MAX(lineRange.location, range.location);
+            // 获取结束位置（较小值），并计算长度
+            contentRange.length = MIN(lineRange.location + lineRange.length, range.location + range.length) - contentRange.location;
+        }
+        if (contentRange.length == 0) {
+            continue;
+        }
+        // 删除开头空格、尾部换行符占用区域
+        NSString *tempContent = [content substringWithRange:contentRange];
+        // 匹配开头空格
+        NSRegularExpression *spaceExpression = [NSRegularExpression regularExpressionWithPattern:@"\\s\\s" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSArray <NSTextCheckingResult *> *spaceResults = [spaceExpression matchesInString:tempContent options:NSMatchingReportProgress range:NSMakeRange(0, tempContent.length)];
+        if (spaceResults.count > 0) {
+            NSRange tempRange = spaceResults.firstObject.range;
+            contentRange = NSMakeRange(contentRange.location + tempRange.length, contentRange.length - tempRange.length);
+        }
+        // 匹配换行符
+        NSRegularExpression *breaklineExpression = [NSRegularExpression regularExpressionWithPattern:@"\\n" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSArray <NSTextCheckingResult *> *breaklineResults = [breaklineExpression matchesInString:tempContent options:NSMatchingReportProgress range:NSMakeRange(0, tempContent.length)];
+        if (breaklineResults.count > 0) {
+            NSRange tempRange = breaklineResults.firstObject.range;
+            contentRange = NSMakeRange(contentRange.location, contentRange.length - tempRange.length);
+        }
+        // 单行开始
+        CGFloat start = CTLineGetOffsetForStringIndex(line, contentRange.location, nil);
+        // 单行结束
+        CGFloat end = CTLineGetOffsetForStringIndex(line, contentRange.location + contentRange.length, nil);
+        CGPoint point = origins[i];
+        CGFloat lineAscent = 0, lineDescnet = 0, lineLeading = 0;
+        CTLineGetTypographicBounds(line, &lineAscent, &lineDescnet, &lineLeading);
+        CGRect contentRect = CGRectMake(point.x + start, point.y - lineDescnet, fabs(end - start), lineAscent + lineDescnet + lineLeading);
+        
+        [rects addObject:@(contentRect)];
+    }
+    return [rects copy];
 }
 
 + (void)parseLocalBookWithFilePath:(NSString *)filePath success:(void (^)(NSArray<XPYChapterModel *> * _Nonnull chapters))success failure:(XPYFailureHandler)failure {
@@ -204,8 +364,6 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, drawingRect);
     CTFrameRef textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
-    CGPathRelease(path);
-    CFRelease(framesetter);
     CFArrayRef lines = CTFrameGetLines(textFrame);
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(textFrame, CFRangeMake(0, 0), lineOrigins);
@@ -224,6 +382,9 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     // height - lineY为除去最后一行的字符原点以下的高度，descent + leading为最后一行不包括上行行高的字符高度
     heightValue = height - lineY + (CGFloat)(fabs(lastDescent) + lastLeading);
     heightValue = ceilf(heightValue);
+    CGPathRelease(path);
+    CFRelease(framesetter);
+    CFRelease(textFrame);
     return heightValue;
 }
 

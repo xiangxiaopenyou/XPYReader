@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class XPYReadView, XPYChapterPageModel, XPYChapterModel;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XPYReadView : UIView
 
-- (void)setupContent:(NSAttributedString *)content;
+/// 设置内容
+/// @param pageModel 页面数据
+/// @param chapterModel 章节数据
+- (void)setupPageModel:(XPYChapterPageModel *)pageModel chapter:(XPYChapterModel *)chapterModel;
 
 @end
 

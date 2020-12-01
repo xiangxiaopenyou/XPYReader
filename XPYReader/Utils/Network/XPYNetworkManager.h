@@ -38,7 +38,7 @@ typedef void (^XPYRequestProgressBlock)(NSProgress *progress);
  @param failure 请求失败回调
  @return 返回Task对象可取消请求
  */
-- (NSURLSessionTask *)getWithURL:(NSString *)URLString
+- (nullable NSURLSessionTask *)getWithURL:(NSString *)URLString
                parameters:(NSDictionary *)parameters
                   success:(XPYRequestSuccessBlock)success
                   failure:(XPYRequestFailureBlock)failure;
@@ -52,7 +52,7 @@ typedef void (^XPYRequestProgressBlock)(NSProgress *progress);
  @param failure 请求失败回调
  @return 返回Task对象可调用cancel方法取消请求
  */
-- (NSURLSessionTask *)postWithURL:(NSString *)URLString
+- (nullable NSURLSessionTask *)postWithURL:(NSString *)URLString
                 parameters:(NSDictionary *)parameters
                    success:(XPYRequestSuccessBlock)success
                    failure:(XPYRequestFailureBlock)failure;

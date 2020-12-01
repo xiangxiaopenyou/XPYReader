@@ -18,3 +18,7 @@ NSString * const XPYLoginStatusDidChangeNotification = @"XPYLoginStatusDidChange
 
 NSString * const XPYBookStackDidChangeNotification = @"XPYBookStackDidChange";
 
+const NSUInteger XPYReadViewLongPressTag = 10000;
+
+const NSUInteger XPYReadViewSingleTapTag = 10001;
+

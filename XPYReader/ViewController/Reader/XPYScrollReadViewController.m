@@ -301,7 +301,7 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     XPYScrollReadTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kXPYScrollReadViewCellIdentifierKey forIndexPath:indexPath];
     XPYChapterModel *chapter = self.chapters[indexPath.section];
     XPYChapterPageModel *pageModel = chapter.pageModels[indexPath.row];
-    [cell setupChapterPageModel:pageModel];
+    [cell setupChapterPageModel:pageModel chapterModel:chapter];
     return cell;
 }
 

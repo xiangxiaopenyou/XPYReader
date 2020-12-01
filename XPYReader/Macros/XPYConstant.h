@@ -20,3 +20,10 @@ FOUNDATION_EXTERN NSString * const XPYLoginStatusDidChangeNotification;
 /// 书架书籍变化通知
 FOUNDATION_EXTERN NSString * const XPYBookStackDidChangeNotification;
 
+#pragma mark - Tags
+/// 阅读器主视图长按手势tag
+FOUNDATION_EXTERN const NSUInteger XPYReadViewLongPressTag;
+/// 阅读器主视图单击手势tag
+FOUNDATION_EXTERN const NSUInteger XPYReadViewSingleTapTag;
+
+

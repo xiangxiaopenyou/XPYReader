@@ -80,6 +80,8 @@
 		6CE9253224D7F52A000AA12F /* XPYBookStackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9253124D7F52A000AA12F /* XPYBookStackViewController.m */; };
 		6CE9253724D7F55E000AA12F /* XPYBookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9253624D7F55E000AA12F /* XPYBookStoreViewController.m */; };
 		6CE9253E24D7F587000AA12F /* XPYTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9253D24D7F587000AA12F /* XPYTabBarController.m */; };
+		6CFC225B257490A100398FD0 /* XPYParagraphModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFC225A257490A100398FD0 /* XPYParagraphModel.m */; };
+		6CFC228825761F5000398FD0 /* UIGestureRecognizer+XPYTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CFC228725761F5000398FD0 /* UIGestureRecognizer+XPYTag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -224,6 +226,10 @@
 		6CE9253624D7F55E000AA12F /* XPYBookStoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookStoreViewController.m; sourceTree = "<group>"; };
 		6CE9253C24D7F587000AA12F /* XPYTabBarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYTabBarController.h; sourceTree = "<group>"; };
 		6CE9253D24D7F587000AA12F /* XPYTabBarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYTabBarController.m; sourceTree = "<group>"; };
+		6CFC2259257490A100398FD0 /* XPYParagraphModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYParagraphModel.h; sourceTree = "<group>"; };
+		6CFC225A257490A100398FD0 /* XPYParagraphModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYParagraphModel.m; sourceTree = "<group>"; };
+		6CFC228625761F5000398FD0 /* UIGestureRecognizer+XPYTag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+XPYTag.h"; sourceTree = "<group>"; };
+		6CFC228725761F5000398FD0 /* UIGestureRecognizer+XPYTag.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+XPYTag.m"; sourceTree = "<group>"; };
 		B9286C8D3744A6AE8C3108E1 /* libPods-XPYReader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XPYReader.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2E91969A5F7A56BB0CACD2F /* Pods-XPYReader.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XPYReader.debug.xcconfig"; path = "Target Support Files/Pods-XPYReader/Pods-XPYReader.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -289,6 +295,8 @@
 				6C03F0E524DBAB2A0070328E /* XPYNetworkService+Chapter.m */,
 				6CCDDC8924EBA94100612B7B /* XPYChapterPageModel.h */,
 				6CCDDC8A24EBA94100612B7B /* XPYChapterPageModel.m */,
+				6CFC2259257490A100398FD0 /* XPYParagraphModel.h */,
+				6CFC225A257490A100398FD0 /* XPYParagraphModel.m */,
 			);
 			path = Chapter;
 			sourceTree = "<group>";
@@ -344,12 +352,12 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
-		6C51B60D252182C7005C97D1 /* Animation */ = {
+		6C51B60D252182C7005C97D1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				6CC6B3582522CB4900F567EE /* Transition */,
 			);
-			path = Animation;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		6C7BA8BC24D7FE660054B971 /* Utils */ = {
@@ -357,7 +365,7 @@
 			children = (
 				6C03F0E724DCED280070328E /* Read */,
 				6C91FAEB24E6374E00D7D2B2 /* User */,
-				6C51B60D252182C7005C97D1 /* Animation */,
+				6C51B60D252182C7005C97D1 /* UI */,
 				6C7BA8BD24D7FE7B0054B971 /* Network */,
 				6C7BA8C424D7FF790054B971 /* Utility */,
 				6C7BA8DB24D904EC0054B971 /* Category */,
@@ -420,6 +428,7 @@
 		6C7BA8DB24D904EC0054B971 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				6CFC228525761F1800398FD0 /* UIGestureRecognizer */,
 				6C03F0F124E0D84A0070328E /* NSString */,
 			);
 			path = Category;
@@ -602,9 +611,9 @@
 			isa = PBXGroup;
 			children = (
 				6CE9253824D7F561000AA12F /* Base */,
+				6C03F0C824D93B910070328E /* Reader */,
 				6CE9253324D7F52E000AA12F /* BookStack */,
 				6CE9253424D7F540000AA12F /* BookStore */,
-				6C03F0C824D93B910070328E /* Reader */,
 				6C91FAE324E630D700D7D2B2 /* Mine */,
 				6C91FAEF24E63ECD00D7D2B2 /* Login */,
 			);
@@ -660,9 +669,9 @@
 		6CE9254024D7F8C5000AA12F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6C03F0DF24DB9EB50070328E /* Reader */,
 				6C7BA8D324D80FBD0054B971 /* BookStack */,
 				6C03F0F524E23D4F0070328E /* BookStore */,
-				6C03F0DF24DB9EB50070328E /* Reader */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -674,6 +683,15 @@
 				6C7BA8B924D7FB9E0054B971 /* XPYBaseModel.m */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		6CFC228525761F1800398FD0 /* UIGestureRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				6CFC228625761F5000398FD0 /* UIGestureRecognizer+XPYTag.h */,
+				6CFC228725761F5000398FD0 /* UIGestureRecognizer+XPYTag.m */,
+			);
+			path = UIGestureRecognizer;
 			sourceTree = "<group>";
 		};
 		BE952BC9EECA4B3C8DB7E38D /* Pods */ = {
@@ -837,6 +855,7 @@
 				6C8F6B97256CA0DF00FA72F4 /* XPYBookCatalogCell.m in Sources */,
 				6C033ED724F74740002B86A3 /* XPYAutoReadCoverView.m in Sources */,
 				6C03F0FE24E249C30070328E /* XPYChapterDataManager.mm in Sources */,
+				6CFC225B257490A100398FD0 /* XPYParagraphModel.m in Sources */,
 				6C7BA8D624D80FDB0054B971 /* XPYBookStackCollectionViewCell.m in Sources */,
 				6CCDDC8B24EBA94100612B7B /* XPYChapterPageModel.m in Sources */,
 				6C033ED424F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m in Sources */,
@@ -845,6 +864,7 @@
 				6C03F0F424E0D8560070328E /* NSString+blowFish.m in Sources */,
 				6CE9253224D7F52A000AA12F /* XPYBookStackViewController.m in Sources */,
 				6C7BA8D224D80E310054B971 /* XPYBookModel.mm in Sources */,
+				6CFC228825761F5000398FD0 /* UIGestureRecognizer+XPYTag.m in Sources */,
 				6C03F10424E3834C0070328E /* XPYReadHelper.m in Sources */,
 				6C03F0CB24D93BD90070328E /* XPYReaderManagerController.m in Sources */,
 				6CE9253E24D7F587000AA12F /* XPYTabBarController.m in Sources */,

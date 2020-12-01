@@ -12,8 +12,10 @@
 
 #import "XPYChapterPageModel.h"
 #import "XPYChapterModel.h"
+#import "XPYParagraphModel.h"
 
 #import "XPYReadRecordManager.h"
+#import "XPYReadParser.h"
 
 
 @interface XPYReadViewController ()
@@ -92,7 +94,7 @@
 - (void)setupChapter:(XPYChapterModel *)chapter pageModel:(XPYChapterPageModel *)pageModel isBackView:(BOOL)isBackView {
     self.chapterModel = chapter;
     self.pageModel = [pageModel copy];
-    [self.readView setupContent:self.pageModel.pageContent];
+    [self.readView setupPageModel:self.pageModel chapter:self.chapterModel];
     [self.view setNeedsLayout];
     
     _backView = isBackView;
@@ -141,6 +143,7 @@
         }
     }
 }
+
 
 #pragma mark - Getters
 - (XPYReadView *)readView {
