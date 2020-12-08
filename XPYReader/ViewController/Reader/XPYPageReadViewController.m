@@ -99,10 +99,12 @@
     UIPageViewControllerNavigationDirection direction = isNext ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
     if (!isNext && currentPageModel.pageIndex == 0 && currentChapter.chapterIndex == 1) {
         // 第一章第一页上一页返回空
+        [MBProgressHUD xpy_showTips:@"当前为本书第一页"];
         return nil;
     }
     if (isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
         // 最后一章最后一页下一页返回空
+        [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
         return nil;
     }
     if ((isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1) || (!isNext && currentPageModel.pageIndex == 0)) {
@@ -181,10 +183,12 @@
     BOOL isAnimated = !([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone);
     if (!isNext && currentPageModel.pageIndex == 0 && currentChapter.chapterIndex == 1) {
         // 第一章第一页上一页返回空
+        [MBProgressHUD xpy_showTips:@"当前为本书第一页"];
         return;
     }
     if (isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1 && currentChapter.chapterIndex == self.bookModel.chapterCount) {
         // 最后一章最后一页下一页返回空
+        [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
         return;
     }
     if ((isNext && currentPageModel.pageIndex == currentChapter.pageModels.count - 1) || (!isNext && currentPageModel.pageIndex == 0)) {

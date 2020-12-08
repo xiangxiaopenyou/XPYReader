@@ -20,6 +20,13 @@
 
 #import "XPYTimerProxy.h"
 
+/// 列表滚动到达位置
+typedef NS_ENUM(NSInteger, XPYScrollReadPosition) {
+    XPYScrollReadPositionNormal,     // 正常位置
+    XPYScrollReadPositionTop,        // 顶部
+    XPYScrollReadPositionBottom      // 底部
+};
+
 static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadViewCellIdentifier";
 
 @interface XPYScrollReadViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -43,6 +50,8 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 @property (nonatomic, assign) BOOL isScrollOrientationDown;
 /// 列表OffsetY坐标，用于判断列表滚动方向
 @property (nonatomic, assign) CGFloat tableOffsetY;
+/// 列表当前位置
+@property (nonatomic, assign) XPYScrollReadPosition scrollViewPosition;
 /// 自动阅读计时器
 @property (nonatomic, strong) CADisplayLink *autoReadTimer;
 /// 是否显示自动阅读菜单（显示菜单时滑动列表不操作启计时器）
@@ -129,6 +138,9 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
         return;
     }
     if (!self.autoReadTimer) {
+        return;
+    }
+    if ([self isScrollAtBottom] && self.autoReadTimer.isPaused) {
         return;
     }
     self.autoReadTimer.paused = !status;
@@ -253,8 +265,17 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     if (!indexPaths || indexPaths.count == 0) {
         return;
     }
+    // indexPaths排序
+    NSArray *sortedIndexPaths = [indexPaths sortedArrayUsingSelector:@selector(compare:)];
     // 获取目标IndexPath（滚动方向不同结果不同）
-    NSIndexPath *indexPath = _isScrollOrientationDown ? indexPaths.firstObject : indexPaths.lastObject;
+    NSIndexPath *indexPath = nil;
+    if (_scrollViewPosition == XPYScrollReadPositionTop) {
+        indexPath = sortedIndexPaths.firstObject;
+    } else if (_scrollViewPosition == XPYScrollReadPositionBottom) {
+        indexPath = sortedIndexPaths.lastObject;
+    } else {
+        indexPath = _isScrollOrientationDown ? sortedIndexPaths.firstObject : sortedIndexPaths.lastObject;
+    }
     XPYChapterModel *chapter = self.chapters[indexPath.section];
     if (self.bookModel.chapter.chapterIndex == chapter.chapterIndex && self.bookModel.page == indexPath.row) {
         // 未翻页时无须更新记录
@@ -275,12 +296,43 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     self.autoReadTimer.paused = NO;
 }
 
+- (void)resolveChapter {
+    NSInteger currentChapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
+    if (_scrollViewPosition == XPYScrollReadPositionBottom && self.bookModel.page == self.bookModel.chapter.pageModels.count - 1 && currentChapterIndex == self.chapters.count - 1) {
+        // 最后一页的下一页
+        [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
+        if (self.scrollReadDelegate && [self.scrollReadDelegate respondsToSelector:@selector(scrollReadViewControllerDidReadEnding)]) {
+            [self.scrollReadDelegate scrollReadViewControllerDidReadEnding];
+        }
+    } else if (_scrollViewPosition == XPYScrollReadPositionTop && self.bookModel.page == 0 && currentChapterIndex == 0) {
+        // 第一页的上一页
+        [MBProgressHUD xpy_showTips:@"当前为本书第一页"];
+    }
+}
+
+/// 判断列表是否滚动到底部
+- (BOOL)isScrollAtBottom {
+    CGFloat offsetY = self.tableView.contentOffset.y;
+    CGFloat tableHeight = CGRectGetHeight(self.tableView.bounds);
+    NSInteger currentChapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
+    if (offsetY + tableHeight >= self.tableView.contentSize.height && self.bookModel.page == self.bookModel.chapter.pageModels.count - 1 && currentChapterIndex == self.chapters.count - 1) {
+        return YES;
+    }
+    return NO;
+}
+
 #pragma mark - Event response
 - (void)scrollAutoRead:(CADisplayLink *)timer {
     CGFloat speed = [XPYReadConfigManager sharedInstance].autoReadSpeed / 8.0 + 0.35;
-    [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + speed)];
-    // 更新阅读记录
-    [self updateReadRecord];
+    if ([self isScrollAtBottom]) {
+        // 滚动到最底部，暂停自动阅读
+        [self updateAutoReadStatus:NO];
+        [self resolveChapter];
+    } else {
+        [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + speed)];
+        // 更新阅读记录
+        [self updateReadRecord];
+    }
 }
 
 
@@ -344,6 +396,10 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
     }
 }
 
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    [self resolveChapter];
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     // 拖动结束更新阅读记录
     [self updateReadRecord];
@@ -366,6 +422,23 @@ static NSString * const kXPYScrollReadViewCellIdentifierKey = @"XPYScrollReadVie
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // 获取滚动方向
     CGFloat contentOffsetY = scrollView.contentOffset.y;
+    // 内容高度
+    CGFloat contentHeight = scrollView.contentSize.height;
+    // 视图高度
+    CGFloat scrollViewHeight = CGRectGetHeight(scrollView.bounds);
+    // 判断列表位置
+    if (contentOffsetY <= 0) {
+        // 滚动到顶部
+        _scrollViewPosition = XPYScrollReadPositionTop;
+    } else if (scrollViewHeight + contentOffsetY >= contentHeight) {
+        // 滚动到底部
+        _scrollViewPosition = XPYScrollReadPositionBottom;
+    } else {
+        // 正常滚动
+        _scrollViewPosition = XPYScrollReadPositionNormal;
+    }
+    
+    // 判断滚动方向
     if (_tableOffsetY - contentOffsetY < 0) {
         NSLog(@"up");
         _isScrollOrientationDown = NO;

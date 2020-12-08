@@ -98,27 +98,27 @@
                 self.nextChapterModel = nil;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                // 加入覆盖视图
+                // 配置覆盖视图
                 [self configureCoverView];
+                // 初始化计时器
+                [self loadTimer];
                 // 更新覆盖视图内容
                 [self updateCoverViewContent];
                 // 设置拖动手势
                 [self configurePanGesture];
-                // 初始化计时器
-                [self loadTimer];
             });
         }];
     } else {
         self.nextChapterModel = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
-            // 加入覆盖视图
+            // 配置覆盖视图
             [self configureCoverView];
+            // 初始化计时器
+            [self loadTimer];
             // 更新覆盖视图内容
             [self updateCoverViewContent];
             // 设置拖动手势
             [self configurePanGesture];
-            // 初始化计时器
-            [self loadTimer];
         });
     }
 }
@@ -156,15 +156,6 @@
     }];
 }
 
-- (void)configureCoverView {
-    [self.view addSubview:self.coverView];
-    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.trailing.equalTo(self.view);
-        make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing - kXPYCoverViewMinHeight);
-        make.height.mas_offset(kXPYCoverViewMinHeight);
-    }];
-}
-
 /// 初始化拖动手势
 - (void)configurePanGesture {
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panCoverView:)];
@@ -179,12 +170,28 @@
     if (!self.timer) {
         return;
     }
+    if ([self currentPageIsLastPage] && self.timer.isPaused) {
+        // 最后一页并且计时器已经暂停则不更新状态
+        return;
+    }
     self.timer.paused = !status;
     // 改变是否显示自动阅读菜单状态
     _isShowingAutoReadMenu = !status;
 }
 
 #pragma mark - Private methods
+- (void)configureCoverView {
+    // 当前页为最后一章最后一页时不需要显示coverView
+    if (self.currentPageModel.pageIndex != self.currentChapterModel.pageModels.count - 1 || self.nextChapterModel) {
+        [self.view addSubview:self.coverView];
+        [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.leading.trailing.equalTo(self.view);
+            make.top.equalTo(self.view.mas_top).mas_offset(XPYReadViewTopSpacing - kXPYCoverViewMinHeight);
+            make.height.mas_offset(kXPYCoverViewMinHeight);
+        }];
+    }
+}
+
 - (void)refreshInformationViews {
     self.chapterNameLabel.text = self.bookModel.chapter.chapterName;
     self.currentPageLabel.text = [NSString stringWithFormat:@"第%@页/总%@页", @(self.bookModel.page + 1), @(self.bookModel.chapter.pageModels.count)];
@@ -245,10 +252,21 @@
         // 当前readView为当前章节最后一页
         if (!self.nextChapterModel) {
             // 无下一章内容
-            return;
+            [self updateAutoReadStatus:NO];
+            if (self.currentChapterModel.chapterIndex == self.bookModel.chapterCount) {
+                // 最后一章最后一页
+                [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
+                if (self.delegate && [self.delegate respondsToSelector:@selector(autoReadCoverViewControllerDidEndEnding)]) {
+                    [self.delegate autoReadCoverViewControllerDidEndEnding];
+                }
+            } else {
+                // 设置覆盖视图为下一章第一页
+                [self.coverView updateCurrentChapter:self.nextChapterModel pageModel:self.nextChapterModel.pageModels.firstObject];
+            }
+        } else {
+            // 设置覆盖视图为下一章第一页
+            [self.coverView updateCurrentChapter:self.nextChapterModel pageModel:self.nextChapterModel.pageModels.firstObject];
         }
-        // 设置覆盖视图为下一章第一页
-        [self.coverView updateCurrentChapter:self.nextChapterModel pageModel:self.nextChapterModel.pageModels.firstObject];
     } else {
         [self.coverView updateCurrentChapter:self.currentChapterModel pageModel:self.currentChapterModel.pageModels[self.currentPageModel.pageIndex + 1]];
     }
@@ -276,6 +294,14 @@
     self.timer = [CADisplayLink displayLinkWithTarget:[XPYTimerProxy proxyWithTarget:self] selector:@selector(autoRead:)];
     [self.timer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     self.timer.paused = NO;
+}
+
+/// 判断当前页是否最后一页
+- (BOOL)currentPageIsLastPage {
+    if (self.currentPageModel.pageIndex == self.currentChapterModel.pageModels.count - 1 && !self.nextChapterModel) {
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - Event response
@@ -330,7 +356,6 @@
 - (XPYReadView *)readView {
     if (!_readView) {
         _readView = [[XPYReadView alloc] initWithFrame:CGRectMake(XPYReadViewLeftSpacing, XPYReadViewTopSpacing, XPYReadViewWidth, XPYReadViewHeight)];
-        
     }
     return _readView;
 }

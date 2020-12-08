@@ -301,7 +301,7 @@
 			path = Chapter;
 			sourceTree = "<group>";
 		};
-		6C03F0E724DCED280070328E /* Read */ = {
+		6C03F0E724DCED280070328E /* ReadHelper */ = {
 			isa = PBXGroup;
 			children = (
 				6C033EC424F351BC002B86A3 /* XPYReadConfigDefines.h */,
@@ -314,7 +314,7 @@
 				6C03F10524E3844C0070328E /* XPYChapterHelper.h */,
 				6C03F10624E3844C0070328E /* XPYChapterHelper.m */,
 			);
-			path = Read;
+			path = ReadHelper;
 			sourceTree = "<group>";
 		};
 		6C03F0F124E0D84A0070328E /* NSString */ = {
@@ -352,21 +352,20 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
-		6C51B60D252182C7005C97D1 /* UI */ = {
+		6C66AB84257E0A920096D6F3 /* Global */ = {
 			isa = PBXGroup;
 			children = (
-				6CC6B3582522CB4900F567EE /* Transition */,
+				6C03F0E724DCED280070328E /* ReadHelper */,
+				6C91FAEB24E6374E00D7D2B2 /* UserManager */,
+				6CC6B3582522CB4900F567EE /* TransitionManager */,
+				6C7BA8BD24D7FE7B0054B971 /* Network */,
 			);
-			path = UI;
+			path = Global;
 			sourceTree = "<group>";
 		};
 		6C7BA8BC24D7FE660054B971 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				6C03F0E724DCED280070328E /* Read */,
-				6C91FAEB24E6374E00D7D2B2 /* User */,
-				6C51B60D252182C7005C97D1 /* UI */,
-				6C7BA8BD24D7FE7B0054B971 /* Network */,
 				6C7BA8C424D7FF790054B971 /* Utility */,
 				6C7BA8DB24D904EC0054B971 /* Category */,
 				6C91FAFE24E77F2700D7D2B2 /* Helper */,
@@ -518,13 +517,13 @@
 			path = User;
 			sourceTree = "<group>";
 		};
-		6C91FAEB24E6374E00D7D2B2 /* User */ = {
+		6C91FAEB24E6374E00D7D2B2 /* UserManager */ = {
 			isa = PBXGroup;
 			children = (
 				6C91FAEC24E6376100D7D2B2 /* XPYUserManager.h */,
 				6C91FAED24E6376100D7D2B2 /* XPYUserManager.m */,
 			);
-			path = User;
+			path = UserManager;
 			sourceTree = "<group>";
 		};
 		6C91FAEF24E63ECD00D7D2B2 /* Login */ = {
@@ -553,7 +552,7 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
-		6CC6B3582522CB4900F567EE /* Transition */ = {
+		6CC6B3582522CB4900F567EE /* TransitionManager */ = {
 			isa = PBXGroup;
 			children = (
 				6C4F71142542BEC500FC3699 /* XPYTransitionManager.h */,
@@ -563,7 +562,7 @@
 				6C602E9325303BA0005A2FED /* XPYCloseBookAnimation.h */,
 				6C602E9425303BA0005A2FED /* XPYCloseBookAnimation.m */,
 			);
-			path = Transition;
+			path = TransitionManager;
 			sourceTree = "<group>";
 		};
 		6CE9250A24D7EF4A000AA12F = {
@@ -588,6 +587,7 @@
 		6CE9251524D7EF4A000AA12F /* XPYReader */ = {
 			isa = PBXGroup;
 			children = (
+				6C66AB84257E0A920096D6F3 /* Global */,
 				6C7BA8E024D90C480054B971 /* Database */,
 				6CE9253F24D7F8B2000AA12F /* Model */,
 				6CE9254024D7F8C5000AA12F /* View */,

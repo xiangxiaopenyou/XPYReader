@@ -363,7 +363,7 @@ static NSString * const kParseLocalBookPattern = @"(\\s+?)([#☆、【0-9]{0,10}
     CGRect drawingRect = CGRectMake(0, 0, XPYReadViewWidth, height);
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathAddRect(path, NULL, drawingRect);
-    CTFrameRef textFrame = CTFramesetterCreateFrame(framesetter,CFRangeMake(0,0), path, NULL);
+    CTFrameRef textFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0,0), path, NULL);
     CFArrayRef lines = CTFrameGetLines(textFrame);
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(textFrame, CFRangeMake(0, 0), lineOrigins);
