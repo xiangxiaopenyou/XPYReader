@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 开始拖动列表
 - (void)scrollReadViewControllerWillBeginDragging;
 
+@optional
+/// 全书读完
+- (void)scrollReadViewControllerDidReadEnding;
+
 @end
 
 @interface XPYScrollReadViewController : XPYBaseReadViewController

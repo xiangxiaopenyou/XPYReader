@@ -43,15 +43,13 @@
     
     [self refreshInformationViews];
     
-    if ([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeTranslation || [XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone) {
-        // 左右平移和无动画翻页模式添加点击边缘翻页事件
+    if ([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone) {
+        // 无动画翻页模式添加点击边缘翻页事件
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         [self.view addGestureRecognizer:tap];
-        if ([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone) {
-            // 无动画翻页模式添加左右滑动翻页事件
-            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-            [self.view addGestureRecognizer:pan];
-        }
+        // 无动画翻页模式添加左右滑动翻页事件
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+        [self.view addGestureRecognizer:pan];
     }
 }
 - (void)viewDidLayoutSubviews {

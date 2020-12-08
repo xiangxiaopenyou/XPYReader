@@ -38,6 +38,8 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 @property (nonatomic, strong) NSIndexPath *needUpdateIndexPath;
 /// 保存滑动开始位置，用于判断是否翻页
 @property (nonatomic, assign) CGFloat offsetX;
+/// 列表滚动方式是否向左（向后翻页）
+@property (nonatomic, assign) BOOL isScrollOrientationLeft;
 
 @end
 
@@ -150,13 +152,22 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
         if (nextChapter && !XPYIsEmptyObject(nextChapter.content)) {
             // 保存分页信息
             nextChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:nextChapter.content chapterName:nextChapter.chapterName] copy];
-            // 插入预加载的下一个章节到当前阅读中
-            [self safeInsertChapter:nextChapter atFirstOrLast:NO];
+            // 避免自带动画效果
+            [UIView setAnimationsEnabled:NO];
+            [self.collectionView performBatchUpdates:^{
+                // 插入预加载的下一个章节到当前阅读中
+                [self.chapterIds addObject:nextChapter.chapterId];
+                [self.chapters addObject:nextChapter];
+                [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:self.chapters.count - 1]];
+            } completion:^(BOOL finished) {
+                // 当前预加载ID数组移除
+                [self.preloadingChapterIds removeObject:nextChapter.chapterId];
+            }];
+            [UIView setAnimationsEnabled:YES];
+        } else {
+            NSLog(@"预加载失败");
             // 当前预加载ID数组移除
             [self.preloadingChapterIds removeObject:nextChapter.chapterId];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
-            });
         }
     }];
 }
@@ -168,40 +179,54 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
         if (lastChapter && !XPYIsEmptyObject(lastChapter.content)) {
             // 保存分页信息
             lastChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:lastChapter.content chapterName:lastChapter.chapterName] copy];
-            // 插入预加载的上一个章节到当前阅读章节中
-            [self safeInsertChapter:lastChapter atFirstOrLast:YES];
-            // 当前预加载ID数组移除
-            [self.preloadingChapterIds removeObject:lastChapter.chapterId];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.collectionView reloadData];
+            // 避免自带动画效果
+            [UIView setAnimationsEnabled:NO];
+            [self.collectionView performBatchUpdates:^{
+                // 插入预加载的上一个章节到当前阅读章节中
+                [self.chapterIds insertObject:lastChapter.chapterId atIndex:0];
+                [self.chapters insertObject:lastChapter atIndex:0];
+                
+                [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:0]];
                 // 更新列表位置
                 [self.collectionView setContentOffset:CGPointMake(self.collectionView.contentOffset.x + CGRectGetWidth(self.view.bounds) * lastChapter.pageModels.count, 0)];
-            });
+
+            } completion:^(BOOL finished) {
+                // 当前预加载ID数组移除
+                [self.preloadingChapterIds removeObject:lastChapter.chapterId];
+            }];
+            [UIView setAnimationsEnabled:YES];
+        } else {
+            NSLog(@"预加载失败");
+            // 当前预加载ID数组移除
+            [self.preloadingChapterIds removeObject:lastChapter.chapterId];
         }
     }];
 }
 
-/// 当前章节数组安全插入章节数据
-/// @param chapter 章节
-/// @param first 是否插入到最前
-- (void)safeInsertChapter:(XPYChapterModel *)chapter atFirstOrLast:(BOOL)first {
-    if ([self.chapterIds containsObject:chapter.chapterId]) {
+- (void)updateReadRecord {
+    NSArray *indexPaths = [[self.collectionView indexPathsForVisibleItems] copy];
+    if (!indexPaths || indexPaths.count == 0) {
         return;
     }
-    if (first) {
-        @synchronized (self) {
-            [self.chapterIds insertObject:chapter.chapterId atIndex:0];
-            [self.chapters insertObject:chapter atIndex:0];
-        }
-    } else {
-        @synchronized (self) {
-            [self.chapterIds addObject:chapter.chapterId];
-            [self.chapters addObject:chapter];
-        }
-    }
+    // indexPath排序
+    NSArray *sortedIndexPaths = [[indexPaths sortedArrayUsingSelector:@selector(compare:)] copy];
+    // 获取目标IndexPath（滚动方向不同结果不同）
+    NSIndexPath *indexPath = _isScrollOrientationLeft ? sortedIndexPaths.lastObject : sortedIndexPaths.firstObject;
+    XPYChapterModel *chapter = self.chapters[indexPath.section];
+    [self updateReadRecordWithPage:indexPath.item chapter:chapter];
 }
-- (void)updateReadRecord {
+
+- (void)updateReadRecordWithPage:(NSInteger)page chapter:(XPYChapterModel *)chapter {
+    if (page == self.bookModel.page && chapter.chapterIndex == self.bookModel.chapter.chapterIndex) {
+        // 章节页码都未改变
+        return;
+    }
+    NSLog(@"更新：%@章%@页", @(chapter.chapterIndex), @(page));
     
+    self.bookModel.chapter = [chapter copy];
+    if (page < self.bookModel.chapter.pageModels.count) {
+        self.bookModel.page = page;
+    }
     [XPYReadRecordManager updateReadRecordWithModel:self.bookModel];
     
     XPYChapterPageModel *pageModel = self.bookModel.chapter.pageModels[self.bookModel.page];
@@ -214,44 +239,46 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 /// 滚动
 /// @param isNext 是否下一页
 - (void)scrollWithDirection:(BOOL)isNext {
-    // 当前正在显示的IndexPath
-    if (isNext && self.bookModel.page == self.bookModel.chapter.pageModels.count - 1 && self.bookModel.chapter.chapterIndex == self.chapters.count) {
+    // 当前章节在当前数组中的索引
+    NSInteger currentChapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
+    if (isNext && self.bookModel.page == self.bookModel.chapter.pageModels.count - 1 && currentChapterIndex == self.chapters.count - 1) {
         // 最后一页的下一页
+        [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
         return;
     }
-    if (!isNext && self.bookModel.page == 0 && self.bookModel.chapter.chapterIndex == 1) {
+    if (!isNext && self.bookModel.page == 0 && currentChapterIndex == 0) {
         // 第一页的上一页
+        [MBProgressHUD xpy_showTips:@"当前为本书第一页"];
         return;
     }
     
+    NSInteger needUpdatePage = self.bookModel.page;
+    XPYChapterModel *needUpdateChapter = [self.bookModel.chapter copy];
     if (isNext) {
         if (self.bookModel.page < self.bookModel.chapter.pageModels.count - 1) {
             // 章节下一页，page加1，chapter不变
-            self.bookModel.page = self.bookModel.page + 1;
+            needUpdatePage = self.bookModel.page + 1;
         } else {
             // 章节最后一页，page为0，chapter设为下一章
-            self.bookModel.page = 0;
-            NSInteger chapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
-            self.bookModel.chapter = self.chapters[chapterIndex + 1];
+            needUpdatePage = 0;
+            needUpdateChapter = self.chapters[currentChapterIndex + 1];
         }
     } else {
         if (self.bookModel.page > 0) {
             // 章节上一页，page减1，chapter不变
-            self.bookModel.page = self.bookModel.page - 1;
+            needUpdatePage = self.bookModel.page - 1;
         } else {
             // 章节第一页，page设为上一章最后一页，chapter设为上一章
-            NSInteger chapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
-            XPYChapterModel *tempChapter = self.chapters[chapterIndex - 1];
-            self.bookModel.page = tempChapter.pageModels.count - 1;
-            self.bookModel.chapter = tempChapter;
+            XPYChapterModel *tempChapter = self.chapters[currentChapterIndex - 1];
+            needUpdatePage = tempChapter.pageModels.count - 1;
+            needUpdateChapter = tempChapter;
         }
     }
+    [self updateReadRecordWithPage:needUpdatePage chapter:needUpdateChapter];
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSInteger chapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.bookModel.page inSection:chapterIndex] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        CGFloat contentOffsetX = isNext ? self.collectionView.contentOffset.x + CGRectGetWidth(self.view.bounds) : self.collectionView.contentOffset.x - CGRectGetWidth(self.view.bounds);
+        [self.collectionView setContentOffset:CGPointMake(contentOffsetX, 0) animated:NO];
     });
-    
-    [self updateReadRecord];
 }
 
 #pragma mark - Event response
@@ -321,20 +348,45 @@ static NSString * const kXPYHorizontalScrollCollectionViewCellIdentifierKey = @"
 #pragma mark - Scroll view delegate
 /// 开始拖动
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self updateReadRecord];
     // 滑动前走代理方法，隐藏菜单工具栏
     if (self.delegate && [self.delegate respondsToSelector:@selector(horizontalScrollReadViewControllerWillBeginScroll)]) {
         [self.delegate horizontalScrollReadViewControllerWillBeginScroll];
     }
     _offsetX = scrollView.contentOffset.x;
 }
+/// 拖动结束
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    NSInteger currentChapterIndex = [self.chapterIds indexOfObject:self.bookModel.chapter.chapterId];
+    if (currentChapterIndex != 0 && currentChapterIndex != self.chapters.count - 1) {
+        // 当前章节数组的中间章节直接返回
+        return;
+    }
+    if (_isScrollOrientationLeft && self.bookModel.page == self.bookModel.chapter.pageModels.count - 1 && self.bookModel.chapter.chapterIndex == self.bookModel.chapterCount) {
+        // 本书最后一页
+        [MBProgressHUD xpy_showTips:@"当前为本书最后一页"];
+        return;
+    } else if (!_isScrollOrientationLeft && self.bookModel.page == 0 && self.bookModel.chapter.chapterIndex == 1) {
+        // 本书第一页
+        [MBProgressHUD xpy_showTips:@"当前为本书第一页"];
+        return;
+    }
+}
 /// 动画减速结束
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (_offsetX != scrollView.contentOffset.x) {
-        // 翻页时更新阅读记录
-        self.bookModel.page = self.needUpdateIndexPath.item;
-        self.bookModel.chapter = self.chapters[self.needUpdateIndexPath.section];
-        [self updateReadRecord];
+    [self updateReadRecord];
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    // 获取滚动方向
+    CGFloat contentOffsetX = scrollView.contentOffset.x;
+    if (_offsetX - contentOffsetX < 0) {
+        _isScrollOrientationLeft = YES;
+        NSLog(@"left");
+    } else if (_offsetX - contentOffsetX > 0) {
+        _isScrollOrientationLeft = NO;
+        NSLog(@"right");
     }
+    _offsetX = contentOffsetX;
 }
 
 #pragma mark - Getters

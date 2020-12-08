@@ -28,7 +28,7 @@
 
 #import "UIGestureRecognizer+XPYTag.h"
 
-@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate, XPYBookCatalogDelegate>
+@interface XPYReaderManagerController () <XPYReadMenuDelegate, UIGestureRecognizerDelegate, XPYHorizontalScrollReadViewControllerDelegate, XPYPageReadViewControllerDelegate, XPYScrollReadViewControllerDelegate, XPYAutoReadCoverViewControllerDelegate, XPYBookCatalogDelegate>
 
 /// 仿真、无效果翻页控制器
 @property (nonatomic, strong) XPYPageReadViewController *pageViewController;
@@ -47,9 +47,6 @@
 
 /// 菜单工具栏显示/隐藏单机手势
 @property (nonatomic, strong) UITapGestureRecognizer *tap;
-
-///// 长按选段手势（上下翻页和自动阅读暂不支持）
-//@property (nonatomic, strong) UILongPressGestureRecognizer *longPress;
 
 @end
 
@@ -74,6 +71,17 @@
     [self initialize];
 }
 
+#pragma mark - Private methods
+
+- (void)configureUI {
+    // 隐藏导航栏
+    self.fd_prefersNavigationBarHidden = YES;
+    // 取消右滑返回手势
+    self.fd_interactivePopDisabled = YES;
+    
+    [self createReader];
+}
+
 /// 初始化内容
 - (void)initialize {
     
@@ -90,20 +98,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // App即将进入不活跃状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-    
 }
 
-#pragma mark - UI
-- (void)configureUI {
-    // 隐藏导航栏
-    self.fd_prefersNavigationBarHidden = YES;
-    // 取消右滑返回手势
-    self.fd_interactivePopDisabled = YES;
-    
-    [self createReader];
-}
-
-#pragma mark - Private methods
 /// 创建阅读器
 - (void)createReader {
     if (_pageViewController) {
@@ -243,6 +239,32 @@
 - (void)scrollReadViewControllerWillBeginDragging {
     if (self.readMenu.isShowing) {
         [self.readMenu hiddenWithComplete:nil];
+    }
+}
+- (void)scrollReadViewControllerDidReadEnding {
+    if ([XPYReadConfigManager sharedInstance].isAutoRead && [XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeScroll) {
+        // 如果是自动阅读模式，则需要结束自动阅读
+        [XPYReadConfigManager sharedInstance].isAutoRead = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self createReader];
+            if (self.readMenu.isShowingAutoReadSetting) {
+                [self.readMenu hideAutoReadSetting];
+            }
+        });
+    }
+}
+
+#pragma mark - XPYAutoReadCoverViewControllerDelegate
+- (void)autoReadCoverViewControllerDidEndEnding {
+    if ([XPYReadConfigManager sharedInstance].isAutoRead && [XPYReadConfigManager sharedInstance].autoReadMode == XPYAutoReadModeCover) {
+        // 如果是自动阅读模式，则需要结束自动阅读
+        [XPYReadConfigManager sharedInstance].isAutoRead = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self createReader];
+            if (self.readMenu.isShowingAutoReadSetting) {
+                [self.readMenu hideAutoReadSetting];
+            }
+        });
     }
 }
 
@@ -399,7 +421,7 @@
 #pragma mark - Getters
 - (XPYPageReadViewController *)pageViewController {
     if (!_pageViewController) {
-        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book pageType:[XPYReadConfigManager sharedInstance].pageType];
+        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book];
         _pageViewController.pageReadDelegate = self;
         [self.view addSubview:_pageViewController.view];
         [self.view sendSubviewToBack:_pageViewController.view];
@@ -428,6 +450,7 @@
 - (XPYAutoReadCoverViewController *)coverReadController {
     if (!_coverReadController) {
         _coverReadController = [[XPYAutoReadCoverViewController alloc] initWithBook:self.book];
+        _coverReadController.delegate = self;
         [self.view addSubview:_coverReadController.view];
         [self.view sendSubviewToBack:_coverReadController.view];
     }

@@ -79,7 +79,7 @@
     [self setNeedsDisplay];
 }
 
-#pragma mark - Response events
+#pragma mark - Event response
 - (void)longPressAction:(UILongPressGestureRecognizer *)press {
     // 触摸点在当前视图的位置
     CGPoint point = [press locationInView:self];
@@ -100,6 +100,7 @@
             // 获取触摸点所在行
             NSRange lineRange = [XPYReadParser touchLineRangeWithPoint:point frameRef:frameRef];
             if (lineRange.location == NSNotFound) {
+                CFRelease(frameRef);
                 return;
             }
             // 获取页面段落
@@ -111,9 +112,10 @@
                     // 获取选中段落范围
                     self.selectedRects = [XPYReadParser rectsWithRange:obj.range content:self.pageModel.pageContent.string frameRef:frameRef];
                     if (self.selectedRects.count > 0) {
-                        // 单击取消手势有效
+                        // 设置单击手势有效
                         self.singleTap.enabled = YES;
                     }
+                    CFRelease(frameRef);
                     // 重绘
                     [self setNeedsDisplay];
                     *stop = YES;
@@ -134,6 +136,8 @@
 - (void)singleTap:(UITapGestureRecognizer *)tap {
     // 单击取消当前选中内容
     self.selectedRects = nil;
+    // 设置单击手势失效
+    self.singleTap.enabled = NO;
     // 重绘
     [self setNeedsDisplay];
 }

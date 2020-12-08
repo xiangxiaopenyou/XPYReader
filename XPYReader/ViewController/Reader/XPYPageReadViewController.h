@@ -23,8 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 初始化方法
 /// @param book 书籍Model
-/// @param pageType 翻页模式
-- (instancetype)initWithBook:(XPYBookModel *)book pageType:(XPYReadPageType)pageType;
+- (instancetype)initWithBook:(XPYBookModel *)book;
 
 @property (nonatomic, weak) id <XPYPageReadViewControllerDelegate> pageReadDelegate;
 

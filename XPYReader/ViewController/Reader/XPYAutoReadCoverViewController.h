@@ -12,7 +12,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol XPYAutoReadCoverViewControllerDelegate <NSObject>
+
+@optional
+/// 全书读完
+- (void)autoReadCoverViewControllerDidEndEnding;
+
+@end
+
 @interface XPYAutoReadCoverViewController : XPYBaseReadViewController
+
+@property (nonatomic, weak) id<XPYAutoReadCoverViewControllerDelegate> delegate;
 
 - (instancetype)initWithBook:(XPYBookModel *)book;
 
