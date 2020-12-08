@@ -421,7 +421,7 @@
 #pragma mark - Getters
 - (XPYPageReadViewController *)pageViewController {
     if (!_pageViewController) {
-        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book pageType:[XPYReadConfigManager sharedInstance].pageType];
+        _pageViewController = [[XPYPageReadViewController alloc] initWithBook:self.book];
         _pageViewController.pageReadDelegate = self;
         [self.view addSubview:_pageViewController.view];
         [self.view sendSubviewToBack:_pageViewController.view];

@@ -26,11 +26,10 @@
 @implementation XPYPageReadViewController
 
 #pragma mark - Initializer
-- (instancetype)initWithBook:(XPYBookModel *)book pageType:(XPYReadPageType)pageType {
-    UIPageViewControllerTransitionStyle style = pageType == XPYReadPageTypeCurl ? UIPageViewControllerTransitionStylePageCurl : UIPageViewControllerTransitionStyleScroll;
-    // options:仿真翻页时设置书脊的位置为Min，滑动翻页时设置页面间距为0
-    NSDictionary *options = style == UIPageViewControllerTransitionStylePageCurl ? @{UIPageViewControllerOptionSpineLocationKey : @(UIPageViewControllerSpineLocationMin)} : @{UIPageViewControllerOptionInterPageSpacingKey : @0};
-    self = [super initWithTransitionStyle:style navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:options];
+- (instancetype)initWithBook:(XPYBookModel *)book {
+    // options:仿真翻页设置书脊的位置为Min
+    NSDictionary *options = @{UIPageViewControllerOptionSpineLocationKey : @(UIPageViewControllerSpineLocationMin)};
+    self = [super initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:options];
     if (self) {
         self.bookModel = book;
         if (XPYIsEmptyObject(self.bookModel.chapter.content)) {
@@ -44,7 +43,7 @@
         self.dataSource = self;
         self.delegate = self;
         
-        self.doubleSided = style == UIPageViewControllerTransitionStylePageCurl;
+        self.doubleSided = YES;
     }
     return self;
 }
@@ -119,42 +118,26 @@
             [XPYChapterHelper chapterWithBookId:self.bookModel.bookId chapterId:otherChapter.chapterId success:^(XPYChapterModel * _Nonnull chapter) {
                 otherChapter = [chapter copy];
                 otherChapter.pageModels = [[XPYReadParser parseChapterWithChapterContent:otherChapter.content chapterName:otherChapter.chapterName] copy];
-                if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
-                    // 仿真模式
-                    if (isNext) {
-                        // 下一章第一页
-                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
-                        // 背面（这里的背面是当前页的背面）
-                        XPYReadViewController *afterBackViewController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentPageModel isBackView:YES];
-                        [self setViewControllers:@[afterReadController, afterBackViewController] direction:direction animated:YES completion:nil];
-                    } else {
-                        // 上一章最后一页
-                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
-                        // 背面（这里的背面是上一页的背面，与上一页相同）
-                        XPYReadViewController *beforeBackViewController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:YES];
-                        [self setViewControllers:@[beforeReadController, beforeBackViewController] direction:direction animated:YES completion:nil];
-                    }
+                if (isNext) {
+                    // 下一章第一页
+                    XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
+                    // 背面（这里的背面是当前页的背面）
+                    XPYReadViewController *afterBackViewController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentPageModel isBackView:YES];
+                    [self setViewControllers:@[afterReadController, afterBackViewController] direction:direction animated:YES completion:nil];
                 } else {
-                    // 平移模式
-                    if (isNext) {
-                        // 下一章第一页
-                        XPYReadViewController *afterReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.firstObject isBackView:NO];
-                        [self setViewControllers:@[afterReadController] direction:direction animated:YES completion:nil];
-                    } else {
-                        // 上一章最后一页
-                        XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
-                        [self setViewControllers:@[beforeReadController] direction:direction animated:YES completion:nil];
-                    }
+                    // 上一章最后一页
+                    XPYReadViewController *beforeReadController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:NO];
+                    // 背面（这里的背面是上一页的背面，与上一页相同）
+                    XPYReadViewController *beforeBackViewController = [self createReadViewControllerWithChapter:otherChapter pageModel:otherChapter.pageModels.lastObject isBackView:YES];
+                    [self setViewControllers:@[beforeReadController, beforeBackViewController] direction:direction animated:YES completion:nil];
                 }
                 // 跨章节时更新阅读记录
                 [self updateReadRecord];
             } failure:^(NSString * _Nonnull tip) {
                 // 获取章节内容失败
                 [MBProgressHUD xpy_showTips:tip];
-                if (self.transitionStyle == UIPageViewControllerTransitionStylePageCurl) {
-                    XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentController.pageModel isBackView:NO];
-                    [self setViewControllers:@[readController] direction:direction animated:NO completion:nil];
-                }
+                XPYReadViewController *readController = [self createReadViewControllerWithChapter:currentChapter pageModel:currentController.pageModel isBackView:NO];
+                [self setViewControllers:@[readController] direction:direction animated:NO completion:nil];
             }];
         } else {
             // 上一章/下一章有内容，则直接分页
@@ -170,7 +153,7 @@
     return nil;
 }
 
-/// 左右平移或者无动画翻页模式获取上一页/下一页并更新阅读页面
+/// 无动画翻页模式获取上一页/下一页并更新阅读页面
 /// @param isNext 是否下一页
 - (void)updateAfterOrBeforeViewControllerWithNext:(BOOL)isNext {
     // 当前页信息
