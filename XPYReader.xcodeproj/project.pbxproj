@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -73,6 +73,7 @@
 		6CCDDC9424ED03A200612B7B /* XPYReadMenuBottomBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */; };
 		6CCDDC9724EE0AB200612B7B /* XPYReadMenuBackgroundBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */; };
 		6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */; };
+		6CD0BBCD258DEE6200F838C4 /* XPYUploadBookViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CD0BBCC258DEE6200F838C4 /* XPYUploadBookViewController.m */; };
 		6CE9251824D7EF4A000AA12F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CE9251724D7EF4A000AA12F /* AppDelegate.m */; };
 		6CE9252324D7EF4D000AA12F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CE9252224D7EF4D000AA12F /* Assets.xcassets */; };
 		6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CE9252424D7EF4D000AA12F /* LaunchScreen.storyboard */; };
@@ -213,6 +214,8 @@
 		6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuBackgroundBar.m; sourceTree = "<group>"; };
 		6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYReadMenuPageTypeBar.h; sourceTree = "<group>"; };
 		6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYReadMenuPageTypeBar.m; sourceTree = "<group>"; };
+		6CD0BBCB258DEE6200F838C4 /* XPYUploadBookViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYUploadBookViewController.h; sourceTree = "<group>"; };
+		6CD0BBCC258DEE6200F838C4 /* XPYUploadBookViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYUploadBookViewController.m; sourceTree = "<group>"; };
 		6CE9251324D7EF4A000AA12F /* XPYReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XPYReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CE9251624D7EF4A000AA12F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6CE9251724D7EF4A000AA12F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -625,6 +628,8 @@
 			children = (
 				6CE9253024D7F52A000AA12F /* XPYBookStackViewController.h */,
 				6CE9253124D7F52A000AA12F /* XPYBookStackViewController.m */,
+				6CD0BBCB258DEE6200F838C4 /* XPYUploadBookViewController.h */,
+				6CD0BBCC258DEE6200F838C4 /* XPYUploadBookViewController.m */,
 			);
 			path = BookStack;
 			sourceTree = "<group>";
@@ -722,6 +727,7 @@
 				6CE9250F24D7EF4A000AA12F /* Sources */,
 				6CE9251024D7EF4A000AA12F /* Frameworks */,
 				6CE9251124D7EF4A000AA12F /* Resources */,
+				A5CF5ACD21B94819030DEA6E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -810,6 +816,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A5CF5ACD21B94819030DEA6E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-XPYReader/Pods-XPYReader-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-XPYReader/Pods-XPYReader-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-XPYReader/Pods-XPYReader-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -843,6 +866,7 @@
 				6C033ECD24F4E77A002B86A3 /* XPYTimerProxy.m in Sources */,
 				6C03F10124E2787B0070328E /* XPYBookDetailsViewController.m in Sources */,
 				6C03F0F824E23D7E0070328E /* XPYBookStoreCell.m in Sources */,
+				6CD0BBCD258DEE6200F838C4 /* XPYUploadBookViewController.m in Sources */,
 				6CCDDC9A24EE0C1300612B7B /* XPYReadMenuPageTypeBar.m in Sources */,
 				6CCDDC9724EE0AB200612B7B /* XPYReadMenuBackgroundBar.m in Sources */,
 				6C51B61025218333005C97D1 /* XPYOpenBookAnimation.m in Sources */,

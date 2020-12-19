@@ -10,16 +10,16 @@
 
 #import <objc/runtime.h>
 
-static const char kXPYGestureRecognizerTagKey;
+static const void *kXPYGestureRecognizerTagKey = &kXPYGestureRecognizerTagKey;
 
 @implementation UIGestureRecognizer (XPYTag)
 
 - (void)setTag:(NSUInteger)tag {
-    objc_setAssociatedObject(self, &kXPYGestureRecognizerTagKey, @(tag), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, kXPYGestureRecognizerTagKey, @(tag), OBJC_ASSOCIATION_ASSIGN);
 }
 
 - (NSUInteger)tag {
-    return [objc_getAssociatedObject(self, &kXPYGestureRecognizerTagKey) integerValue];
+    return [objc_getAssociatedObject(self, kXPYGestureRecognizerTagKey) integerValue];
 }
 
 @end

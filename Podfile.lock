@@ -16,6 +16,9 @@ PODS:
     - AFNetworking/NSURLSession
   - Aspects (1.4.1)
   - FDFullscreenPopGesture (1.1)
+  - GCDWebServer/Core (3.5.4)
+  - GCDWebServer/WebUploader (3.5.4):
+    - GCDWebServer/Core
   - KVOController (1.2.0)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
@@ -36,6 +39,7 @@ DEPENDENCIES:
   - AFNetworking
   - Aspects
   - FDFullscreenPopGesture
+  - GCDWebServer/WebUploader
   - KVOController
   - Masonry
   - MBProgressHUD
@@ -49,6 +53,7 @@ SPEC REPOS:
     - AFNetworking
     - Aspects
     - FDFullscreenPopGesture
+    - GCDWebServer
     - KVOController
     - Masonry
     - MBProgressHUD
@@ -71,6 +76,7 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
+  GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
@@ -81,6 +87,6 @@ SPEC CHECKSUMS:
   XPYKit: 5f9e8fa0088bedecfe594f44efd04de5afbddb6f
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 7ab6d5efdc34920a337574db5dcad5de580ceca8
+PODFILE CHECKSUM: a413dc2eba053bb40bb329a376efe0f1235f990c
 
 COCOAPODS: 1.9.1

@@ -47,3 +47,15 @@
 #define XPYFontMedium(x) [UIFont fontWithName:@"PingFangSC-Medium" size:x]
 #define XPYFontLight(x) [UIFont fontWithName:@"PingFangSC-Light" size:x]
 
+static inline NSString * XPYFilePath(NSString *name) {
+    if (!name) {
+        return XPYDocumentDirectory;
+    }
+    NSString *path = [XPYDocumentDirectory stringByAppendingPathComponent:name];
+    BOOL isDirectory;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return path;
+}
+

@@ -35,6 +35,9 @@ target 'XPYReader' do
   # XPYKit
   pod 'XPYKit', :git => 'https://github.com/xiangxiaopenyou/XPYKit.git'
   
+  # 文件上传
+  pod "GCDWebServer/WebUploader"
+  
   # 消除版本警告
   post_install do |installer|
     installer.pods_project.targets.each do |target|

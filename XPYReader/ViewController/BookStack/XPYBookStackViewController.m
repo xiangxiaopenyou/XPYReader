@@ -87,6 +87,8 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
         make.leading.trailing.equalTo(self.view);
     }];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"传书" style:UIBarButtonItemStylePlain target:self action:@selector(uploadBookAction:)];
+    
     // 请求网络书架中的书籍（服务器到期暂时注释了网络书籍请求）
     //[self booksRequest];
     
@@ -148,10 +150,13 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     return NO;
 }
 
-#pragma mark - Notifications
+#pragma mark - Event response
 - (void)stackBooksChanged:(NSNotification *)notification {
     self.dataSource = [[XPYReadRecordManager allBooksInStack] copy];
     [self.collectionView reloadData];
+}
+- (void)uploadBookAction:(id)sender {
+    
 }
 
 #pragma mark - Collection view data source
