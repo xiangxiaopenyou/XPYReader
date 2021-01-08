@@ -46,7 +46,7 @@
 		6C7BA8D224D80E310054B971 /* XPYBookModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D124D80E310054B971 /* XPYBookModel.mm */; };
 		6C7BA8D624D80FDB0054B971 /* XPYBookStackCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D524D80FDB0054B971 /* XPYBookStackCollectionViewCell.m */; };
 		6C7BA8DA24D8FAD40054B971 /* XPYNetworkService+Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */; };
-		6C80D9C225A8276A001183A3 /* upload_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C80D9C125A8276A001183A3 /* upload_book.png */; };
+		6C80E70625A82AB9001183A3 /* upload_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C80E70525A82AB9001183A3 /* upload_book.png */; };
 		6C8F6B93256C9ED300FA72F4 /* XPYBookCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */; };
 		6C8F6B97256CA0DF00FA72F4 /* XPYBookCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */; };
 		6C8F6B9A256D038A00FA72F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6B99256D038A00FA72F4 /* README.md */; };
@@ -168,7 +168,7 @@
 		6C7BA8D724D8F21C0054B971 /* XPYMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYMacros.h; sourceTree = "<group>"; };
 		6C7BA8D824D8FAD40054B971 /* XPYNetworkService+Book.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XPYNetworkService+Book.h"; sourceTree = "<group>"; };
 		6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XPYNetworkService+Book.m"; sourceTree = "<group>"; };
-		6C80D9C125A8276A001183A3 /* upload_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_book.png; sourceTree = "<group>"; };
+		6C80E70525A82AB9001183A3 /* upload_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_book.png; sourceTree = "<group>"; };
 		6C8F6B91256C9ED300FA72F4 /* XPYBookCatalogViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogViewController.h; sourceTree = "<group>"; };
 		6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookCatalogViewController.m; sourceTree = "<group>"; };
 		6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogCell.h; sourceTree = "<group>"; };
@@ -343,7 +343,7 @@
 		6C33933525635F0300CDB9CA /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				6C80D9C125A8276A001183A3 /* upload_book.png */,
+				6C80E70525A82AB9001183A3 /* upload_book.png */,
 				6C8F6BB2256E2C8000FA72F4 /* reader_landscape.gif */,
 				6C8F6BB1256E2C7F00FA72F4 /* reader_setting.gif */,
 				6C8F6BAE256E2A5200FA72F4 /* reader_background.gif */,
@@ -781,7 +781,7 @@
 				6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */,
 				6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */,
 				6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */,
-				6C80D9C225A8276A001183A3 /* upload_book.png in Resources */,
+				6C80E70625A82AB9001183A3 /* upload_book.png in Resources */,
 				6C8F6B9A256D038A00FA72F4 /* README.md in Resources */,
 				6C8F6BAC256E28FB00FA72F4 /* reader_catalog.gif in Resources */,
 				6C8F6BAF256E2A5300FA72F4 /* reader_background.gif in Resources */,
