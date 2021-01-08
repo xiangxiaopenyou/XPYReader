@@ -7,6 +7,7 @@
 //
 
 #import "XPYBookStackViewController.h"
+#import "XPYUploadBookViewController.h"
 
 #import "XPYBookStackCollectionViewCell.h"
 
@@ -156,7 +157,8 @@ static NSString *kXPYBookStackCollectionViewCellIdentifierKey = @"XPYBookStackCo
     [self.collectionView reloadData];
 }
 - (void)uploadBookAction:(id)sender {
-    
+    XPYUploadBookViewController *uploadController = [[XPYUploadBookViewController alloc] init];
+    [self.navigationController pushViewController:uploadController animated:YES];
 }
 
 #pragma mark - Collection view data source

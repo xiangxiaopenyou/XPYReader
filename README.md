@@ -33,6 +33,10 @@ iOS 9.0+
 
 ![横屏](XPYReader/Resource/reader_landscape.gif)
 
+### 本地书上传（WiFi传书）
+
+![WiFi传书](XPYReader/Resource/upload_book.png)
+
 
 ## 关键方法举例
 
@@ -52,6 +56,8 @@ iOS 9.0+
 [Masonry](https://github.com/SnapKit/Masonry)
 
 [YYModel](https://github.com/ibireme/YYModel)
+
+[GCDWebServer](https://github.com/swisspol/GCDWebServer)
 
 
 *******************
