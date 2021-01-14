@@ -46,7 +46,7 @@
 		6C7BA8D224D80E310054B971 /* XPYBookModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D124D80E310054B971 /* XPYBookModel.mm */; };
 		6C7BA8D624D80FDB0054B971 /* XPYBookStackCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D524D80FDB0054B971 /* XPYBookStackCollectionViewCell.m */; };
 		6C7BA8DA24D8FAD40054B971 /* XPYNetworkService+Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */; };
-		6C80E70625A82AB9001183A3 /* upload_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C80E70525A82AB9001183A3 /* upload_book.png */; };
+		6C80E71725AC20F8001183A3 /* upload_book.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C80E71625AC20F7001183A3 /* upload_book.png */; };
 		6C8F6B93256C9ED300FA72F4 /* XPYBookCatalogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */; };
 		6C8F6B97256CA0DF00FA72F4 /* XPYBookCatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */; };
 		6C8F6B9A256D038A00FA72F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6C8F6B99256D038A00FA72F4 /* README.md */; };
@@ -168,7 +168,7 @@
 		6C7BA8D724D8F21C0054B971 /* XPYMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYMacros.h; sourceTree = "<group>"; };
 		6C7BA8D824D8FAD40054B971 /* XPYNetworkService+Book.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XPYNetworkService+Book.h"; sourceTree = "<group>"; };
 		6C7BA8D924D8FAD40054B971 /* XPYNetworkService+Book.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "XPYNetworkService+Book.m"; sourceTree = "<group>"; };
-		6C80E70525A82AB9001183A3 /* upload_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_book.png; sourceTree = "<group>"; };
+		6C80E71625AC20F7001183A3 /* upload_book.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_book.png; sourceTree = "<group>"; };
 		6C8F6B91256C9ED300FA72F4 /* XPYBookCatalogViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogViewController.h; sourceTree = "<group>"; };
 		6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XPYBookCatalogViewController.m; sourceTree = "<group>"; };
 		6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XPYBookCatalogCell.h; sourceTree = "<group>"; };
@@ -262,37 +262,6 @@
 			path = XPYWeakTimer;
 			sourceTree = "<group>";
 		};
-		6C03F0C824D93B910070328E /* Reader */ = {
-			isa = PBXGroup;
-			children = (
-				6C03F0C924D93BD90070328E /* XPYReaderManagerController.h */,
-				6C03F0CA24D93BD90070328E /* XPYReaderManagerController.m */,
-				6CCDDC8F24EBD28100612B7B /* XPYPageReadViewController.h */,
-				6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */,
-				6C03F0DC24DB9B5C0070328E /* XPYReadViewController.h */,
-				6C03F0DD24DB9B5C0070328E /* XPYReadViewController.m */,
-				6CAEFD722505C16E006DC948 /* XPYHorizontalScrollReadViewController.h */,
-				6CAEFD732505C16E006DC948 /* XPYHorizontalScrollReadViewController.m */,
-				6CCDDC8224EB766E00612B7B /* XPYScrollReadViewController.h */,
-				6CCDDC8324EB766E00612B7B /* XPYScrollReadViewController.m */,
-				6C033ED824F8B25E002B86A3 /* XPYAutoReadCoverViewController.h */,
-				6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */,
-				6C8F6B91256C9ED300FA72F4 /* XPYBookCatalogViewController.h */,
-				6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */,
-			);
-			path = Reader;
-			sourceTree = "<group>";
-		};
-		6C03F0DF24DB9EB50070328E /* Reader */ = {
-			isa = PBXGroup;
-			children = (
-				6C8F6B9D256DE7D500FA72F4 /* Read */,
-				6C8F6B9C256DE7AF00FA72F4 /* Menu */,
-				6C8F6B9E256DE7E700FA72F4 /* Catalog */,
-			);
-			path = Reader;
-			sourceTree = "<group>";
-		};
 		6C03F0E324DBAB040070328E /* Chapter */ = {
 			isa = PBXGroup;
 			children = (
@@ -331,19 +300,13 @@
 			path = NSString;
 			sourceTree = "<group>";
 		};
-		6C03F0F524E23D4F0070328E /* BookStore */ = {
-			isa = PBXGroup;
-			children = (
-				6C03F0F624E23D7E0070328E /* XPYBookStoreCell.h */,
-				6C03F0F724E23D7E0070328E /* XPYBookStoreCell.m */,
-			);
-			path = BookStore;
-			sourceTree = "<group>";
-		};
 		6C33933525635F0300CDB9CA /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				6C80E70525A82AB9001183A3 /* upload_book.png */,
+				6CE9252224D7EF4D000AA12F /* Assets.xcassets */,
+				6CE9252424D7EF4D000AA12F /* LaunchScreen.storyboard */,
+				6CE9252724D7EF4D000AA12F /* Info.plist */,
+				6C80E71625AC20F7001183A3 /* upload_book.png */,
 				6C8F6BB2256E2C8000FA72F4 /* reader_landscape.gif */,
 				6C8F6BB1256E2C7F00FA72F4 /* reader_setting.gif */,
 				6C8F6BAE256E2A5200FA72F4 /* reader_background.gif */,
@@ -358,13 +321,204 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		6C65599B25AFF329002910C4 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				6CE9251624D7EF4A000AA12F /* AppDelegate.h */,
+				6CE9251724D7EF4A000AA12F /* AppDelegate.m */,
+				6CE9252824D7EF4D000AA12F /* main.m */,
+				6C7BA8CB24D7FFF20054B971 /* XPYReader.pch */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		6C65599E25B010C2002910C4 /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				6C65599F25B010D3002910C4 /* Base */,
+				6C6559A425B01145002910C4 /* Reader */,
+				6C6559A925B012C0002910C4 /* ReadMenu */,
+				6C6559AB25B0143A002910C4 /* BookCatalog */,
+				6C6559AF25B014A9002910C4 /* BookStack */,
+				6C6559B025B014B9002910C4 /* BookStore */,
+				6C6559B325B01503002910C4 /* BookDetails */,
+				6C6559B125B014BF002910C4 /* PersonalCenter */,
+				6C6559B225B014DD002910C4 /* Login */,
+			);
+			path = Module;
+			sourceTree = "<group>";
+		};
+		6C65599F25B010D3002910C4 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				6C6559A225B0111B002910C4 /* View */,
+				6C6559A125B01108002910C4 /* Controller */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		6C6559A125B01108002910C4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6CE9253C24D7F587000AA12F /* XPYTabBarController.h */,
+				6CE9253D24D7F587000AA12F /* XPYTabBarController.m */,
+				6C03F0D924DAB12F0070328E /* XPYNavigationController.h */,
+				6C03F0DA24DAB12F0070328E /* XPYNavigationController.m */,
+				6C91FAE024E5237A00D7D2B2 /* XPYBaseViewController.h */,
+				6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */,
+				6C033EC524F3C06E002B86A3 /* XPYBaseReadViewController.h */,
+				6C033EC624F3C06E002B86A3 /* XPYBaseReadViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6C6559A225B0111B002910C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6C6559A425B01145002910C4 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				6C6559A525B01152002910C4 /* Controller */,
+				6C6559A625B01156002910C4 /* View */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
+		6C6559A525B01152002910C4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6C03F0C924D93BD90070328E /* XPYReaderManagerController.h */,
+				6C03F0CA24D93BD90070328E /* XPYReaderManagerController.m */,
+				6CCDDC8F24EBD28100612B7B /* XPYPageReadViewController.h */,
+				6CCDDC9024EBD28100612B7B /* XPYPageReadViewController.m */,
+				6C03F0DC24DB9B5C0070328E /* XPYReadViewController.h */,
+				6C03F0DD24DB9B5C0070328E /* XPYReadViewController.m */,
+				6CAEFD722505C16E006DC948 /* XPYHorizontalScrollReadViewController.h */,
+				6CAEFD732505C16E006DC948 /* XPYHorizontalScrollReadViewController.m */,
+				6CCDDC8224EB766E00612B7B /* XPYScrollReadViewController.h */,
+				6CCDDC8324EB766E00612B7B /* XPYScrollReadViewController.m */,
+				6C033ED824F8B25E002B86A3 /* XPYAutoReadCoverViewController.h */,
+				6C033ED924F8B25E002B86A3 /* XPYAutoReadCoverViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		6C6559A625B01156002910C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
+				6C03F0E124DB9F2A0070328E /* XPYReadView.m */,
+				6CAEFD752505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.h */,
+				6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */,
+				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
+				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
+				6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */,
+				6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6C6559A925B012C0002910C4 /* ReadMenu */ = {
+			isa = PBXGroup;
+			children = (
+				6C6559AA25B01416002910C4 /* View */,
+			);
+			path = ReadMenu;
+			sourceTree = "<group>";
+		};
+		6C6559AA25B01416002910C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */,
+				6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */,
+				6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */,
+				6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */,
+				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
+				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
+				6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */,
+				6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */,
+				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
+				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
+				6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */,
+				6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */,
+				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
+				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6C6559AB25B0143A002910C4 /* BookCatalog */ = {
+			isa = PBXGroup;
+			children = (
+				6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */,
+				6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */,
+				6C8F6B91256C9ED300FA72F4 /* XPYBookCatalogViewController.h */,
+				6C8F6B92256C9ED300FA72F4 /* XPYBookCatalogViewController.m */,
+			);
+			path = BookCatalog;
+			sourceTree = "<group>";
+		};
+		6C6559AF25B014A9002910C4 /* BookStack */ = {
+			isa = PBXGroup;
+			children = (
+				6CE9253024D7F52A000AA12F /* XPYBookStackViewController.h */,
+				6CE9253124D7F52A000AA12F /* XPYBookStackViewController.m */,
+				6CD0BBCB258DEE6200F838C4 /* XPYUploadBookViewController.h */,
+				6CD0BBCC258DEE6200F838C4 /* XPYUploadBookViewController.m */,
+				6C7BA8D424D80FDB0054B971 /* XPYBookStackCollectionViewCell.h */,
+				6C7BA8D524D80FDB0054B971 /* XPYBookStackCollectionViewCell.m */,
+			);
+			path = BookStack;
+			sourceTree = "<group>";
+		};
+		6C6559B025B014B9002910C4 /* BookStore */ = {
+			isa = PBXGroup;
+			children = (
+				6CE9253524D7F55E000AA12F /* XPYBookStoreViewController.h */,
+				6CE9253624D7F55E000AA12F /* XPYBookStoreViewController.m */,
+				6C03F0F624E23D7E0070328E /* XPYBookStoreCell.h */,
+				6C03F0F724E23D7E0070328E /* XPYBookStoreCell.m */,
+			);
+			path = BookStore;
+			sourceTree = "<group>";
+		};
+		6C6559B125B014BF002910C4 /* PersonalCenter */ = {
+			isa = PBXGroup;
+			children = (
+				6C91FAE424E6319500D7D2B2 /* XPYMineViewController.h */,
+				6C91FAE524E6319500D7D2B2 /* XPYMineViewController.m */,
+			);
+			path = PersonalCenter;
+			sourceTree = "<group>";
+		};
+		6C6559B225B014DD002910C4 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				6C91FAF024E65DE400D7D2B2 /* XPYLoginViewController.h */,
+				6C91FAF124E65DE400D7D2B2 /* XPYLoginViewController.m */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		6C6559B325B01503002910C4 /* BookDetails */ = {
+			isa = PBXGroup;
+			children = (
+				6C03F0FF24E2787B0070328E /* XPYBookDetailsViewController.h */,
+				6C03F10024E2787B0070328E /* XPYBookDetailsViewController.m */,
+			);
+			path = BookDetails;
+			sourceTree = "<group>";
+		};
 		6C66AB84257E0A920096D6F3 /* Global */ = {
 			isa = PBXGroup;
 			children = (
 				6C03F0E724DCED280070328E /* ReadHelper */,
 				6C91FAEB24E6374E00D7D2B2 /* UserManager */,
 				6CC6B3582522CB4900F567EE /* TransitionManager */,
-				6C7BA8BD24D7FE7B0054B971 /* Network */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -421,15 +575,6 @@
 			path = Book;
 			sourceTree = "<group>";
 		};
-		6C7BA8D324D80FBD0054B971 /* BookStack */ = {
-			isa = PBXGroup;
-			children = (
-				6C7BA8D424D80FDB0054B971 /* XPYBookStackCollectionViewCell.h */,
-				6C7BA8D524D80FDB0054B971 /* XPYBookStackCollectionViewCell.m */,
-			);
-			path = BookStack;
-			sourceTree = "<group>";
-		};
 		6C7BA8DB24D904EC0054B971 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -458,60 +603,6 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
-		6C8F6B9C256DE7AF00FA72F4 /* Menu */ = {
-			isa = PBXGroup;
-			children = (
-				6C91FADA24E4E2DB00D7D2B2 /* XPYReadMenu.h */,
-				6C91FADB24E4E2DB00D7D2B2 /* XPYReadMenu.m */,
-				6C91FADD24E4E90600D7D2B2 /* XPYReadMenuTopBar.h */,
-				6C91FADE24E4E90600D7D2B2 /* XPYReadMenuTopBar.m */,
-				6CCDDC9224ED03A200612B7B /* XPYReadMenuBottomBar.h */,
-				6CCDDC9324ED03A200612B7B /* XPYReadMenuBottomBar.m */,
-				6CCDDC9524EE0AB200612B7B /* XPYReadMenuBackgroundBar.h */,
-				6CCDDC9624EE0AB200612B7B /* XPYReadMenuBackgroundBar.m */,
-				6CCDDC9824EE0C1300612B7B /* XPYReadMenuPageTypeBar.h */,
-				6CCDDC9924EE0C1300612B7B /* XPYReadMenuPageTypeBar.m */,
-				6C033ECF24F4F651002B86A3 /* XPYReadMenuSettingBar.h */,
-				6C033ED024F4F651002B86A3 /* XPYReadMenuSettingBar.m */,
-				6C033ED224F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.h */,
-				6C033ED324F5FEC2002B86A3 /* XPYReadMenuAutoReadSettingBar.m */,
-			);
-			path = Menu;
-			sourceTree = "<group>";
-		};
-		6C8F6B9D256DE7D500FA72F4 /* Read */ = {
-			isa = PBXGroup;
-			children = (
-				6C03F0E024DB9F2A0070328E /* XPYReadView.h */,
-				6C03F0E124DB9F2A0070328E /* XPYReadView.m */,
-				6CAEFD752505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.h */,
-				6CAEFD762505C47E006DC948 /* XPYHorizontalScrollCollectionViewCell.m */,
-				6CCDDC8C24EBC4DA00612B7B /* XPYScrollReadTableViewCell.h */,
-				6CCDDC8D24EBC4DA00612B7B /* XPYScrollReadTableViewCell.m */,
-				6C033ED524F74740002B86A3 /* XPYAutoReadCoverView.h */,
-				6C033ED624F74740002B86A3 /* XPYAutoReadCoverView.m */,
-			);
-			path = Read;
-			sourceTree = "<group>";
-		};
-		6C8F6B9E256DE7E700FA72F4 /* Catalog */ = {
-			isa = PBXGroup;
-			children = (
-				6C8F6B95256CA0DF00FA72F4 /* XPYBookCatalogCell.h */,
-				6C8F6B96256CA0DF00FA72F4 /* XPYBookCatalogCell.m */,
-			);
-			path = Catalog;
-			sourceTree = "<group>";
-		};
-		6C91FAE324E630D700D7D2B2 /* Mine */ = {
-			isa = PBXGroup;
-			children = (
-				6C91FAE424E6319500D7D2B2 /* XPYMineViewController.h */,
-				6C91FAE524E6319500D7D2B2 /* XPYMineViewController.m */,
-			);
-			path = Mine;
-			sourceTree = "<group>";
-		};
 		6C91FAE724E6332000D7D2B2 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -530,15 +621,6 @@
 				6C91FAED24E6376100D7D2B2 /* XPYUserManager.m */,
 			);
 			path = UserManager;
-			sourceTree = "<group>";
-		};
-		6C91FAEF24E63ECD00D7D2B2 /* Login */ = {
-			isa = PBXGroup;
-			children = (
-				6C91FAF024E65DE400D7D2B2 /* XPYLoginViewController.h */,
-				6C91FAF124E65DE400D7D2B2 /* XPYLoginViewController.m */,
-			);
-			path = Login;
 			sourceTree = "<group>";
 		};
 		6C91FAF624E77E0C00D7D2B2 /* Vendor */ = {
@@ -593,74 +675,18 @@
 		6CE9251524D7EF4A000AA12F /* XPYReader */ = {
 			isa = PBXGroup;
 			children = (
-				6C66AB84257E0A920096D6F3 /* Global */,
-				6C7BA8E024D90C480054B971 /* Database */,
+				6C65599B25AFF329002910C4 /* Application */,
+				6C65599E25B010C2002910C4 /* Module */,
 				6CE9253F24D7F8B2000AA12F /* Model */,
-				6CE9254024D7F8C5000AA12F /* View */,
-				6CE9252F24D7F4F0000AA12F /* ViewController */,
+				6C7BA8E024D90C480054B971 /* Database */,
+				6C7BA8BD24D7FE7B0054B971 /* Network */,
+				6C66AB84257E0A920096D6F3 /* Global */,
 				6C7BA8BC24D7FE660054B971 /* Utils */,
 				6C7BA8C924D7FFA70054B971 /* Macros */,
 				6C91FAF624E77E0C00D7D2B2 /* Vendor */,
 				6C33933525635F0300CDB9CA /* Resource */,
-				6CE9251624D7EF4A000AA12F /* AppDelegate.h */,
-				6CE9251724D7EF4A000AA12F /* AppDelegate.m */,
-				6CE9252224D7EF4D000AA12F /* Assets.xcassets */,
-				6CE9252424D7EF4D000AA12F /* LaunchScreen.storyboard */,
-				6CE9252724D7EF4D000AA12F /* Info.plist */,
-				6CE9252824D7EF4D000AA12F /* main.m */,
-				6C7BA8CB24D7FFF20054B971 /* XPYReader.pch */,
 			);
 			path = XPYReader;
-			sourceTree = "<group>";
-		};
-		6CE9252F24D7F4F0000AA12F /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				6CE9253824D7F561000AA12F /* Base */,
-				6C03F0C824D93B910070328E /* Reader */,
-				6CE9253324D7F52E000AA12F /* BookStack */,
-				6CE9253424D7F540000AA12F /* BookStore */,
-				6C91FAE324E630D700D7D2B2 /* Mine */,
-				6C91FAEF24E63ECD00D7D2B2 /* Login */,
-			);
-			path = ViewController;
-			sourceTree = "<group>";
-		};
-		6CE9253324D7F52E000AA12F /* BookStack */ = {
-			isa = PBXGroup;
-			children = (
-				6CE9253024D7F52A000AA12F /* XPYBookStackViewController.h */,
-				6CE9253124D7F52A000AA12F /* XPYBookStackViewController.m */,
-				6CD0BBCB258DEE6200F838C4 /* XPYUploadBookViewController.h */,
-				6CD0BBCC258DEE6200F838C4 /* XPYUploadBookViewController.m */,
-			);
-			path = BookStack;
-			sourceTree = "<group>";
-		};
-		6CE9253424D7F540000AA12F /* BookStore */ = {
-			isa = PBXGroup;
-			children = (
-				6CE9253524D7F55E000AA12F /* XPYBookStoreViewController.h */,
-				6CE9253624D7F55E000AA12F /* XPYBookStoreViewController.m */,
-				6C03F0FF24E2787B0070328E /* XPYBookDetailsViewController.h */,
-				6C03F10024E2787B0070328E /* XPYBookDetailsViewController.m */,
-			);
-			path = BookStore;
-			sourceTree = "<group>";
-		};
-		6CE9253824D7F561000AA12F /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				6CE9253C24D7F587000AA12F /* XPYTabBarController.h */,
-				6CE9253D24D7F587000AA12F /* XPYTabBarController.m */,
-				6C03F0D924DAB12F0070328E /* XPYNavigationController.h */,
-				6C03F0DA24DAB12F0070328E /* XPYNavigationController.m */,
-				6C91FAE024E5237A00D7D2B2 /* XPYBaseViewController.h */,
-				6C91FAE124E5237A00D7D2B2 /* XPYBaseViewController.m */,
-				6C033EC524F3C06E002B86A3 /* XPYBaseReadViewController.h */,
-				6C033EC624F3C06E002B86A3 /* XPYBaseReadViewController.m */,
-			);
-			path = Base;
 			sourceTree = "<group>";
 		};
 		6CE9253F24D7F8B2000AA12F /* Model */ = {
@@ -672,16 +698,6 @@
 				6C91FAE724E6332000D7D2B2 /* User */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		6CE9254024D7F8C5000AA12F /* View */ = {
-			isa = PBXGroup;
-			children = (
-				6C03F0DF24DB9EB50070328E /* Reader */,
-				6C7BA8D324D80FBD0054B971 /* BookStack */,
-				6C03F0F524E23D4F0070328E /* BookStore */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		6CE9254424D7F8ED000AA12F /* Base */ = {
@@ -781,7 +797,7 @@
 				6CE9252624D7EF4D000AA12F /* LaunchScreen.storyboard in Resources */,
 				6C3393612563A0FE00CDB9CA /* 孤单的飞.txt in Resources */,
 				6C3393632563A0FE00CDB9CA /* 汉末文枭.txt in Resources */,
-				6C80E70625A82AB9001183A3 /* upload_book.png in Resources */,
+				6C80E71725AC20F8001183A3 /* upload_book.png in Resources */,
 				6C8F6B9A256D038A00FA72F4 /* README.md in Resources */,
 				6C8F6BAC256E28FB00FA72F4 /* reader_catalog.gif in Resources */,
 				6C8F6BAF256E2A5300FA72F4 /* reader_background.gif in Resources */,
@@ -1043,8 +1059,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
-				INFOPLIST_FILE = XPYReader/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/Application/XPYReader.pch";
+				INFOPLIST_FILE = XPYReader/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1064,8 +1080,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RLWJB4A9U9;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/XPYReader.pch";
-				INFOPLIST_FILE = XPYReader/Info.plist;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/XPYReader/Application/XPYReader.pch";
+				INFOPLIST_FILE = XPYReader/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

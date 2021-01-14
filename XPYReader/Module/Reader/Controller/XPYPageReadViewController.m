@@ -90,6 +90,9 @@
 /// @param isNext 是否下一页
 /// @param isBackView 是否背面视图
 - (UIViewController *)viewControllerAfterOrBeforeViewController:(UIViewController *)viewController next:(BOOL)isNext isBackView:(BOOL)isBackView {
+    if ([XPYReadConfigManager sharedInstance].pageType == XPYReadPageTypeNone) {
+        return nil;
+    }
     // 当前页信息
     XPYReadViewController *currentController = (XPYReadViewController *)viewController;
     XPYChapterModel *currentChapter = currentController.chapterModel;
