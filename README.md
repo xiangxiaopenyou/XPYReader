@@ -8,7 +8,7 @@ iOS 9.0+
 
 ## 为了以后更好地进行模块化、组件化开发，提前整理了项目文件结构
 
-### Application : 存放AppDelegate、main、pch等应用必须文件
+### Application : 存放AppDelegate、main、pch等应用必需文件
 
 ### Module : 业务模块，该模块中每个文件夹都可以作为一个业务组件，业务组件中具体设计模式可以自行选用
 
