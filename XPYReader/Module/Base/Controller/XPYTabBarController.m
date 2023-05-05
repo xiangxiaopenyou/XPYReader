@@ -27,7 +27,7 @@
     storeController.title = @"书城";
     XPYMineViewController *mineController = [[XPYMineViewController alloc] init];
     mineController.title = @"我的";
-    
+
     XPYNavigationController *stackNavigation = [[XPYNavigationController alloc] initWithRootViewController:stackController];
     XPYNavigationController *storeNavigation = [[XPYNavigationController alloc] initWithRootViewController:storeController];
     XPYNavigationController *mineNavigation = [[XPYNavigationController alloc] initWithRootViewController:mineController];
